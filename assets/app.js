@@ -12,7 +12,8 @@ import 'bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 // importing scss files to compile.
-import './scss/bootstrap-reload.scss';
+import './scss/bootstrap-ebsecondary.scss';
+import './scss/bootstrap-ebprimary.scss';
 
 
 // any CSS you import will output into a single css file (app.css in this case)

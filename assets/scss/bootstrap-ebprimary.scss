@@ -1,0 +1,159 @@
+
+/*------------------------------------
+- COLOR ebebprimary
+------------------------------------*/
+
+$ebprimary_t1: #6c9bc3;
+$ebprimary_t2: #4982b2;
+$ebprimary_t3: #dce7f0;
+$ebprimary_t4: #eef3f8;
+$ebprimary_t5: #345d80;
+$ebprimary_t6: #447aa8;
+$ebprimary_t7: #5289b8;
+$ebprimary_t8: #25425c;
+$ebprimary_t9: #fcfdfe;
+$btn_ebprimary_white: #fff;
+
+$ebprimary_shadow: rgba(108, 155, 195, 0.5);
+$ebprimary_text_color_dark_bright: #212529;
+
+
+.alert-ebprimary {
+  color: $ebprimary_t5;
+  background-color: $ebprimary_t9;
+  border-color: $ebprimary_t4;
+}
+
+.alert-ebprimary hr {
+  border-top-color: $ebprimary_t3;
+}
+
+.alert-ebprimary .alert-link {
+  color: $ebprimary_t8;
+}
+
+.badge-ebprimary {
+  color: $ebprimary_text_color_dark_bright;
+  background-color: $ebprimary_t1;
+}
+
+.badge-ebprimary[href]:hover, .badge-ebprimary[href]:focus {
+  color: $ebprimary_text_color_dark_bright;
+  background-color: $ebprimary_t2;
+}
+
+.bg-ebprimary {
+  background-color: $ebprimary_t1 !important;
+}
+
+a.bg-ebprimary:hover, a.bg-ebprimary:focus,
+button.bg-ebprimary:hover,
+button.bg-ebprimary:focus {
+  background-color: $ebprimary_t2 !important;
+}
+
+.border-ebprimary {
+  border-color: $ebprimary_t1 !important;
+}
+
+.btn-ebprimary {
+  color: $btn_ebprimary_white;
+  background-color: $ebprimary_t1;
+  border-color: $ebprimary_t1;
+}
+
+.btn-ebprimary:hover {
+  color: $btn_ebprimary_white;
+  background-color: $ebprimary_t7;
+  border-color: $ebprimary_t2;
+}
+
+.btn-ebprimary:focus, .btn-ebprimary.focus {
+  box-shadow: 0 0 0 0.2rem $ebprimary_shadow;
+}
+
+.btn-ebprimary.disabled, .btn-ebprimary:disabled {
+  color: $ebprimary_text_color_dark_bright;
+  background-color: $ebprimary_t1;
+  border-color: $ebprimary_t1;
+}
+
+.btn-ebprimary:not(:disabled):not(.disabled):active, .btn-ebprimary:not(:disabled):not(.disabled).active, .show > .btn-ebprimary.dropdown-toggle {
+  color: $ebprimary_text_color_dark_bright;
+  background-color: $ebprimary_t2;
+  border-color: $ebprimary_t6;
+}
+
+.btn-ebprimary:not(:disabled):not(.disabled):active:focus, .btn-ebprimary:not(:disabled):not(.disabled).active:focus, .show > .btn-ebprimary.dropdown-toggle:focus {
+  box-shadow: 0 0 0 0.2rem $ebprimary_shadow;
+}
+
+.btn-outline-ebprimary {
+  color: $ebprimary_t1;
+  background-color: transparent;
+  border-color: $ebprimary_t1;
+}
+
+.btn-outline-ebprimary:hover {
+  color: $ebprimary_text_color_dark_bright;
+  background-color: $ebprimary_t1;
+  border-color: $ebprimary_t1;
+}
+
+.btn-outline-ebprimary:focus, .btn-outline-ebprimary.focus {
+  box-shadow: 0 0 0 0.2rem $ebprimary_shadow;
+}
+
+.btn-outline-ebprimary.disabled, .btn-outline-ebprimary:disabled {
+  color: $ebprimary_t1;
+  background-color: transparent;
+}
+
+.btn-outline-ebprimary:not(:disabled):not(.disabled):active, .btn-outline-ebprimary:not(:disabled):not(.disabled).active, .show > .btn-outline-ebprimary.dropdown-toggle {
+  color: $ebprimary_text_color_dark_bright;
+  background-color: $ebprimary_t1;
+  border-color: $ebprimary_t1;
+}
+
+.btn-outline-ebprimary:not(:disabled):not(.disabled):active:focus, .btn-outline-ebprimary:not(:disabled):not(.disabled).active:focus, .show > .btn-outline-ebprimary.dropdown-toggle:focus {
+  box-shadow: 0 0 0 0.2rem $ebprimary_shadow;
+}
+
+.list-group-item-ebprimary {
+  color: $ebprimary_t5;
+  background-color: $ebprimary_t4;
+}
+
+.list-group-item-ebprimary.list-group-item-action:hover, .list-group-item-ebprimary.list-group-item-action:focus {
+  color: $ebprimary_t5;
+  background-color: $ebprimary_t3;
+}
+
+.list-group-item-ebprimary.list-group-item-action.active {
+  color: $ebprimary_text_color_dark_bright;
+  background-color: $ebprimary_t5;
+  border-color: $ebprimary_t5;
+}
+
+.table-ebprimary,
+.table-ebprimary > th,
+.table-ebprimary > td {
+  background-color: $ebprimary_t4;
+}
+
+.table-hover .table-ebprimary:hover {
+  background-color: $ebprimary_t3;
+}
+
+.table-hover .table-ebprimary:hover > td,
+.table-hover .table-ebprimary:hover > th {
+  background-color: $ebprimary_t3;
+}
+
+.text-ebprimary {
+  color: $ebprimary_t1 !important;
+}
+
+a.text-ebprimary:hover, a.text-ebprimary:focus {
+  color: $ebprimary_t2 !important;
+}
