@@ -1,46 +1,57 @@
-{% extends 'base.html.twig' %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Welcome!{% endblock %}</title>
+    {{ encore_entry_link_tags('app') }}
 
-{% block title %}Log in!{% endblock %}
+</head>
+<body>
+    <form method="post">
+        {% if error %}
+            <div class="alert alert-danger text-center">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+        {% endif %}
 
-{% block body %}
-<form method="post">
-    {% if error %}
-        <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
-    {% endif %}
+        {% if app.user %}
+            <div class="mb-3">
+                You are logged in as {{ app.user.username }}, <a href="{{ path('app_logout') }}">Logout</a>
+            </div>
+        {% endif %}
 
-    {% if app.user %}
-        <div class="mb-3">
-            You are logged in as {{ app.user.username }}, <a href="{{ path('app_logout') }}">Logout</a>
+        <div class="container d-flex justify-content-center vh-100">
+            <div class="row w-100 w-md-75 w-lg-50 align-self-center" id="login-form">
+                <div class="col-md-12 login-form bg-ebprimary">
+                    <h3>Login</h3>
+
+                    <div class="form-group">
+                        <input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="form-control" placeholder="Your Email" required autofocus>
+                    </div>
+
+                    <div class="form-group">
+                        <input type="password" name="password" id="inputPassword" class="form-control" placeholder="Your Password" required>
+                    </div>
+
+                    <div class="form-group">
+                        <input type="submit" class="btnSubmit" value="Login" />
+                    </div>
+
+                    <div class="checkbox mb-3">
+                        <label>
+                            <input type="checkbox" name="_remember_me"> Remember me
+                        </label>
+                    </div>
+
+                    <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+                </div>
+            </div>
         </div>
-    {% endif %}
-</form>
+
+    </form>
+</body>
+</html>
 
 
-<div class="container d-flex justify-content-center vh-100">
-    <div class="row w-100 w-md-75 w-lg-50 align-self-center">
-        <div class="col-md-12 login-form bg-ebprimary">
-            <h3>EvalBook Login</h3>
 
-            <div class="form-group">
-                <input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="form-control" placeholder="Your Email" required autofocus>
-            </div>
 
-            <div class="form-group">
-                <input type="password" name="password" id="inputPassword" class="form-control" placeholder="Your Password" required>
-            </div>
 
-            <div class="form-group">
-                <input type="submit" class="btnSubmit" value="Login" />
-            </div>
 
-            <div class="checkbox mb-3">
-                <label>
-                    <input type="checkbox" name="_remember_me"> Remember me
-                </label>
-            </div>
-
-            <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
-        </div>
-    </div>
-</div>
-{% endblock %}
