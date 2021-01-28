@@ -1,0 +1,75 @@
+@import "~bootstrap/scss/bootstrap";
+
+/**
+ * SCSS BT addons to expend responsive width abilities.
+ */
+
+@include media-breakpoint-up(md) {
+  // 75%.
+  .w-md-75 {
+    width: 75% !important;
+  }
+
+  // 90%.
+  .w-md-90 {
+    width: 90% !important;
+  }
+
+  // 95%.
+  .w-md-95 {
+    width: 95% !important;
+  }
+
+}
+
+@include media-breakpoint-up(sm) {
+  // 75%.
+  .w-sm-75 {
+    width: 75% !important;
+  }
+
+  // 90%.
+  .w-sm-90 {
+    width: 90% !important;
+  }
+
+  // 95%.
+  .w-sm-95 {
+    width: 95% !important;
+  }
+
+}
+
+@include media-breakpoint-up(xs) {
+  // 75%.
+  .w-xs-75 {
+    width: 75% !important;
+  }
+
+  // 90%.
+  .w-xs-90 {
+    width: 90% !important;
+  }
+
+  // 95%.
+  .w-xs-95 {
+    width: 95% !important;
+  }
+}
+
+@include media-breakpoint-up(lg) {
+  // 75%.
+  .w-lg-75 {
+    width: 75% !important;
+  }
+
+  // 90%.
+  .w-lg-90 {
+    width: 90% !important;
+  }
+
+  // 95%.
+  .w-lg-95 {
+    width: 95% !important;
+  }
+}
