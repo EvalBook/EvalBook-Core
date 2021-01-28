@@ -5,6 +5,11 @@
  */
 
 @include media-breakpoint-up(md) {
+  // 50%.
+  .w-md-50 {
+    width: 50% !important;
+  }
+
   // 75%.
   .w-md-75 {
     width: 75% !important;
@@ -23,6 +28,11 @@
 }
 
 @include media-breakpoint-up(sm) {
+  // 50%.
+  .w-sm-50 {
+    width: 50% !important;
+  }
+
   // 75%.
   .w-sm-75 {
     width: 75% !important;
@@ -40,24 +50,12 @@
 
 }
 
-@include media-breakpoint-up(xs) {
-  // 75%.
-  .w-xs-75 {
-    width: 75% !important;
-  }
-
-  // 90%.
-  .w-xs-90 {
-    width: 90% !important;
-  }
-
-  // 95%.
-  .w-xs-95 {
-    width: 95% !important;
-  }
-}
-
 @include media-breakpoint-up(lg) {
+  // 50%.
+  .w-lg-50 {
+    width: 50% !important;
+  }
+
   // 75%.
   .w-lg-75 {
     width: 75% !important;
