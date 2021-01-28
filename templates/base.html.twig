@@ -1,8 +1,16 @@
 <!DOCTYPE html>
-<html>
+<html lang="fr">
     <head>
+        <!-- Basic metas -->
         <meta charset="UTF-8">
-        <title>{% block title %}Welcome!{% endblock %}</title>
+-       <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="Free and open source school report for teachers and schools">
+        <meta name="author" content="EvalBook">
+
+        <!-- EB favicon. -->
+        <link rel="icon" type="image/x-icon" href="{{ asset('build/img/favicon.ico') }}" />
+
+        <title>{% block title %}EvalBook{% endblock %}</title>
 
         {{ encore_entry_link_tags('app') }}
         {% block stylesheets %}{% endblock %}
