@@ -20,14 +20,44 @@ class AppFixtures extends Fixture
     }
 
     /**
+     * Load fixtures.
      * @param ObjectManager $manager
      */
     public function load(ObjectManager $manager) {
-        $user = new User();
-        $user->setEmail('admin@eb.com');
-        $user->setPassword($this->passwordEncoder->encodePassword($user, 'password'));
+        $this->loadAdmin($manager);
+        $this->loadUsers($manager);
+    }
 
+    /**
+     * Load admin user.
+     * @param ObjectManager $manager
+     */
+    public function loadAdmin(ObjectManager $manager) {
+        $user = new User();
+        $user->setEmail('admin@eb.com')
+             ->setPassword($this->passwordEncoder->encodePassword($user, 'password'))
+             ->setFirstname('Admin')
+             ->setLastname('Super')
+        ;
         $manager->persist($user);
+        $manager->flush();
+    }
+
+
+    /**
+     * Load classic users.
+     * @param ObjectManager $manager
+     */
+    public function loadUsers(ObjectManager $manager) {
+        for($i = 5; $i > 0; $i--) {
+            $user = new User();
+            $user->setEmail('u-' . $i . '@eb.com')
+                 ->setPassword($this->passwordEncoder->encodePassword($user, 'password'))
+                 ->setFirstname('User')
+                 ->setLastname($i)
+            ;
+            $manager->persist($user);
+        }
         $manager->flush();
     }
 }

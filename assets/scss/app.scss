@@ -20,7 +20,7 @@ body {
 
     .btnSubmit {
         font-weight: 600;
-        width: 50%;
+        width: 35%;
         color: #282726;
         background-color: #fff;
         border: none;
@@ -28,12 +28,10 @@ body {
         padding:2%;
     }
 
-    input[type='submit'], input[type='email'], input[type='password'] {
-        margin-top: 10px;
-        margin-bottom: 10px;
+    input[type="submit"], input[type="email"], input[type="password"] {
+        margin-top: 2rem;
     }
 }
-
 
 /**
  * Sidebar left style.
@@ -67,9 +65,6 @@ body {
         width: 15rem;
     }
 }
-
-
-
 
 
 /**
