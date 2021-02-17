@@ -2,15 +2,13 @@
 
 namespace App\Entity;
 
-use App\Repository\SchoolRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
+use App\Repository\ImplantationRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity(repositoryClass=SchoolRepository::class)
+ * @ORM\Entity(repositoryClass=ImplantationRepository::class)
  */
-class School
+class Implantation
 {
     /**
      * @ORM\Id
@@ -40,25 +38,18 @@ class School
     private $zip;
 
     /**
-     * @ORM\OneToMany(targetEntity=Implantation::class, mappedBy="school", orphanRemoval=true)
-     */
-    private $implantations;
-
-    /**
      * @ORM\Column(type="string", length=255)
      */
     private $country;
 
-
     /**
-     * School constructor.
+     * @ORM\ManyToOne(targetEntity=School::class, inversedBy="implantations")
+     * @ORM\JoinColumn(nullable=false)
      */
-    public function __construct() {
-        $this->implantations = new ArrayCollection();
-    }
+    private $school;
 
     /**
-     * Return the School ID.
+     * Return the Implantation ID.
      * @return int|null
      */
     public function getId(): ?int {
@@ -66,7 +57,7 @@ class School
     }
 
     /**
-     * Return the School name.
+     * Return the Implantation name.
      * @return string|null
      */
     public function getName(): ?string {
@@ -74,17 +65,18 @@ class School
     }
 
     /**
-     * Set the School name.
+     * Set the Implantation name.
      * @param string $name
      * @return $this
      */
     public function setName(string $name): self {
         $this->name = $name;
+
         return $this;
     }
 
     /**
-     * Return the School street.
+     * Return the Implantation street.
      * @return string|null
      */
     public function getStreet(): ?string {
@@ -92,17 +84,18 @@ class School
     }
 
     /**
-     * Set the School street.
+     * Set the Implantation Street.
      * @param string $street
      * @return $this
      */
     public function setStreet(string $street): self {
         $this->street = $street;
+
         return $this;
     }
 
     /**
-     * Return the School number.
+     * Return the Implantation number.
      * @return int|null
      */
     public function getNumber(): ?int {
@@ -110,17 +103,18 @@ class School
     }
 
     /**
-     * Set the School number.
+     * Set the Implantation number.
      * @param int $number
      * @return $this
      */
     public function setNumber(int $number): self {
         $this->number = $number;
+
         return $this;
     }
 
     /**
-     * Return the School postal code.
+     * Return the Implantation country postal code.
      * @return int|null
      */
     public function getZip(): ?int {
@@ -128,17 +122,18 @@ class School
     }
 
     /**
-     * Set the School postal code.
+     * Set the Implantation postal code.
      * @param int $zip
      * @return $this
      */
     public function setZip(int $zip): self {
         $this->zip = $zip;
+
         return $this;
     }
 
     /**
-     * Return the School country.
+     * Return the Implantation country.
      * @return string|null
      */
     public function getCountry(): ?string {
@@ -146,53 +141,37 @@ class School
     }
 
     /**
-     * Set the School Country.
+     * Set the Implantation Country.
      * @param string $country
      * @return $this
      */
     public function setCountry(string $country): self {
         $this->country = $country;
+
         return $this;
     }
 
     /**
-     * Return the School Implantations
-     * @return Collection|Implantation[]
+     * Return the Implantation's School.
+     * @return School|null
      */
-    public function getImplantations(): Collection {
-        return $this->implantations;
+    public function getSchool(): ?School {
+        return $this->school;
     }
 
     /**
-     * Add a School Implantation.
-     * @param Implantation $implantation
+     * Set the Implantation's School.
+     * @param School|null $school
      * @return $this
      */
-    public function addImplantation(Implantation $implantation): self {
-        if (!$this->implantations->contains($implantation)) {
-            $this->implantations[] = $implantation;
-            $implantation->setSchool($this);
-        }
+    public function setSchool(?School $school): self {
+        $this->school = $school;
+
         return $this;
     }
 
     /**
-     * Remove a School Implantation.
-     * @param Implantation $implantation
-     * @return $this
-     */
-    public function removeImplantation(Implantation $implantation): self {
-        if ($this->implantations->removeElement($implantation)) {
-            // set the owning side to null (unless already changed)
-            if ($implantation->getSchool() === $this) {
-                $implantation->setSchool(null);
-            }
-        }
-        return $this;
-    }
-
-    /**
-     * Return the School's string representation.
+     * The Implantation's string representation.
      * @return string
      */
     public function __toString(): string {
