@@ -20,10 +20,4 @@ import './scss/bootstrap/bootstrap-custom-width.scss';
 import './scss/app.scss';
 
 
-// any CSS you import will output into a single css file (app.css in this case)
-import './styles/app.css';
-
-// start the Stimulus application
-import './bootstrap';
-
 

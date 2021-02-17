@@ -27,6 +27,11 @@ body {
         border-radius: 1.5rem;
         padding:2%;
     }
+
+    input[type='submit'], input[type='email'], input[type='password'] {
+        margin-top: 10px;
+        margin-bottom: 10px;
+    }
 }
 
 
