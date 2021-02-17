@@ -15,23 +15,23 @@
         <div class="container d-flex justify-content-center vh-100">
             <div class="row w-100 w-md-75 w-lg-50 align-self-center" id="login-form">
                 <div class="col-md-12 login-form bg-ebprimary">
-                    <h3>Login</h3>
+                    <h3>{{ 'Login'|trans }}</h3>
 
                     <div class="form-group">
-                        <input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="form-control" placeholder="Your Email" required>
+                        <input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="form-control" placeholder="{{ 'Your mail'|trans }}" required>
                     </div>
 
                     <div class="form-group">
-                        <input type="password" name="password" id="inputPassword" class="form-control" placeholder="Your Password" required>
+                        <input type="password" name="password" id="inputPassword" class="form-control" placeholder="{{ 'Your Password'|trans }}" required>
                     </div>
 
                     <div class="form-group">
-                        <input type="submit" class="btnSubmit" value="Login" />
+                        <input type="submit" class="btnSubmit" value="{{ 'Login'|trans }}" />
                     </div>
 
                     <div class="checkbox mb-3">
                         <label>
-                            <input type="checkbox" name="_remember_me"> Remember me
+                            <input type="checkbox" name="_remember_me"> {{ 'Remember me'|trans }}
                         </label>
                     </div>
 
