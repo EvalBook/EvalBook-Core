@@ -4,3 +4,4 @@ EvalBook Core peut s'installer sur un serveur léger et permet aux écoles belge
 
     - Gérer des évaluations
     - Atrribuer des notes à ces évaluations
+
