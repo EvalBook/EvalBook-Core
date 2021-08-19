@@ -9,3 +9,9 @@ EvalBook Core permet également la généartion d'un bulletin pour chaque élèv
 du module **EvalBook Report** qui est installé d'office.
 
 
+## Documentation développeurs
+
+De la documentation basique pour les contributeurs est disponible dans le dossier **_doc** à la racine du projet.
+
+Pour le README développeurs, c'est [par ici](_doc/technique/README_DEV.md).
+
