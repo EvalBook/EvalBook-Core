@@ -16,5 +16,9 @@
         "build": "encore production --progress",
         "bc": "php bin/console",
         "evalbook-dev-install": "composer install && yarn install && yarn bc d:d:c -n --if-not-exists && yarn bc d:m:m -n"
+    },
+    "dependencies": {
+        "sass": "^1.38.0",
+        "sass-loader": "^12.1.0"
     }
 }
