@@ -2,11 +2,25 @@
 
 Vous souhaitez contribuer à Evalbook ? Super ! Mais il y a quelques règles à suivre, voyons ça ensemble.
 
+
 ## Généralités.
 * Webpack est utilisé pour packer les sources js, css, sass, etc...
 * Yarn est utlisé comme gestionnaire de dépendances, n'utilisez surtout pas npm pour Evalbook.
 * Pour bien démarrer, un coups de *composer install* ainsi qu'un *yarn install*
 * Des scripts sont à votre disposition dans la section Webpack qui va bien :-)
+
+
+## Base de données et configuration
+Il est important de <span style="color:blue">**ne pas toucher au fichier .env**</span> se situant à la racine du projet, ce fichier est destiné à être utilisé en production.
+
+Si vous avez besoin de spécifier vos accès à MySQL, MariaDb ou encore PostgreSQL, alors:
+* Créez un fichier **.env.local**,
+* Pour des raisons de sécurité évidentes, ajoutez le aux fichiers exclus de git (.gitignore),
+* Copiez les informations reprises dans le fichier **.env**,
+* Adaptez les diverses informations en fonction de vos paramètres locaux de développemet.
+
+:warning: <span style="color:red">**N'oubliez pas d'insérer les informations de connexion à votre base de données AVANT d'aller plus loin !**</span>
+
 
 ## Installer les dépendances
 
@@ -69,13 +83,3 @@ $ php -S localhost:8000 -t public/
 ```shell
 $ symfony serve
 ```
-
-
-## Base de données et configuration
-Il est important de <span style="color:blue">**ne pas toucher au fichier .env**</span> se situant à la racine du projet, ce fichier est destiné à être utilisé en production. 
-
-Si vous avez besoin de spécifier vos accès à MySQL, MariaDb ou encore PostgreSQL, alors: 
-* Créez un fichier **.env.local**,
-* Pour des raisons de sécurité évidentes, ajoutez le aux fichiers exclus de git (.gitignore),
-* Copiez les informations reprises dans le fichier **.env**,
-* Adaptez les diverses informations en fonction de vos paramètres locaux de développemet.
