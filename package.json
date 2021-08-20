@@ -13,6 +13,8 @@
         "dev-server": "encore dev-server",
         "dev": "encore dev",
         "watch": "encore dev --watch",
-        "build": "encore production --progress"
+        "build": "encore production --progress",
+        "bc": "php bin/console",
+        "evalbook-dev-install": "composer install && yarn install && yarn bc d:d:c -n --if-not-exists && yarn bc d:m:m -n"
     }
 }

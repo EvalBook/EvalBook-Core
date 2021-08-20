@@ -24,7 +24,14 @@ Si vous avez besoin de spécifier vos accès à MySQL, MariaDb ou encore Postgre
 
 ## Installer les dépendances
 
-Dans la console:
+Pour installer les dépendances, vous aurez le choix entre:
+* Utiliser le script d'installation réalisé par nos soins (vous facilitera la vie)
+* Utiliser la bonne vieille méthode manuelle
+
+
+### <span style="color:blue">Méthode manuelle</span>
+
+Dans la console - terminal
 
 1. Installation des packages composer - Symfony
 ```shell
@@ -51,9 +58,25 @@ $ php bin/console make:migration
 $ php bin/console doctrine:migrations:migrate
 ```
 
-Un script que vous pourrez utiliser pour faire tout ca automatiquement sera fourni sous peu.
 
+### <span style="color:blue">Méthode automatique avec notre script dev</span>:
 
+Pour utiliser ce script, vous aurez besoin de disposer de yarn, mais si vous souhaitez contrinuer à EvalBook, vous devriez déjà l'avoir installé'
+```shell
+$ yarn evalbook-dev-install
+```
+
+Utilisez ce script si vous n'avez jamais importé EvalBook ou si vous utilisez une nouvelle branche. Vous devrez au préalable 
+avoir entré les informations de connexion à la base de données dans le fichier .env.local
+
+Pour information, voici ce que le script réalise poiur vous:
+```json
+{
+  ...
+  "bc": "php bin/console",
+  "evalbook-dev-install": "composer install && yarn install && yarn bc d:d:c -n --if-not-exists && yarn bc d:m:m -n"
+}
+```
 
 ## Rouler le serveur en mode dev
 
