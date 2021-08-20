@@ -6,9 +6,13 @@ Vous souhaitez contribuer à Evalbook ? Super ! Mais il y a quelques règles à 
 ## Généralités.
 * Webpack est utilisé pour packer les sources js, css, sass, etc...
 * Yarn est utlisé comme gestionnaire de dépendances, n'utilisez surtout pas npm pour Evalbook.
-* Pour bien démarrer, un coups de *composer install* ainsi qu'un *yarn install*
-* Des scripts sont à votre disposition dans la section Webpack qui va bien :-)
+  Si vous ne disposez pas encore de yarn, vous pouvez l'installer facilement à l'aide du terminal et de npm en entrant la commande suivante:
+```shell
+$ npm install --global yarn
 
+# Pou tester l'installation, utilisez la commande suivante
+$ yarn --version
+```
 
 ## Base de données et configuration
 Il est important de <span style="color:blue">**ne pas toucher au fichier .env**</span> se situant à la racine du projet, ce fichier est destiné à être utilisé en production.
