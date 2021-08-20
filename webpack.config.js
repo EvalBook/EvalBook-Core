@@ -70,6 +70,9 @@ Encore
 
     // uncomment if you're having problems with a jQuery plugin
     //.autoProvidejQuery()
+    .enableVueLoader(() => {}, {
+        useJsx: true,
+    })
 ;
 
 module.exports = Encore.getWebpackConfig();
