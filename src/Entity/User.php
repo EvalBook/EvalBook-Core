@@ -6,6 +6,7 @@ use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use JetBrains\PhpStorm\Pure;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
@@ -51,6 +52,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @ORM\OneToOne(targetEntity=Classroom::class, mappedBy="owner", cascade={"persist", "remove"})
      */
     private Classroom $ownedClassroom;
+
+    /**
+     * @ORM\ManyToMany(targetEntity=Classroom::class, mappedBy="users")
+     */
+    private ArrayCollection $classrooms;
+
+
+    #[Pure] public function __construct()
+    {
+        $this->classrooms = new ArrayCollection();
+    }
 
 
     /**
@@ -211,6 +223,41 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         }
 
         $this->ownedClassroom = $ownedClassroom;
+        return $this;
+    }
+
+    /**
+     * @return Collection|Classroom[]
+     */
+    public function getClassrooms(): Collection
+    {
+        return $this->classrooms;
+    }
+
+    /**
+     * @param Classroom $classroom
+     * @return $this
+     */
+    public function addClassroom(Classroom $classroom): self
+    {
+        if (!$this->classrooms->contains($classroom)) {
+            $this->classrooms[] = $classroom;
+            $classroom->addUser($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param Classroom $classroom
+     * @return $this
+     */
+    public function removeClassroom(Classroom $classroom): self
+    {
+        if ($this->classrooms->removeElement($classroom)) {
+            $classroom->removeUser($this);
+        }
+
         return $this;
     }
 }
