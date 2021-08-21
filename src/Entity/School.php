@@ -3,7 +3,10 @@
 namespace App\Entity;
 
 use App\Repository\SchoolRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use JetBrains\PhpStorm\Pure;
 
 /**
  * @ORM\Entity(repositoryClass=SchoolRepository::class)
@@ -42,6 +45,17 @@ class School
      * @ORM\Column(type="string", length=20)
      */
     private string $zip;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Implantation::class, mappedBy="school")
+     */
+    private ArrayCollection $implantations;
+
+    #[Pure]
+    public function __construct()
+    {
+        $this->implantations = new ArrayCollection();
+    }
 
 
     /**
@@ -139,6 +153,44 @@ class School
     public function setZip(string $zip): self
     {
         $this->zip = $zip;
+        return $this;
+    }
+
+    /**
+     * @return Collection|Implantation[]
+     */
+    public function getImplantations(): Collection
+    {
+        return $this->implantations;
+    }
+
+    /**
+     * @param Implantation $implantation
+     * @return $this
+     */
+    public function addImplantation(Implantation $implantation): self
+    {
+        if (!$this->implantations->contains($implantation)) {
+            $this->implantations[] = $implantation;
+            $implantation->setSchool($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param Implantation $implantation
+     * @return $this
+     */
+    public function removeImplantation(Implantation $implantation): self
+    {
+        if ($this->implantations->removeElement($implantation)) {
+            // set the owning side to null (unless already changed)
+            if ($implantation->getSchool() === $this) {
+                $implantation->setSchool(null);
+            }
+        }
+
         return $this;
     }
 }
