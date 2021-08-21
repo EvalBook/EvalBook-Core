@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -44,6 +46,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @ORM\Column(type="string", length=255)
      */
     private string $first_name;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Classroom::class, mappedBy="owner", orphanRemoval=true)
+     */
+    private $classrooms;
+
+    public function __construct()
+    {
+        $this->classrooms = new ArrayCollection();
+    }
 
 
     /**
@@ -181,6 +193,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setFirstName(string $first_name): self
     {
         $this->first_name = $first_name;
+        return $this;
+    }
+
+    /**
+     * @return Collection|Classroom[]
+     */
+    public function getClassrooms(): Collection
+    {
+        return $this->classrooms;
+    }
+
+    public function addClassroom(Classroom $classroom): self
+    {
+        if (!$this->classrooms->contains($classroom)) {
+            $this->classrooms[] = $classroom;
+            $classroom->setOwner($this);
+        }
+
+        return $this;
+    }
+
+    public function removeClassroom(Classroom $classroom): self
+    {
+        if ($this->classrooms->removeElement($classroom)) {
+            // set the owning side to null (unless already changed)
+            if ($classroom->getOwner() === $this) {
+                $classroom->setOwner(null);
+            }
+        }
+
         return $this;
     }
 }

@@ -55,12 +55,18 @@ class Implantation
      */
     private ArrayCollection $periods;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Classroom::class, mappedBy="implantation", orphanRemoval=true)
+     */
+    private ArrayCollection $classrooms;
+
 
 
     #[Pure]
     public function __construct()
     {
         $this->periods = new ArrayCollection();
+        $this->classrooms = new ArrayCollection();
     }
 
 
@@ -212,6 +218,44 @@ class Implantation
             // set the owning side to null (unless already changed)
             if ($period->getImplantation() === $this) {
                 $period->setImplantation(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Classroom[]
+     */
+    public function getClassrooms(): Collection
+    {
+        return $this->classrooms;
+    }
+
+    /**
+     * @param Classroom $classroom
+     * @return $this
+     */
+    public function addClassroom(Classroom $classroom): self
+    {
+        if (!$this->classrooms->contains($classroom)) {
+            $this->classrooms[] = $classroom;
+            $classroom->setImplantation($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param Classroom $classroom
+     * @return $this
+     */
+    public function removeClassroom(Classroom $classroom): self
+    {
+        if ($this->classrooms->removeElement($classroom)) {
+            // set the owning side to null (unless already changed)
+            if ($classroom->getImplantation() === $this) {
+                $classroom->setImplantation(null);
             }
         }
 
