@@ -40,11 +40,17 @@ class Pupil
      */
     private ArrayCollection $classrooms;
 
+    /**
+     * @ORM\OneToMany(targetEntity=PupilContact::class, mappedBy="pupil", orphanRemoval=true)
+     */
+    private ArrayCollection $pupilContacts;
+
 
     #[Pure]
     public function __construct()
     {
         $this->classrooms = new ArrayCollection();
+        $this->pupilContacts = new ArrayCollection();
     }
 
 
@@ -138,6 +144,44 @@ class Pupil
     public function removeClassroom(Classroom $classroom): self
     {
         $this->classrooms->removeElement($classroom);
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|PupilContact[]
+     */
+    public function getPupilContacts(): Collection
+    {
+        return $this->pupilContacts;
+    }
+
+    /**
+     * @param PupilContact $pupilContact
+     * @return $this
+     */
+    public function addPupilContact(PupilContact $pupilContact): self
+    {
+        if (!$this->pupilContacts->contains($pupilContact)) {
+            $this->pupilContacts[] = $pupilContact;
+            $pupilContact->setPupil($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param PupilContact $pupilContact
+     * @return $this
+     */
+    public function removePupilContact(PupilContact $pupilContact): self
+    {
+        if ($this->pupilContacts->removeElement($pupilContact)) {
+            // set the owning side to null (unless already changed)
+            if ($pupilContact->getPupil() === $this) {
+                $pupilContact->setPupil(null);
+            }
+        }
 
         return $this;
     }
