@@ -6,6 +6,7 @@ use App\Repository\ClassroomRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use JetBrains\PhpStorm\Pure;
 
 /**
  * @ORM\Entity(repositoryClass=ClassroomRepository::class)
@@ -39,11 +40,19 @@ class Classroom
     /**
      * @ORM\ManyToMany(targetEntity=User::class, inversedBy="classrooms")
      */
-    private $users;
+    private ArrayCollection $users;
 
+    /**
+     * @ORM\ManyToMany(targetEntity=Pupil::class, mappedBy="classrooms")
+     */
+    private ArrayCollection $pupils;
+
+
+    #[Pure]
     public function __construct()
     {
         $this->users = new ArrayCollection();
+        $this->pupils = new ArrayCollection();
     }
 
 
@@ -117,6 +126,10 @@ class Classroom
         return $this->users;
     }
 
+    /**
+     * @param User $user
+     * @return $this
+     */
     public function addUser(User $user): self
     {
         if (!$this->users->contains($user)) {
@@ -126,9 +139,48 @@ class Classroom
         return $this;
     }
 
+    /**
+     * @param User $user
+     * @return $this
+     */
     public function removeUser(User $user): self
     {
         $this->users->removeElement($user);
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Pupil[]
+     */
+    public function getPupils(): Collection
+    {
+        return $this->pupils;
+    }
+
+    /**
+     * @param Pupil $pupil
+     * @return $this
+     */
+    public function addPupil(Pupil $pupil): self
+    {
+        if (!$this->pupils->contains($pupil)) {
+            $this->pupils[] = $pupil;
+            $pupil->addClassroom($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param Pupil $pupil
+     * @return $this
+     */
+    public function removePupil(Pupil $pupil): self
+    {
+        if ($this->pupils->removeElement($pupil)) {
+            $pupil->removeClassroom($this);
+        }
 
         return $this;
     }

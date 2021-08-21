@@ -3,7 +3,10 @@
 namespace App\Entity;
 
 use App\Repository\PupilRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use JetBrains\PhpStorm\Pure;
 
 /**
  * @ORM\Entity(repositoryClass=PupilRepository::class)
@@ -31,6 +34,18 @@ class Pupil
      * @ORM\Column(type="datetime")
      */
     private \DateTimeInterface $birthdate;
+
+    /**
+     * @ORM\ManyToMany(targetEntity=Classroom::class, inversedBy="pupils")
+     */
+    private ArrayCollection $classrooms;
+
+
+    #[Pure]
+    public function __construct()
+    {
+        $this->classrooms = new ArrayCollection();
+    }
 
 
     /**
@@ -92,6 +107,38 @@ class Pupil
     public function setBirthdate(\DateTimeInterface $birthdate): self
     {
         $this->birthdate = $birthdate;
+        return $this;
+    }
+
+    /**
+     * @return Collection|Classroom[]
+     */
+    public function getClassrooms(): Collection
+    {
+        return $this->classrooms;
+    }
+
+    /**
+     * @param Classroom $classroom
+     * @return $this
+     */
+    public function addClassroom(Classroom $classroom): self
+    {
+        if (!$this->classrooms->contains($classroom)) {
+            $this->classrooms[] = $classroom;
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param Classroom $classroom
+     * @return $this
+     */
+    public function removeClassroom(Classroom $classroom): self
+    {
+        $this->classrooms->removeElement($classroom);
+
         return $this;
     }
 }
