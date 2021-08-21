@@ -3,7 +3,10 @@
 namespace App\Entity;
 
 use App\Repository\ImplantationRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use JetBrains\PhpStorm\Pure;
 
 /**
  * @ORM\Entity(repositoryClass=ImplantationRepository::class)
@@ -46,6 +49,19 @@ class Implantation
      * @ORM\ManyToOne(targetEntity=School::class, inversedBy="implantations")
      */
     private School $school;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Period::class, mappedBy="implantation", orphanRemoval=true)
+     */
+    private ArrayCollection $periods;
+
+
+
+    #[Pure]
+    public function __construct()
+    {
+        $this->periods = new ArrayCollection();
+    }
 
 
     /**
@@ -161,6 +177,44 @@ class Implantation
     public function setSchool(?School $school): self
     {
         $this->school = $school;
+        return $this;
+    }
+
+    /**
+     * @return Collection|Period[]
+     */
+    public function getPeriods(): Collection
+    {
+        return $this->periods;
+    }
+
+    /**
+     * @param Period $period
+     * @return $this
+     */
+    public function addPeriod(Period $period): self
+    {
+        if (!$this->periods->contains($period)) {
+            $this->periods[] = $period;
+            $period->setImplantation($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param Period $period
+     * @return $this
+     */
+    public function removePeriod(Period $period): self
+    {
+        if ($this->periods->removeElement($period)) {
+            // set the owning side to null (unless already changed)
+            if ($period->getImplantation() === $this) {
+                $period->setImplantation(null);
+            }
+        }
+
         return $this;
     }
 }
