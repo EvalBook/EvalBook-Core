@@ -8,6 +8,23 @@ EvalBook Core peut s'installer sur un serveur léger et permet aux écoles belge
 EvalBook Core permet également la généartion d'un bulletin pour chaque élève inscrit dans le système, la création du bulletin fait partie 
 du module **EvalBook Report** qui est installé d'office.
 
+## Installation
+
+### Image Docker
+
+### Installation classique
+
+## Contribuer
+
+### Traduire
+
+### Coder
+
+### Financer
+
+## Support
+
+### Modalités de support
 
 ## Documentation développeurs
 
