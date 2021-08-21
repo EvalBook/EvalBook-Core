@@ -48,14 +48,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private string $first_name;
 
     /**
-     * @ORM\OneToMany(targetEntity=Classroom::class, mappedBy="owner", orphanRemoval=true)
+     * @ORM\OneToOne(targetEntity=Classroom::class, mappedBy="owner", cascade={"persist", "remove"})
      */
-    private $classrooms;
-
-    public function __construct()
-    {
-        $this->classrooms = new ArrayCollection();
-    }
+    private Classroom $ownedClassroom;
 
 
     /**
@@ -197,32 +192,25 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
     /**
-     * @return Collection|Classroom[]
+     * @return Classroom|null
      */
-    public function getClassrooms(): Collection
+    public function getOwnedClassroom(): ?Classroom
     {
-        return $this->classrooms;
+        return $this->ownedClassroom;
     }
 
-    public function addClassroom(Classroom $classroom): self
+    /**
+     * @param Classroom $ownedClassroom
+     * @return $this
+     */
+    public function setOwnedClassroom(Classroom $ownedClassroom): self
     {
-        if (!$this->classrooms->contains($classroom)) {
-            $this->classrooms[] = $classroom;
-            $classroom->setOwner($this);
+        // set the owning side of the relation if necessary
+        if ($ownedClassroom->getOwner() !== $this) {
+            $ownedClassroom->setOwner($this);
         }
 
-        return $this;
-    }
-
-    public function removeClassroom(Classroom $classroom): self
-    {
-        if ($this->classrooms->removeElement($classroom)) {
-            // set the owning side to null (unless already changed)
-            if ($classroom->getOwner() === $this) {
-                $classroom->setOwner(null);
-            }
-        }
-
+        $this->ownedClassroom = $ownedClassroom;
         return $this;
     }
 }

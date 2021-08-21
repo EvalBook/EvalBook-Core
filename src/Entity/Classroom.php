@@ -29,7 +29,7 @@ class Classroom
     private Implantation $implantation;
 
     /**
-     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="classrooms")
+     * @ORM\OneToOne(targetEntity=User::class, inversedBy="ownedClassroom", cascade={"persist", "remove"})
      * @ORM\JoinColumn(nullable=false)
      */
     private User $owner;
@@ -88,12 +88,13 @@ class Classroom
     }
 
     /**
-     * @param User|null $owner
+     * @param User $owner
      * @return $this
      */
-    public function setOwner(?User $owner): self
+    public function setOwner(User $owner): self
     {
         $this->owner = $owner;
         return $this;
     }
+
 }
