@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\ActivityRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -45,6 +47,17 @@ class Activity
      */
     private Classroom $class;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Note::class, mappedBy="activity", orphanRemoval=true)
+     */
+    private ArrayCollection $notes;
+
+
+
+    public function __construct()
+    {
+        $this->notes = new ArrayCollection();
+    }
 
     /**
      * @return int|null
@@ -141,6 +154,44 @@ class Activity
     public function setClass(?Classroom $class): self
     {
         $this->class = $class;
+        return $this;
+    }
+
+    /**
+     * @return Collection|Note[]
+     */
+    public function getNotes(): Collection
+    {
+        return $this->notes;
+    }
+
+    /**
+     * @param Note $note
+     * @return $this
+     */
+    public function addNote(Note $note): self
+    {
+        if (!$this->notes->contains($note)) {
+            $this->notes[] = $note;
+            $note->setActivity($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param Note $note
+     * @return $this
+     */
+    public function removeNote(Note $note): self
+    {
+        if ($this->notes->removeElement($note)) {
+            // set the owning side to null (unless already changed)
+            if ($note->getActivity() === $this) {
+                $note->setActivity(null);
+            }
+        }
+
         return $this;
     }
 }
