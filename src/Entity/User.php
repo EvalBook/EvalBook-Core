@@ -27,10 +27,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private string $email;
 
-    /**
-     * @ORM\Column(type="json")
-     */
-    private $roles = [];
+
+     //@ORM\Column(type="json")
+    //private $roles = [];
 
     /**
      * @var string The hashed password
@@ -57,6 +56,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @ORM\ManyToMany(targetEntity=Classroom::class, mappedBy="users")
      */
     private ArrayCollection $classrooms;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Role::class, inversedBy="users")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private Role $role;
 
 
     public function __construct()
@@ -113,20 +118,29 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     public function getRoles(): array
     {
-        $roles = $this->roles;
-        // guarantee every user at least has ROLE_USER
-        $roles[] = 'ROLE_USER';
-
-        return array_unique($roles);
+        return [
+            'ROLE_USER',
+            $this->getRole()->toString(),
+        ];
     }
 
     /**
-     * @param array $roles
+     * Return attribued role except the user very basic role that is only needed to get user connected or simple other things.
+     * @return Role|null
+     */
+    public function getRole(): ?Role
+    {
+        return $this->role;
+    }
+
+    /**
+     * @param Role|null $role
      * @return $this
      */
-    public function setRoles(array $roles): self
+    public function setRole(?Role $role): self
     {
-        $this->roles = $roles;
+        $this->role = $role;
+
         return $this;
     }
 
