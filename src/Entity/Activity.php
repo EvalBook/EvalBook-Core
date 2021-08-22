@@ -52,6 +52,11 @@ class Activity
      */
     private ArrayCollection $notes;
 
+    /**
+     * @ORM\Column(type="datetime")
+     */
+    private \DateTimeInterface $created_at;
+
 
 
     public function __construct()
@@ -192,6 +197,24 @@ class Activity
             }
         }
 
+        return $this;
+    }
+
+    /**
+     * @return \DateTimeInterface|null
+     */
+    public function getCreatedAt(): ?\DateTimeInterface
+    {
+        return $this->created_at;
+    }
+
+    /**
+     * @param \DateTimeInterface $createdAt
+     * @return $this
+     */
+    public function setCreatedAt(\DateTimeInterface $createdAt): self
+    {
+        $this->created_at = $createdAt;
         return $this;
     }
 }
