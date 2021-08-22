@@ -37,7 +37,7 @@ class Period
     /**
      * @ORM\Column(type="boolean")
      */
-    private bool $active;
+    private bool $is_active;
 
     /**
      * @ORM\ManyToOne(targetEntity=Implantation::class, inversedBy="periods")
@@ -124,7 +124,7 @@ class Period
      */
     public function isActive(): ?bool
     {
-        return $this->active;
+        return $this->is_active;
     }
 
     /**
@@ -133,7 +133,7 @@ class Period
      */
     public function setActive(bool $active): self
     {
-        $this->active = $active;
+        $this->is_active = $active;
         return $this;
     }
 

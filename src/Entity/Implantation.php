@@ -31,7 +31,7 @@ class Implantation
     private string $street;
 
     /**
-     * @ORM\Column(type="smallint", length=255)
+     * @ORM\Column(type="smallint")
      */
     private int $number;
 

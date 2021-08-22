@@ -23,7 +23,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private int $id;
 
     /**
-     * @ORM\Column(type="string", length=180, unique=true)
+     * @ORM\Column(type="string", length=255, unique=true)
      */
     private string $email;
 
@@ -33,7 +33,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     /**
      * @var string The hashed password
-     * @ORM\Column(type="string")
+     * @ORM\Column(type="string", length=255)
      */
     private string $password;
 
@@ -120,7 +120,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         return [
             'ROLE_USER',
-            $this->getRole()->toString(),
+            (string)$this->getRole(),
         ];
     }
 

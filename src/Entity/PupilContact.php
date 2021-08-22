@@ -20,7 +20,7 @@ class PupilContact
     /**
      * @ORM\Column(type="boolean")
      */
-    private bool $send_school_report;
+    private bool $is_report_sent;
 
     /**
      * @ORM\ManyToOne(targetEntity=ContactRelation::class)
@@ -52,18 +52,18 @@ class PupilContact
     /**
      * @return bool|null
      */
-    public function getSendSchoolReport(): ?bool
+    public function getIsReportSent(): ?bool
     {
-        return $this->send_school_report;
+        return $this->is_report_sent;
     }
 
     /**
-     * @param bool $send_school_report
+     * @param bool $is_report_sent
      * @return $this
      */
-    public function setSendSchoolReport(bool $send_school_report): self
+    public function setIsReportSent(bool $is_report_sent): self
     {
-        $this->send_school_report = $send_school_report;
+        $this->is_report_sent = $is_report_sent;
         return $this;
     }
 

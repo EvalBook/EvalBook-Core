@@ -33,7 +33,7 @@ class Contact
     private string $street;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="smallint")
      */
     private int $number;
 
