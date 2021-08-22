@@ -51,7 +51,6 @@ class SystemConfiguration
     public function setName(string $name): self
     {
         $this->name = $name;
-
         return $this;
     }
 
@@ -70,7 +69,6 @@ class SystemConfiguration
     public function setValue(string $value): self
     {
         $this->value = $value;
-
         return $this;
     }
 }

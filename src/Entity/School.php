@@ -51,7 +51,8 @@ class School
      */
     private ArrayCollection $implantations;
 
-    #[Pure]
+
+
     public function __construct()
     {
         $this->implantations = new ArrayCollection();

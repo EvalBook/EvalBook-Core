@@ -46,7 +46,6 @@ class Pupil
     private ArrayCollection $pupilContacts;
 
 
-    #[Pure]
     public function __construct()
     {
         $this->classrooms = new ArrayCollection();

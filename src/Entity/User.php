@@ -59,7 +59,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ArrayCollection $classrooms;
 
 
-    #[Pure] public function __construct()
+    public function __construct()
     {
         $this->classrooms = new ArrayCollection();
     }

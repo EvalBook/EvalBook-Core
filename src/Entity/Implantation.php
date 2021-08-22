@@ -62,7 +62,6 @@ class Implantation
 
 
 
-    #[Pure]
     public function __construct()
     {
         $this->periods = new ArrayCollection();
