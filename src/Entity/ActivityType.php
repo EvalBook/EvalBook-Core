@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\ActivityTypeRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -32,6 +34,17 @@ class ActivityType
      * @ORM\JoinColumn(nullable=false)
      */
     private NoteType $note_type;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Activity::class, mappedBy="activity_type", orphanRemoval=true)
+     */
+    private ArrayCollection $activities;
+
+
+    public function __construct()
+    {
+        $this->activities = new ArrayCollection();
+    }
 
 
     /**
@@ -93,6 +106,44 @@ class ActivityType
     public function setNoteType(?NoteType $note_type): self
     {
         $this->note_type = $note_type;
+        return $this;
+    }
+
+    /**
+     * @return Collection|Activity[]
+     */
+    public function getActivities(): Collection
+    {
+        return $this->activities;
+    }
+
+    /**
+     * @param Activity $activity
+     * @return $this
+     */
+    public function addActivity(Activity $activity): self
+    {
+        if (!$this->activities->contains($activity)) {
+            $this->activities[] = $activity;
+            $activity->setActivityType($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param Activity $activity
+     * @return $this
+     */
+    public function removeActivity(Activity $activity): self
+    {
+        if ($this->activities->removeElement($activity)) {
+            // set the owning side to null (unless already changed)
+            if ($activity->getActivityType() === $this) {
+                $activity->setActivityType(null);
+            }
+        }
+
         return $this;
     }
 }

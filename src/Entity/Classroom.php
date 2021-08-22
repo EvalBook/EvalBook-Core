@@ -47,11 +47,17 @@ class Classroom
      */
     private ArrayCollection $pupils;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Activity::class, mappedBy="class", orphanRemoval=true)
+     */
+    private ArrayCollection $activities;
+
 
     public function __construct()
     {
         $this->users = new ArrayCollection();
         $this->pupils = new ArrayCollection();
+        $this->activities = new ArrayCollection();
     }
 
 
@@ -179,6 +185,44 @@ class Classroom
     {
         if ($this->pupils->removeElement($pupil)) {
             $pupil->removeClassroom($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Activity[]
+     */
+    public function getActivities(): Collection
+    {
+        return $this->activities;
+    }
+
+    /**
+     * @param Activity $activity
+     * @return $this
+     */
+    public function addActivity(Activity $activity): self
+    {
+        if (!$this->activities->contains($activity)) {
+            $this->activities[] = $activity;
+            $activity->setClass($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param Activity $activity
+     * @return $this
+     */
+    public function removeActivity(Activity $activity): self
+    {
+        if ($this->activities->removeElement($activity)) {
+            // set the owning side to null (unless already changed)
+            if ($activity->getClass() === $this) {
+                $activity->setClass(null);
+            }
         }
 
         return $this;

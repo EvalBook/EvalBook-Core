@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\PeriodRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -43,6 +45,17 @@ class Period
      */
     private Implantation $implantation;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Activity::class, mappedBy="period", orphanRemoval=true)
+     */
+    private ArrayCollection $activities;
+
+
+
+    public function __construct()
+    {
+        $this->activities = new ArrayCollection();
+    }
 
     /**
      * @return int|null
@@ -139,6 +152,44 @@ class Period
     public function setImplantation(?Implantation $implantation): self
     {
         $this->implantation = $implantation;
+        return $this;
+    }
+
+    /**
+     * @return Collection|Activity[]
+     */
+    public function getActivities(): Collection
+    {
+        return $this->activities;
+    }
+
+    /**
+     * @param Activity $activity
+     * @return $this
+     */
+    public function addActivity(Activity $activity): self
+    {
+        if (!$this->activities->contains($activity)) {
+            $this->activities[] = $activity;
+            $activity->setPeriod($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param Activity $activity
+     * @return $this
+     */
+    public function removeActivity(Activity $activity): self
+    {
+        if ($this->activities->removeElement($activity)) {
+            // set the owning side to null (unless already changed)
+            if ($activity->getPeriod() === $this) {
+                $activity->setPeriod(null);
+            }
+        }
+
         return $this;
     }
 }
