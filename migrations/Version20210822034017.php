@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20210821122919 extends AbstractMigration
+final class Version20210822034017 extends AbstractMigration
 {
     public function getDescription(): string
     {
@@ -29,8 +29,10 @@ final class Version20210821122919 extends AbstractMigration
         $this->addSql('CREATE TABLE pupil (id INT AUTO_INCREMENT NOT NULL, last_name VARCHAR(255) NOT NULL, first_name VARCHAR(255) NOT NULL, birthdate DATETIME NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('CREATE TABLE pupil_classroom (pupil_id INT NOT NULL, classroom_id INT NOT NULL, INDEX IDX_DE9D377D2FD11 (pupil_id), INDEX IDX_DE9D3776278D5A8 (classroom_id), PRIMARY KEY(pupil_id, classroom_id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('CREATE TABLE pupil_contact (id INT AUTO_INCREMENT NOT NULL, relation_id INT NOT NULL, contact_id INT NOT NULL, pupil_id INT NOT NULL, send_school_report TINYINT(1) NOT NULL, INDEX IDX_3DE61B373256915B (relation_id), INDEX IDX_3DE61B37E7A1254A (contact_id), INDEX IDX_3DE61B37D2FD11 (pupil_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
+        $this->addSql('CREATE TABLE role (id INT AUTO_INCREMENT NOT NULL, name VARCHAR(255) NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('CREATE TABLE school (id INT AUTO_INCREMENT NOT NULL, name VARCHAR(255) NOT NULL, street VARCHAR(255) NOT NULL, number SMALLINT NOT NULL, city VARCHAR(255) NOT NULL, zip VARCHAR(20) NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
-        $this->addSql('CREATE TABLE user (id INT AUTO_INCREMENT NOT NULL, email VARCHAR(180) NOT NULL, roles LONGTEXT NOT NULL COMMENT \'(DC2Type:json)\', password VARCHAR(255) NOT NULL, last_name VARCHAR(255) NOT NULL, first_name VARCHAR(255) NOT NULL, UNIQUE INDEX UNIQ_8D93D649E7927C74 (email), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
+        $this->addSql('CREATE TABLE system_configuration (id INT AUTO_INCREMENT NOT NULL, name VARCHAR(255) NOT NULL, value VARCHAR(255) NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
+        $this->addSql('CREATE TABLE user (id INT AUTO_INCREMENT NOT NULL, role_id INT NOT NULL, email VARCHAR(180) NOT NULL, password VARCHAR(255) NOT NULL, last_name VARCHAR(255) NOT NULL, first_name VARCHAR(255) NOT NULL, UNIQUE INDEX UNIQ_8D93D649E7927C74 (email), INDEX IDX_8D93D649D60322AC (role_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('ALTER TABLE classroom ADD CONSTRAINT FK_497D309DCE296AF7 FOREIGN KEY (implantation_id) REFERENCES implantation (id)');
         $this->addSql('ALTER TABLE classroom ADD CONSTRAINT FK_497D309D7E3C61F9 FOREIGN KEY (owner_id) REFERENCES user (id)');
         $this->addSql('ALTER TABLE classroom_user ADD CONSTRAINT FK_7499B21D6278D5A8 FOREIGN KEY (classroom_id) REFERENCES classroom (id) ON DELETE CASCADE');
@@ -42,6 +44,7 @@ final class Version20210821122919 extends AbstractMigration
         $this->addSql('ALTER TABLE pupil_contact ADD CONSTRAINT FK_3DE61B373256915B FOREIGN KEY (relation_id) REFERENCES contact_relation (id)');
         $this->addSql('ALTER TABLE pupil_contact ADD CONSTRAINT FK_3DE61B37E7A1254A FOREIGN KEY (contact_id) REFERENCES contact (id)');
         $this->addSql('ALTER TABLE pupil_contact ADD CONSTRAINT FK_3DE61B37D2FD11 FOREIGN KEY (pupil_id) REFERENCES pupil (id)');
+        $this->addSql('ALTER TABLE user ADD CONSTRAINT FK_8D93D649D60322AC FOREIGN KEY (role_id) REFERENCES role (id)');
     }
 
     public function down(Schema $schema): void
@@ -55,6 +58,7 @@ final class Version20210821122919 extends AbstractMigration
         $this->addSql('ALTER TABLE period DROP FOREIGN KEY FK_C5B81ECECE296AF7');
         $this->addSql('ALTER TABLE pupil_classroom DROP FOREIGN KEY FK_DE9D377D2FD11');
         $this->addSql('ALTER TABLE pupil_contact DROP FOREIGN KEY FK_3DE61B37D2FD11');
+        $this->addSql('ALTER TABLE user DROP FOREIGN KEY FK_8D93D649D60322AC');
         $this->addSql('ALTER TABLE implantation DROP FOREIGN KEY FK_16DC605C32A47EE');
         $this->addSql('ALTER TABLE classroom DROP FOREIGN KEY FK_497D309D7E3C61F9');
         $this->addSql('ALTER TABLE classroom_user DROP FOREIGN KEY FK_7499B21DA76ED395');
@@ -67,7 +71,9 @@ final class Version20210821122919 extends AbstractMigration
         $this->addSql('DROP TABLE pupil');
         $this->addSql('DROP TABLE pupil_classroom');
         $this->addSql('DROP TABLE pupil_contact');
+        $this->addSql('DROP TABLE role');
         $this->addSql('DROP TABLE school');
+        $this->addSql('DROP TABLE system_configuration');
         $this->addSql('DROP TABLE user');
     }
 }
