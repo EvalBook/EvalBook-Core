@@ -1,46 +1,57 @@
 <?php
-
+ini_set('max_execution_time', 0);
 require_once 'utils/FileUtils.php';
 
 final class Installer
 {
     const COMPOSER_VERSION = '2.1.6';
 
-    private string $composer_release;
-    private string $download_path;
-    private string $composer_path;
-    private string $npm_path;
+    private string $root;
+    private string $env;
 
-    public function __construct(string $downloadPath) {
-        $this->download_path = $downloadPath;
-        $this->npm_path = $this->download_path . '/vendor/mouf/nodejs-installer/bin/local/npm';
-        $this->composer_release = 'https://github.com/composer/composer/releases/download/' . self::COMPOSER_VERSION . '/composer.phar';
-
+    public function __construct(string $env = 'prod')
+    {
+        $this->root = $_SERVER['DOCUMENT_ROOT'] . '/..';
+        $this->env = $env;
     }
 
     /**
      * Start installation process.
      */
-    public function start() {
-        if(!FileUtils::download($this->composer_release, $this->download_path, 'composer.phar')) {
-            echo "Impossible de télécharger composer, vérifiez votre connexion internet<br>";
-            exit(1);
-        }
+    public function start()
+    {
+        $isLinux = strtolower(PHP_OS) === 'linux';
 
-        $this->composer_path = $this->download_path . '/composer.phar';
+        $release = 'https://github.com/composer/composer/releases/download/' . self::COMPOSER_VERSION . '/composer.phar';
+        if(!FileUtils::download($release, $this->root, 'composer.phar')) {
+            echo "Impossible de télécharger composer, vérifiez votre connexion internet<br>";
+            exit();
+        }
 
         // Installing composer dependencies.
-        exec('php ' . $this->composer_path . ' install --working-dir=' . $this->download_path);
-        if(!is_dir($this->download_path . '/vendor')) {
-            echo "Une problème est survenu en installant les dépendances composer<br>";
-            exit(1);
-        }
+        $composer = 'php ' . $this->root . '/composer.phar install --working-dir=' . $this->root;
+        $this->shellInstall($composer, $this->root . '/vendor');
 
-        // Requiring browser detection lib.
-        if(strtolower(PHP_OS) === 'linux'){
-            exec('sh ' . $this->npm_path . ' install yarn');
-        }
+        // Installing yarn
+        $npm = $isLinux ? 'sh '. $this->root .'/vendor/mouf/nodejs-installer/bin/local/npm' : $this->root .'/vendor/bin/npm.bat';
+        $this->shellInstall("$npm install yarn", $this->root . '/node_modules/yarn');
 
+        // Installing yarn dependencies.
+        $node = $isLinux ? 'sh '. $this->root .'/vendor/mouf/nodejs-installer/bin/local/node' : $this->root .'/vendor/bin/node.bat';
+        $yarn = $this->root . '/node_modules/yarn/bin/yarn.js';
+        $this->shellInstall("$node $yarn install --cwd " . $this->root, null, false);
+    }
+
+
+    /**
+     * Install dependencies via shell.
+     */
+    private function shellInstall(string $cmd, string $dir=null, bool $die=true): void {
+        exec("$cmd");
+        if(null !== $dir && !is_dir($dir)) {
+            echo "Une erreur est survenue en installant une dépendance<br>";
+            exit();
+        }
     }
 
 }
