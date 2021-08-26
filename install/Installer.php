@@ -30,28 +30,29 @@ final class Installer
 
         // Installing composer dependencies.
         $composer = 'php ' . $this->root . '/composer.phar install --working-dir=' . $this->root;
-        $this->shellInstall($composer, $this->root . '/vendor');
+        $result = $this->shellInstall($composer, $this->root . '/vendor');
 
         // Installing yarn
         $npm = $isLinux ? 'sh '. $this->root .'/vendor/mouf/nodejs-installer/bin/local/npm' : $this->root .'/vendor/bin/npm.bat';
-        $this->shellInstall("$npm install yarn", $this->root . '/node_modules/yarn');
+        $result = $this->shellInstall("$npm install yarn", $this->root . '/node_modules/yarn');
 
         // Installing yarn dependencies.
         $node = $isLinux ? 'sh '. $this->root .'/vendor/mouf/nodejs-installer/bin/local/node' : $this->root .'/vendor/bin/node.bat';
         $yarn = $this->root . '/node_modules/yarn/bin/yarn.js';
-        $this->shellInstall("$node $yarn install --cwd " . $this->root, null, false);
+        $result = $this->shellInstall("$node $yarn install --cwd " . $this->root, null, false);
     }
 
 
     /**
      * Install dependencies via shell.
      */
-    private function shellInstall(string $cmd, string $dir=null, bool $die=true): void {
+    private function shellInstall(string $cmd, string $dir=null): bool {
         exec("$cmd");
         if(null !== $dir && !is_dir($dir)) {
             echo "Une erreur est survenue en installant une dépendance<br>";
-            exit();
+            return false;
         }
+        return true;
     }
 
 }

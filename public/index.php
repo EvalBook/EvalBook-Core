@@ -3,8 +3,7 @@
 use App\Kernel;
 
 if(is_dir('../install')) {
-    require_once dirname(__DIR__) . '/install/Installer.php';
-    (new Installer(dirname(__DIR__)))->start();
+    require_once dirname(__DIR__) . '/install/install.php';
 }
 else {
     require_once dirname(__DIR__) . '/vendor/autoload_runtime.php';
