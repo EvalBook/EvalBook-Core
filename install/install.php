@@ -139,9 +139,12 @@ $installer = new Installer(dirname(__DIR__));
             <img src="/assets/logo_text.png" alt="Logo texte EvalBook">
         </header>
         <?php
+        /**
+         * Step one, selection between production or development EvalBook installation.
+         */
         if($step === 1) { ?>
             <section id="step-1" class="active">
-                <h2>Etape 1/3: <span>Choix du mode d'installation</span></h2>
+                <h2>Étape 1/3: <span>Choix du mode d'installation</span></h2>
 
                 <form action="index.php" method="POST">
                     <div class="input-group">
@@ -151,7 +154,7 @@ $installer = new Installer(dirname(__DIR__));
                             <label for="prod">Mode production, pour utiliser dans votre école.</label>
                         </div>
 
-                        <!-- Dev installation mode, used to contibute to EvalBook -->
+                        <!-- Dev installation mode, used to contribute to EvalBook -->
                         <div>
                             <input type="radio" id="dev" name="install-mode" value="dev">
                             <label for="prod">Mode développeur, pour contribuer à EvalBook</label>
