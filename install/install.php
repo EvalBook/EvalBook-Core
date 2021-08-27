@@ -1,6 +1,7 @@
 <?php
 session_start();
 $step = $_SESSION['step'] ?? 0;
+// Checking current installation step.
 if(isset($_POST['next'])){
     $step = (int)++$step;
 }
@@ -10,11 +11,17 @@ elseif(isset($_POST['previous'])) {
 
 $_SESSION['step'] = $step;
 
+// Getting installation mode.
+if(isset($_POST['install-mode']) && in_array($_POST['install-mode'], ['prod', 'env'])) {
+    $_SESSION['install-mode'] = $_POST['install-mode'];
+}
+
 const CHOOSE_MODE = 0;
 const INSTALL_DEPENDENCIES = 1;
+const INSTALL_DEPENDENCIES_COMPOSER = 2;
 
 require dirname(__FILE__) . '/Installer.php';
-$installer = new Installer(dirname(__DIR__));
+$installer = new Installer($_POST['install-mode'] ?? $_SESSION['install-mode'] ?? 'prod');
 
 ?>
 
@@ -191,7 +198,7 @@ $installer = new Installer(dirname(__DIR__));
         /**
          * Step 2, dependencies installation. 
          */
-        elseif($step === INSTALL_DEPENDENCIES){ ?>
+        elseif(in_array($step,[INSTALL_DEPENDENCIES, INSTALL_DEPENDENCIES_COMPOSER])){ ?>
             <section>
                 <h2>Étape 2/3: <span>Installation des dépendences</span></h2>
                 <div class="input-group">
@@ -200,7 +207,17 @@ $installer = new Installer(dirname(__DIR__));
                     $version_span = version_compare($php_version, '7.4.0', '>=') ?
                         "<span class='green bold'>Ok</span>" : "<span class='red bold'>Nok</span>";
                     ?>
-                    <p><?= $version_span ?> - Version de php >= à 7.4 (<?= $php_version ?>)</p>
+                    <p><?= $version_span ?> - Version de php >= à 7.4 (<?= $php_version ?>)</p> <?php
+                    if($step === INSTALL_DEPENDENCIES_COMPOSER) {
+                        if($installer->installComposer()) { ?>
+                            <p><span class='green bold'>Ok</span> - Composer et les dépendences liées ont bien été installés.</p> <?php
+                        }
+                        else { ?>
+                            <p><span class='red bold'>Nok</span> - Un problème est survenu en installant Composer et les dépendences liées.</p> <?php
+                        }
+                        exit();
+                    }
+                    ?>
                 </div>
 
                 <div class="input-group row">
