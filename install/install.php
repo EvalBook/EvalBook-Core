@@ -1,8 +1,17 @@
 <?php
 session_start();
 $step = $_SESSION['step'] ?? 0;
-$step = (int)++$step;
+if(isset($_POST['next'])){
+    $step = (int)++$step;
+}
+elseif(isset($_POST['previous'])) {
+    $step = (int)--$step;
+}
+
 $_SESSION['step'] = $step;
+
+const CHOOSE_MODE = 0;
+const INSTALL_DEPENDENCIES = 1;
 
 require dirname(__FILE__) . '/Installer.php';
 $installer = new Installer(dirname(__DIR__));
@@ -92,10 +101,7 @@ $installer = new Installer(dirname(__DIR__));
             border-radius: 1rem;
             color: #FFFFFF;
             font-size: 1.6rem;
-            padding-left: 2rem;
-            padding-right: 2rem;
-            padding-top: .5rem;
-            padding-bottom: .5rem;
+            padding: .5rem 2rem;
             -webkit-box-shadow: .1rem .1rem .8rem 0 #000000;
             -moz-box-shadow: .1rem .1rem .8rem 0 #000000;
             box-shadow: .1rem .1rem .8rem 0 #000000;
@@ -127,6 +133,12 @@ $installer = new Installer(dirname(__DIR__));
             margin-top: 1.2rem;
         }
 
+        .row {
+            flex-direction: row;
+            justify-content: space-between;
+            width: 100%;
+        }
+
     </style>
     <title>Installation - EvalBook</title>
 </head>
@@ -142,7 +154,7 @@ $installer = new Installer(dirname(__DIR__));
         /**
          * Step one, selection between production or development EvalBook installation.
          */
-        if($step === 1) { ?>
+        if($step === CHOOSE_MODE) { ?>
             <section id="step-1" class="active">
                 <h2>Étape 1/3: <span>Choix du mode d'installation</span></h2>
 
@@ -161,12 +173,38 @@ $installer = new Installer(dirname(__DIR__));
                         </div>
                     </div>
                     <div class="input-group">
-                        <input type="submit" class="btn" value="Suivant" name="submit">
+                        <input type="submit" class="btn" value="Suivant&nbsp;&raquo;" name="next">
                     </div>
                 </form>
 
             </section> <?php
-        } ?>
+        } 
+        /**
+         * Step 2, dependencies installation. 
+         */
+        elseif($step === INSTALL_DEPENDENCIES){ ?>
+            <section id="step-1" class="active">
+                <h2>Étape 2/3: <span>Installation des dépendences</span></h2>
+                <div>
+                    <p>Version de php >= à 7.4</p>
+                </div>
+
+                <div class="input-group row">
+
+                    <form action="index.php" method="POST">
+                        <div class="input-group">
+                            <input type="submit" class="btn" value="&laquo;&nbsp;Précédent" name="previous">
+                        </div>
+                    </form>
+
+                    <form action="index.php" method="POST">
+                        <div class="input-group">
+                            <input type="submit" class="btn" value="Suivant&nbsp;&raquo;" name="next">
+                        </div>
+                    </form>
+                </div>
+            </section> <?php
+        }?>
     </main>
 
 </body>
