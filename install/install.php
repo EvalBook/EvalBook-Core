@@ -50,10 +50,6 @@ $installer = new Installer(dirname(__DIR__));
             margin-top: 6rem;
         }
 
-        section {
-            display: none;
-        }
-
         header img {
             max-width: 50rem;
             height: auto;
@@ -72,15 +68,11 @@ $installer = new Installer(dirname(__DIR__));
             font-size: 1.9rem;
         }
 
-        section.active {
-            display: flex;
-        }
-
         section > * {
             margin-top: 1.5rem;
         }
 
-        section > form * {
+        section > form *, .input-group {
             margin-top: 1rem;
             font-size: 1.6rem;
         }
@@ -133,10 +125,27 @@ $installer = new Installer(dirname(__DIR__));
             margin-top: 1.2rem;
         }
 
+        .input-group p {
+            margin-top: 1.3rem;
+        }
+
         .row {
             flex-direction: row;
             justify-content: space-between;
             width: 100%;
+            margin-top: 1.5rem;
+        }
+
+        .green {
+            color: green;
+        }
+
+        .red {
+            color: red;
+        }
+
+        .bold {
+            font-weight: bold;
         }
 
     </style>
@@ -155,7 +164,7 @@ $installer = new Installer(dirname(__DIR__));
          * Step one, selection between production or development EvalBook installation.
          */
         if($step === CHOOSE_MODE) { ?>
-            <section id="step-1" class="active">
+            <section>
                 <h2>Étape 1/3: <span>Choix du mode d'installation</span></h2>
 
                 <form action="index.php" method="POST">
@@ -183,10 +192,15 @@ $installer = new Installer(dirname(__DIR__));
          * Step 2, dependencies installation. 
          */
         elseif($step === INSTALL_DEPENDENCIES){ ?>
-            <section id="step-1" class="active">
+            <section>
                 <h2>Étape 2/3: <span>Installation des dépendences</span></h2>
-                <div>
-                    <p>Version de php >= à 7.4</p>
+                <div class="input-group">
+                    <?php
+                    $php_version = phpversion();
+                    $version_span = version_compare($php_version, '7.4.0', '>=') ?
+                        "<span class='green bold'>Ok</span>" : "<span class='red bold'>Nok</span>";
+                    ?>
+                    <p><?= $version_span ?> - Version de php >= à 7.4 (<?= $php_version ?>)</p>
                 </div>
 
                 <div class="input-group row">
