@@ -1,6 +1,12 @@
 <?php
+session_start();
+$step = $_SESSION['step'] ?? 0;
+$step = (int)++$step;
+$_SESSION['step'] = $step;
+
 require dirname(__FILE__) . '/Installer.php';
 $installer = new Installer(dirname(__DIR__));
+
 ?>
 
 <!doctype html>
@@ -132,30 +138,32 @@ $installer = new Installer(dirname(__DIR__));
             <h1>Installation de votre instance</h1>
             <img src="/assets/logo_text.png" alt="Logo texte EvalBook">
         </header>
+        <?php
+        if($step === 1) { ?>
+            <section id="step-1" class="active">
+                <h2>Etape 1/3: <span>Choix du mode d'installation</span></h2>
 
-        <section id="step-1" class="active">
-            <h2>Etape 1/3: <span>Choix du mode d'installation</span></h2>
+                <form action="index.php" method="POST">
+                    <div class="input-group">
+                        <!-- Standard installation mode, use in production -->
+                        <div>
+                            <input type="radio" id="prod" name="install-mode" value="prod" checked>
+                            <label for="prod">Mode production, pour utiliser dans votre école.</label>
+                        </div>
 
-            <form action="index.php" method="POST">
-                <div class="input-group">
-                    <!-- Standard installation mode, use in production -->
-                    <div>
-                        <input type="radio" id="prod" name="install-mode" value="prod" checked>
-                        <label for="prod">Mode production, pour utiliser dans votre école.</label>
+                        <!-- Dev installation mode, used to contibute to EvalBook -->
+                        <div>
+                            <input type="radio" id="dev" name="install-mode" value="dev">
+                            <label for="prod">Mode développeur, pour contribuer à EvalBook</label>
+                        </div>
                     </div>
-
-                    <!-- Dev installation mode, used to contibute to EvalBook -->
-                    <div>
-                        <input type="radio" id="dev" name="install-mode" value="dev">
-                        <label for="prod">Mode développeur, pour contribuer à EvalBook</label>
+                    <div class="input-group">
+                        <input type="submit" class="btn" value="Suivant" name="submit">
                     </div>
-                </div>
-                <div class="input-group">
-                    <input type="submit" class="btn" value="Suivant">
-                </div>
-            </form>
+                </form>
 
-        </section>
+            </section> <?php
+        } ?>
     </main>
 
 </body>
