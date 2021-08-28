@@ -135,6 +135,10 @@ $installer = new Installer($_POST['install-mode'] ?? $_SESSION['install-mode'] ?
             margin-bottom: 1rem;
         }
 
+        .input-group.row {
+            flex-direction: row;
+        }
+
         p {
             margin-top: 1.3rem;
             font-size: 1.6rem;
@@ -203,6 +207,34 @@ $installer = new Installer($_POST['install-mode'] ?? $_SESSION['install-mode'] ?
             border-radius: 4px;
             box-shadow: 0 0 5px rgba(0, 0, 0, .2);
             animation: load 5s infinite;
+        }
+
+        label, input[type="text"], input[type="password"], input[type="email"] {
+            display: block;
+            margin-top: 0.8rem;
+            width: 100%;
+            padding: 0.4rem;
+        }
+
+        label {
+            margin-right: 3rem;
+        }
+
+        fieldset {
+            padding: 2rem;
+            border-radius: 0.6rem;
+            margin-top: 4rem !important;
+        }
+
+        fieldset div:last-child {
+            width: 60%;
+        }
+
+        fieldset > legend {
+            margin-left: 0.5rem;
+            margin-right: 0.5rem;
+            padding-left: 1rem;
+            padding-right: 1rem;
         }
 
         @keyframes load {
@@ -366,14 +398,45 @@ $installer = new Installer($_POST['install-mode'] ?? $_SESSION['install-mode'] ?
          */
         else { ?>
             <form action="index.php" method="POST">
-                <div class="input-group">
+                <!-- Database information -->
+                <fieldset class="input-group row">
+                    <legend>Base de données</legend>
+                    <div>
+                        <label for="database-host">Serveur</label>
+                        <label for="database-name">Nom de la base</label>
+                        <label for="database-username">Utilisateur de la base</label>
+                        <label for="database-password">Password de la base</label>
+                    </div>
 
-                </div>
+                    <div class="input-group">
+                        <input type="text" name="database-host" placeholder="Généralement localhost">
+                        <input type="text" name="database-name">
+                        <input type="text" name="database-username">
+                        <input type="password" name="database-password">
+                    </div>
+                </fieldset>
+
+                <!-- Admin user information -->
+                <fieldset class="input-group row">
+                    <legend>Définir l'accès administrateur</legend>
+                    <div>
+                        <label for="admin-pseudo">Pseudo</label>
+                        <label for="admin-password">Mot de passe</label>
+                        <label for="admin-password-repeat">Répétez mot de passe</label>
+                        <label for="admin-email">Adresse mail</label>
+                    </div>
+
+                    <div class="input-group">
+                        <input type="text" name="admin-pseudo" placeholder="Évitez 'admin'">
+                        <input type="password" name="admin-password">
+                        <input type="password" name="admin-password-repeat">
+                        <input type="email" name="admin-email">
+                    </div>
+                </fieldset>
 
                 <div class="input-group">
                     <input type="submit" class="btn" value="Finir l'installation&nbsp;&raquo;" name="next">
                 </div>
-
             </form>
             <?php
         }?>
