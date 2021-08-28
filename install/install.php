@@ -230,11 +230,6 @@ $installer = new Installer($_POST['install-mode'] ?? $_SESSION['install-mode'] ?
                 }
 
                 if($step === INSTALL_DEPENDENCIES_COMPOSER) {
-                    echo '
-                        <script>
-                            document.getElementById("composer-install-overlay").style.display = "flex";
-                        </script>
-                    ';
                     if($installer->installComposer()) { ?>
                         <p><span class='green bold'>Ok</span> - Composer et les dépendences liées ont bien été installés.</p> <?php
                     }
