@@ -174,7 +174,7 @@ $installer = new Installer($_POST['install-mode'] ?? $_SESSION['install-mode'] ?
             top: 0;
             left: 30%;
             width: 40%;
-            margin: 28rem auto;
+            margin: 18rem auto;
             padding: 1.5rem 2rem;
             border-radius: .4rem;
             box-sizing: border-box;
@@ -255,6 +255,14 @@ $installer = new Installer($_POST['install-mode'] ?? $_SESSION['install-mode'] ?
         }
 
     </style>
+
+    <script>
+        window.addEventListener('load', function() {
+            const loader = document.getElementById('loader');
+            loader.parentElement.removeChild(loader);
+        });
+    </script>
+
     <title>Installation - EvalBook</title>
 </head>
 <body>
@@ -266,14 +274,6 @@ $installer = new Installer($_POST['install-mode'] ?? $_SESSION['install-mode'] ?
                 <div class="loading"></div>
             </div>
             <img src="/assets/logo_text.png" alt="Logo texte EvalBook">
-
-            <script>
-                window.addEventListener('load', function() {
-                    const loader = document.getElementById('loader');
-                    loader.parentElement.removeChild(loader);
-                });
-            </script>
-
         </header>
         <?php
         /**
@@ -360,6 +360,22 @@ $installer = new Installer($_POST['install-mode'] ?? $_SESSION['install-mode'] ?
                     </div>
                 </form>
             </section> <?php
+        }
+        /**
+         * Making migration and asking for database / admin details.
+         */
+        else { ?>
+            <form action="index.php" method="POST">
+                <div class="input-group">
+
+                </div>
+
+                <div class="input-group">
+                    <input type="submit" class="btn" value="Finir l'installation&nbsp;&raquo;" name="next">
+                </div>
+
+            </form>
+            <?php
         }?>
     </main>
 </body>
