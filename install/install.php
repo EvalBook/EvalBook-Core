@@ -130,6 +130,11 @@ $installer = new Installer($_POST['install-mode'] ?? $_SESSION['install-mode'] ?
             font-size: 1.6rem;
         }
 
+        .input-group > div {
+            margin-top: 1rem;
+            margin-bottom: 1rem;
+        }
+
         p {
             margin-top: 1.3rem;
             font-size: 1.6rem;
