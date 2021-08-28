@@ -20,6 +20,7 @@ if(isset($_POST['install-mode']) && in_array($_POST['install-mode'], ['prod', 'e
 const CHOOSE_MODE = 0;
 const INSTALL_DEPENDENCIES = 1;
 const INSTALL_DEPENDENCIES_COMPOSER = 2;
+const INSTALL_DEPENDENCIES_NPM_YARN = 3;
 
 require dirname(__FILE__) . '/Installer.php';
 $installer = new Installer($_POST['install-mode'] ?? $_SESSION['install-mode'] ?? 'prod');
@@ -206,7 +207,7 @@ $installer = new Installer($_POST['install-mode'] ?? $_SESSION['install-mode'] ?
         /**
          * Step 2, dependencies installation. 
          */
-        elseif(in_array($step,[INSTALL_DEPENDENCIES, INSTALL_DEPENDENCIES_COMPOSER])){ ?>
+        elseif(in_array($step,[INSTALL_DEPENDENCIES, INSTALL_DEPENDENCIES_COMPOSER, INSTALL_DEPENDENCIES_NPM_YARN])){ ?>
             <section>
                 <h2>Étape 2/3: <span>Installation des dépendences</span></h2>
                 <form action="index.php" method="POST">
@@ -231,20 +232,32 @@ $installer = new Installer($_POST['install-mode'] ?? $_SESSION['install-mode'] ?
                             </div> <?php
                         }
 
-                        if($step === INSTALL_DEPENDENCIES_COMPOSER) {
-                            //$result = $installer->installComposer();
-                            $result = false;
-                            if($result) { ?>
-                                <p><span class='green bold'>Ok</span> - Composer et libs installés.</p>
-                                <hr> <?php
-                            }
-                            else { ?>
-                                <p><span class='red bold'>Nok</span> - Problème survenu en installant Composer.</p>
-                                <hr>
-                                <a class="try-again" href="index.php">Essayer à nouveau</a><?php
-                                $_SESSION['step'] = --$_SESSION['step'];
-                            }
-                        } ?>
+                        elseif($step === INSTALL_DEPENDENCIES_COMPOSER) {
+                            $info = "
+                                La prochaine étape est l'installation de NPM et de YARN, cette opération prend plus de temps.
+                                Les étapes suivantes seront disponibles dès l'apparition des boutons de contrôle.
+                            ";
+                            installPackages(
+                                $installer,
+                                'installComposer',
+                                'Npm, Yarn et libs associées installé',
+                                'Problème survenu en installant Composer.',
+                                'Installer NPM et YARN',
+                                $info
+                            );
+                        }
+                        /**
+                         * Display Npm and Yarn installation process.
+                         */
+                        else{
+                            installPackages(
+                                $installer,
+                                'installNpmAndYarn',
+                                'Npm, Yarn et libs associées installés',
+                                'Problème survenu en installant Npm et Yarn.',
+                                'Dernière étape'
+                            );
+                        }?>
                     </div>
                 </form>
             </section> <?php
@@ -253,3 +266,41 @@ $installer = new Installer($_POST['install-mode'] ?? $_SESSION['install-mode'] ?
 
 </body>
 </html>
+
+<?php
+
+/**
+ * @param Installer $installer
+ * @param string $function
+ * @param string $messageOk
+ * @param string $messageNok
+ * @param string $nextStepLabel
+ * @param string $infoParagraph
+ * @return void
+ */
+function installPackages(
+        Installer $installer,
+        string $function,
+        string $messageOk,
+        string $messageNok,
+        string $nextStepLabel = '',
+        string $infoParagraph = ''
+): void
+{
+    if($installer->$function()) { ?>
+        <p><span class='green bold'>Ok</span> - <?= $messageOk ?></p>
+        <hr>
+        <p class="info">
+            <?= $infoParagraph ?>
+        </p>
+        <div class="input-group">
+            <input type="submit" class="btn" value="<?= $nextStepLabel ?>&nbsp;&raquo;" name="next">
+        </div><?php
+    }
+    else { ?>
+        <p><span class='red bold'>Nok</span> - <?= $messageNok ?></p>
+        <hr>
+        <a class="try-again" href="index.php">Essayer à nouveau</a><?php
+        $_SESSION['step'] = --$_SESSION['step'];
+    }
+}
