@@ -1,5 +1,6 @@
 <?php
 session_start();
+
 $step = $_SESSION['step'] ?? 0;
 // Checking current installation step.
 if(isset($_POST['next'])){
@@ -49,7 +50,6 @@ $installer = new Installer($_POST['install-mode'] ?? $_SESSION['install-mode'] ?
 
         main, header, section {
             display: flex;
-            align-items: center;
             max-width: 50rem;
             flex-direction: column;
             margin-left: auto;
@@ -65,6 +65,7 @@ $installer = new Installer($_POST['install-mode'] ?? $_SESSION['install-mode'] ?
 
         h1, h2 {
             font-family: 'Schoolbell', cursive;
+            text-align: center;
         }
 
         h1 {
@@ -128,19 +129,12 @@ $installer = new Installer($_POST['install-mode'] ?? $_SESSION['install-mode'] ?
         .input-group {
             display: flex;
             flex-direction: column;
-            align-items: center;
             margin-top: 1.2rem;
+            align-items: center;
         }
 
         .input-group p {
             margin-top: 1.3rem;
-        }
-
-        .row {
-            flex-direction: row;
-            justify-content: space-between;
-            width: 100%;
-            margin-top: 1.5rem;
         }
 
         .green {
@@ -155,11 +149,16 @@ $installer = new Installer($_POST['install-mode'] ?? $_SESSION['install-mode'] ?
             font-weight: bold;
         }
 
+        .input-group p.info {
+            font-size: 1.3rem;
+            margin-top: 2.5rem;
+            margin-bottom: 2.5rem;
+        }
+
     </style>
     <title>Installation - EvalBook</title>
 </head>
 <body>
-
     <main>
 
         <header>
@@ -178,14 +177,16 @@ $installer = new Installer($_POST['install-mode'] ?? $_SESSION['install-mode'] ?
                     <div class="input-group">
                         <!-- Standard installation mode, use in production -->
                         <div>
-                            <input type="radio" id="prod" name="install-mode" value="prod" checked>
-                            <label for="prod">Mode production, pour utiliser dans votre école.</label>
-                        </div>
+                            <div>
+                                <input type="radio" id="prod" name="install-mode" value="prod" checked>
+                                <label for="prod">Mode production, pour utiliser dans votre école.</label>
+                            </div>
 
-                        <!-- Dev installation mode, used to contribute to EvalBook -->
-                        <div>
-                            <input type="radio" id="dev" name="install-mode" value="dev">
-                            <label for="prod">Mode développeur, pour contribuer à EvalBook</label>
+                            <!-- Dev installation mode, used to contribute to EvalBook -->
+                            <div>
+                                <input type="radio" id="dev" name="install-mode" value="dev">
+                                <label for="prod">Mode développeur, pour contribuer à EvalBook</label>
+                            </div>
                         </div>
                     </div>
                     <div class="input-group">
@@ -201,6 +202,7 @@ $installer = new Installer($_POST['install-mode'] ?? $_SESSION['install-mode'] ?
         elseif(in_array($step,[INSTALL_DEPENDENCIES, INSTALL_DEPENDENCIES_COMPOSER])){ ?>
             <section>
                 <h2>Étape 2/3: <span>Installation des dépendences</span></h2>
+
                 <div class="input-group">
                     <?php
                     $php_version = phpversion();
@@ -209,29 +211,30 @@ $installer = new Installer($_POST['install-mode'] ?? $_SESSION['install-mode'] ?
                     ?>
                     <p><?= $version_span ?> - Version de php >= à 7.4 (<?= $php_version ?>)</p> <?php
                     if($step === INSTALL_DEPENDENCIES_COMPOSER) {
+                        echo '
+                            <script>
+                                document.getElementById("composer-install-overlay").style.display = "flex";
+                            </script>
+                        ';
                         if($installer->installComposer()) { ?>
                             <p><span class='green bold'>Ok</span> - Composer et les dépendences liées ont bien été installés.</p> <?php
                         }
                         else { ?>
-                            <p><span class='red bold'>Nok</span> - Un problème est survenu en installant Composer et les dépendences liées.</p> <?php
+                            <p><span class='red bold'>Nok</span> - Un problème est survenu en installant Composer et les dépendences liées.</p><?php
                         }
-                        exit();
+                    }
+                    else { ?>
+                        <p class="info">
+                            La prochaine étape est l'installation de Composer, cette opération prend plus de temps.
+                            Les étapes suivantes seront disponibles dès l'apparition des boutons de contrôle.
+                        </p> <?php
                     }
                     ?>
                 </div>
 
-                <div class="input-group row">
-
+                <div class="input-group">
                     <form action="index.php" method="POST">
-                        <div class="input-group">
-                            <input type="submit" class="btn" value="&laquo;&nbsp;Précédent" name="previous">
-                        </div>
-                    </form>
-
-                    <form action="index.php" method="POST">
-                        <div class="input-group">
-                            <input type="submit" class="btn" value="Suivant&nbsp;&raquo;" name="next">
-                        </div>
+                        <input type="submit" class="btn" value="Installer Composer&nbsp;&raquo;" name="next">
                     </form>
                 </div>
             </section> <?php
