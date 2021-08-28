@@ -149,10 +149,16 @@ $installer = new Installer($_POST['install-mode'] ?? $_SESSION['install-mode'] ?
             font-weight: bold;
         }
 
-        .input-group p.info {
-            font-size: 1.3rem;
+        p.info {
+            font-size: 1.5rem;
             margin-top: 2.5rem;
             margin-bottom: 2.5rem;
+        }
+
+        hr {
+            width: 60%;
+            margin-top: 5rem;
+            color: #6C9BC3;
         }
 
     </style>
@@ -209,28 +215,36 @@ $installer = new Installer($_POST['install-mode'] ?? $_SESSION['install-mode'] ?
                     $version_span = version_compare($php_version, '7.4.0', '>=') ?
                         "<span class='green bold'>Ok</span>" : "<span class='red bold'>Nok</span>";
                     ?>
-                    <p><?= $version_span ?> - Version de php >= à 7.4 (<?= $php_version ?>)</p> <?php
-                    if($step === INSTALL_DEPENDENCIES_COMPOSER) {
-                        echo '
-                            <script>
-                                document.getElementById("composer-install-overlay").style.display = "flex";
-                            </script>
-                        ';
-                        if($installer->installComposer()) { ?>
-                            <p><span class='green bold'>Ok</span> - Composer et les dépendences liées ont bien été installés.</p> <?php
-                        }
-                        else { ?>
-                            <p><span class='red bold'>Nok</span> - Un problème est survenu en installant Composer et les dépendences liées.</p><?php
-                        }
+                    <p><?= $version_span ?> - Version de php >= à 7.4 (<?= $php_version ?>)</p>
+                    <hr>
+                </div><?php
+
+                /**
+                 * Display the composer install notice before proceeding (long install, no async possible as vendors are not set yet).
+                 */
+                if($step === INSTALL_DEPENDENCIES) { ?>
+                    <p class="info">
+                        La prochaine étape est l'installation de Composer, cette opération prend plus de temps.
+                        Les étapes suivantes seront disponibles dès l'apparition des boutons de contrôle.
+                    </p> <?php
+                }
+
+                if($step === INSTALL_DEPENDENCIES_COMPOSER) {
+                    echo '
+                        <script>
+                            document.getElementById("composer-install-overlay").style.display = "flex";
+                        </script>
+                    ';
+                    if($installer->installComposer()) { ?>
+                        <p><span class='green bold'>Ok</span> - Composer et les dépendences liées ont bien été installés.</p> <?php
                     }
                     else { ?>
-                        <p class="info">
-                            La prochaine étape est l'installation de Composer, cette opération prend plus de temps.
-                            Les étapes suivantes seront disponibles dès l'apparition des boutons de contrôle.
-                        </p> <?php
+                        <p><span class='red bold'>Nok</span> - Un problème est survenu en installant Composer et les dépendences liées.</p><?php
                     }
-                    ?>
-                </div>
+                }
+
+                ?>
+
 
                 <div class="input-group">
                     <form action="index.php" method="POST">
