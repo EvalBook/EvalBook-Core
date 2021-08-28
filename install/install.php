@@ -168,6 +168,92 @@ $installer = new Installer($_POST['install-mode'] ?? $_SESSION['install-mode'] ?
             margin-top: 3rem;
         }
 
+        .progress-container {
+            border: .2rem solid black;
+            position: absolute;
+            top: 0;
+            left: 30%;
+            width: 40%;
+            margin: 28rem auto;
+            padding: 1.5rem 2rem;
+            border-radius: .4rem;
+            box-sizing: border-box;
+            background: #fff;
+            box-shadow: 0 1rem 2rem rgba(0, 0, 0, .5);
+            animation: pulse 5s infinite;
+        }
+
+        .loading {
+            position: relative;
+            display: inline-block;
+            width: 100%;
+            height: 2rem;
+            background: #f1f1f1;
+            box-shadow: inset 0 0 .5rem rgba(0, 0, 0, .2);
+            border-radius: .4rem;
+            overflow: hidden;
+        }
+
+        .loading:after {
+            content: '';
+            position: absolute;
+            left: 0;
+            width: 0;
+            height: 100%;
+            border-radius: 4px;
+            box-shadow: 0 0 5px rgba(0, 0, 0, .2);
+            animation: load 5s infinite;
+        }
+
+        @keyframes load {
+            0% {
+                width: 0;
+                background: #6C9BC3FF;
+            }
+
+            25% {
+                width: 40%;
+                background: #a0d2eb;
+            }
+
+            50% {
+                width: 60%;
+                background: #bcdcec;
+            }
+
+            75% {
+                width: 75%;
+                background: #EAAF19FF;
+            }
+
+            100% {
+                width: 100%;
+                background: #ecd498;
+            }
+        }
+
+        @keyframes pulse {
+            0% {
+                border-color: #6C9BC3FF;
+            }
+
+            25% {
+                border-color: #a0d2eb;
+            }
+
+            50% {
+                border-color: #bcdcec;
+            }
+
+            75% {
+                border-color: #EAAF19FF;
+            }
+
+            100% {
+                border-color: #ecd498;
+            }
+        }
+
     </style>
     <title>Installation - EvalBook</title>
 </head>
@@ -176,7 +262,18 @@ $installer = new Installer($_POST['install-mode'] ?? $_SESSION['install-mode'] ?
 
         <header>
             <h1>Installation de votre instance</h1>
+            <div id="loader" class="progress-container">
+                <div class="loading"></div>
+            </div>
             <img src="/assets/logo_text.png" alt="Logo texte EvalBook">
+
+            <script>
+                window.addEventListener('load', function() {
+                    const loader = document.getElementById('loader');
+                    loader.parentElement.removeChild(loader);
+                });
+            </script>
+
         </header>
         <?php
         /**
@@ -265,7 +362,6 @@ $installer = new Installer($_POST['install-mode'] ?? $_SESSION['install-mode'] ?
             </section> <?php
         }?>
     </main>
-
 </body>
 </html>
 
