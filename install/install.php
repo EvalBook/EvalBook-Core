@@ -80,11 +80,6 @@ $installer = new Installer($_POST['install-mode'] ?? $_SESSION['install-mode'] ?
             margin-top: 1.5rem;
         }
 
-        .input-group {
-            margin-top: 1rem;
-            font-size: 1.6rem;
-        }
-
         input + label {
             margin-left: .8rem;
         }
@@ -131,10 +126,12 @@ $installer = new Installer($_POST['install-mode'] ?? $_SESSION['install-mode'] ?
             flex-direction: column;
             margin-top: 1.2rem;
             align-items: center;
+            font-size: 1.6rem;
         }
 
-        .input-group p {
+        p {
             margin-top: 1.3rem;
+            font-size: 1.6rem;
         }
 
         .green {
@@ -159,6 +156,10 @@ $installer = new Installer($_POST['install-mode'] ?? $_SESSION['install-mode'] ?
             width: 60%;
             margin-top: 5rem;
             color: #6C9BC3;
+        }
+
+        .try-again {
+            margin-top: 3rem;
         }
 
     </style>
@@ -209,39 +210,42 @@ $installer = new Installer($_POST['install-mode'] ?? $_SESSION['install-mode'] ?
             <section>
                 <h2>Étape 2/3: <span>Installation des dépendences</span></h2>
                 <form action="index.php" method="POST">
-                    <div class="input-group">
-                        <?php
+                    <div class="input-group"> <?php
                         $php_version = phpversion();
                         $version_span = version_compare($php_version, '7.4.0', '>=') ?
                             "<span class='green bold'>Ok</span>" : "<span class='red bold'>Nok</span>";
                         ?>
-                        <p><?= $version_span ?> - Version de php >= à 7.4 (<?= $php_version ?>)</p>
-                        <hr>
-                    </div><?php
+                        <p><?= $version_span ?> - Version de php >= à 7.4 (<?= $php_version ?>)</p> <?php
 
-                    /**
-                     * Display the composer install notice before proceeding (long install, no async possible as vendors are not set yet).
-                     */
-                    if($step === INSTALL_DEPENDENCIES) { ?>
-                        <p class="info">
-                            La prochaine étape est l'installation de Composer, cette opération prend plus de temps.
-                            Les étapes suivantes seront disponibles dès l'apparition des boutons de contrôle.
-                        </p>
-
-                        <div class="input-group">
-                            <input type="submit" class="btn" value="Installer Composer&nbsp;&raquo;" name="next">
-                        </div> <?php
-                    }
-
-                    if($step === INSTALL_DEPENDENCIES_COMPOSER) {
-                        if($installer->installComposer()) { ?>
-                            <p><span class='green bold'>Ok</span> - Composer et les dépendences liées ont bien été installés.</p> <?php
+                        /**
+                         * Display the composer install notice before proceeding (long install, no async possible as vendors are not set yet).
+                         */
+                        if($step === INSTALL_DEPENDENCIES) { ?>
+                            <hr>
+                            <p class="info">
+                                La prochaine étape est l'installation de Composer, cette opération prend plus de temps.
+                                Les étapes suivantes seront disponibles dès l'apparition des boutons de contrôle.
+                            </p>
+                            <div class="input-group">
+                                <input type="submit" class="btn" value="Installer Composer&nbsp;&raquo;" name="next">
+                            </div> <?php
                         }
-                        else { ?>
-                            <p><span class='red bold'>Nok</span> - Un problème est survenu en installant Composer et les dépendences liées.</p>
-                            <?php
-                        }
-                    } ?>
+
+                        if($step === INSTALL_DEPENDENCIES_COMPOSER) {
+                            //$result = $installer->installComposer();
+                            $result = false;
+                            if($result) { ?>
+                                <p><span class='green bold'>Ok</span> - Composer et libs installés.</p>
+                                <hr> <?php
+                            }
+                            else { ?>
+                                <p><span class='red bold'>Nok</span> - Problème survenu en installant Composer.</p>
+                                <hr>
+                                <a class="try-again" href="index.php">Essayer à nouveau</a><?php
+                                $_SESSION['step'] = --$_SESSION['step'];
+                            }
+                        } ?>
+                    </div>
                 </form>
             </section> <?php
         }?>

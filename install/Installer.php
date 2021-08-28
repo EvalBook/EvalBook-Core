@@ -35,19 +35,22 @@ final class Installer
         return $this->shellInstall($composer, $this->root . '/vendor');
     }
 
+
     /**
-     * Start installation process.
+     * Proceed to npm, yarn and yarn dependencies installation.
+     * @return bool
      */
-    public function start()
-    {
+    public function installNpmAndYarn(): bool {
         // Installing yarn
         $npm = $this->isLinux ? 'sh '. $this->root .'/vendor/mouf/nodejs-installer/bin/local/npm' : $this->root .'/vendor/bin/npm.bat';
-        $result = $this->shellInstall("$npm install yarn", $this->root . '/node_modules/yarn');
 
-        // Installing yarn dependencies.
-        $node = $this->isLinux ? 'sh '. $this->root .'/vendor/mouf/nodejs-installer/bin/local/node' : $this->root .'/vendor/bin/node.bat';
-        $yarn = $this->root . '/node_modules/yarn/bin/yarn.js';
-        $result = $this->shellInstall("$node $yarn install --cwd " . $this->root, null, false);
+        if($this->shellInstall("$npm install yarn", $this->root . '/node_modules/yarn')) {
+            // Installing yarn dependencies.
+            $node = $this->isLinux ? 'sh '. $this->root .'/vendor/mouf/nodejs-installer/bin/local/node' : $this->root .'/vendor/bin/node.bat';
+            $yarn = $this->root . '/node_modules/yarn/bin/yarn.js';
+            return $this->shellInstall("$node $yarn install --cwd " . $this->root, null, false);
+        }
+        return false;
     }
 
 
