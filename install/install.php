@@ -185,16 +185,14 @@ $installer = new Installer($_POST['install-mode'] ?? $_SESSION['install-mode'] ?
                     <div class="input-group">
                         <!-- Standard installation mode, use in production -->
                         <div>
-                            <div>
-                                <input type="radio" id="prod" name="install-mode" value="prod" checked>
-                                <label for="prod">Mode production, pour utiliser dans votre école.</label>
-                            </div>
+                            <input type="radio" id="prod" name="install-mode" value="prod" checked>
+                            <label for="prod">Mode production, pour utiliser dans votre école.</label>
+                        </div>
 
-                            <!-- Dev installation mode, used to contribute to EvalBook -->
-                            <div>
-                                <input type="radio" id="dev" name="install-mode" value="dev">
-                                <label for="prod">Mode développeur, pour contribuer à EvalBook</label>
-                            </div>
+                        <!-- Dev installation mode, used to contribute to EvalBook -->
+                        <div>
+                            <input type="radio" id="dev" name="install-mode" value="dev">
+                            <label for="prod">Mode développeur, pour contribuer à EvalBook</label>
                         </div>
                     </div>
                     <div class="input-group">
@@ -212,16 +210,15 @@ $installer = new Installer($_POST['install-mode'] ?? $_SESSION['install-mode'] ?
                 <h2>Étape 2/3: <span>Installation des dépendences</span></h2>
                 <form action="index.php" method="POST">
                     <div class="input-group"> <?php
-                        $php_version = phpversion();
-                        $version_span = version_compare($php_version, '7.4.0', '>=') ?
-                            "<span class='green bold'>Ok</span>" : "<span class='red bold'>Nok</span>";
-                        ?>
-                        <p><?= $version_span ?> - Version de php >= à 7.4 (<?= $php_version ?>)</p> <?php
-
                         /**
                          * Display the composer install notice before proceeding (long install, no async possible as vendors are not set yet).
                          */
-                        if($step === INSTALL_DEPENDENCIES) { ?>
+                        if($step === INSTALL_DEPENDENCIES) {
+                            $php_version = phpversion();
+                            $version_span = version_compare($php_version, '7.4.0', '>=') ?
+                                "<span class='green bold'>Ok</span>" : "<span class='red bold'>Nok</span>";
+                            ?>
+                            <p><?= $version_span ?> - Version de php >= à 7.4 (<?= $php_version ?>)</p>
                             <hr>
                             <p class="info">
                                 La prochaine étape est l'installation de Composer, cette opération prend plus de temps.
@@ -240,7 +237,7 @@ $installer = new Installer($_POST['install-mode'] ?? $_SESSION['install-mode'] ?
                             installPackages(
                                 $installer,
                                 'installComposer',
-                                'Npm, Yarn et libs associées installé',
+                                'Composer et libs associées installées',
                                 'Problème survenu en installant Composer.',
                                 'Installer NPM et YARN',
                                 $info
