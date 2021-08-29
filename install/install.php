@@ -139,6 +139,12 @@ $installer = new Installer($_POST['install-mode'] ?? $_SESSION['install-mode'] ?
             flex-direction: row;
         }
 
+        .input-group.row > div {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+        }
+
         p {
             margin-top: 1.3rem;
             font-size: 1.6rem;
@@ -241,10 +247,6 @@ $installer = new Installer($_POST['install-mode'] ?? $_SESSION['install-mode'] ?
             padding: 2rem;
             border-radius: 0.6rem;
             margin-top: 4rem !important;
-        }
-
-        fieldset div:last-child {
-            width: 60%;
         }
 
         fieldset > legend {
@@ -428,39 +430,71 @@ $installer = new Installer($_POST['install-mode'] ?? $_SESSION['install-mode'] ?
             }?>
             <form action="index.php" method="POST" name="env-form">
                 <!-- Database information -->
-                <fieldset class="input-group row">
+                <fieldset>
                     <legend>Base de données</legend>
-                    <div>
+
+                    <div class="input-group row">
                         <label class="required" for="database-host">Serveur</label>
-                        <label class="required" for="database-port">Port</label>
-                        <label class="required" for="database-name">Nom de la base</label>
-                        <label class="required" for="database-username">Utilisateur de la base</label>
-                        <label class="required" for="database-password">Password de la base</label>
+                        <div>
+                            <input type="text" name="database-host" placeholder="Généralement localhost" required>
+                        </div>
                     </div>
 
-                    <div class="input-group">
-                        <input type="text" name="database-host" placeholder="Généralement localhost" required>
-                        <input type="number" name="database-port" placeholder="3306" required>
-                        <input type="text" name="database-name" placeholder="Vide pour automatique" required>
-                        <input type="text" name="database-username" required>
-                        <input type="password" name="database-password" required>
+                    <div class="input-group row">
+                        <label class="required" for="database-port">Port</label>
+                        <div>
+                            <input type="number" name="database-port" placeholder="3306" required>
+                        </div>
                     </div>
+
+                    <div class="input-group row">
+                        <label class="required" for="database-name">Nom de la base</label>
+                        <div>
+                            <input type="text" name="database-name" placeholder="Vide pour automatique" required>
+                        </div>
+                    </div>
+
+                    <div class="input-group row">
+                        <label class="required" for="database-username">Utilisateur de la base</label>
+                        <div>
+                            <input type="text" name="database-username" required>
+                        </div>
+                    </div>
+
+                    <div class="input-group row">
+                        <label class="required" for="database-password">Password de la base</label>
+                        <div>
+                            <input type="password" name="database-password" required>
+                        </div>
+                    </div>
+
                 </fieldset>
 
                 <!-- Admin user information -->
-                <fieldset class="input-group row">
+                <fieldset>
                     <legend>Définir l'accès administrateur</legend>
-                    <div>
+
+                    <div class="input-group row">
                         <label class="required" for="admin-email">Adresse mail</label>
-                        <label class="required" for="admin-password">Mot de passe</label>
-                        <label class="required" for="admin-password-repeat">Répétez mot de passe</label>
+                        <div>
+                            <input type="email" name="admin-email" required>
+                        </div>
                     </div>
 
-                    <div class="input-group">
-                        <input type="email" name="admin-email" required>
-                        <input type="password" name="admin-password" required>
-                        <input type="password" name="admin-password-repeat" required>
+                    <div class="input-group row">
+                        <label class="required" for="admin-password">Mot de passe</label>
+                        <div>
+                            <input type="password" name="admin-password" required>
+                        </div>
                     </div>
+
+                    <div class="input-group row">
+                        <label class="required" for="admin-password-repeat">Répétez mot de passe</label>
+                        <div>
+                            <input type="password" name="admin-password-repeat" required>
+                        </div>
+                    </div>
+
                 </fieldset>
 
                 <div class="input-group">
@@ -513,7 +547,7 @@ $installer = new Installer($_POST['install-mode'] ?? $_SESSION['install-mode'] ?
                     const errorElement = document.createElement('span');
                     errorElement.innerText = 'Ce champs ne peut être vide';
                     errorElement.classList.add('error');
-                    field.parentElement.insertBefore(errorElement, field.nextSibling);
+                    field.parentElement.appendChild(errorElement);
                 }
             });
         }
