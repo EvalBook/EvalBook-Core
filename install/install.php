@@ -172,6 +172,18 @@ $installer = new Installer($_POST['install-mode'] ?? $_SESSION['install-mode'] ?
             margin-top: 3rem;
         }
 
+        .error {
+            color: indianred;
+            outline-color: indianred;
+            border-color: indianred;
+            align-self: flex-start;
+            font-size: 1.2rem;
+        }
+
+        .error::before {
+            content: "*";
+        }
+
         .progress-container {
             border: .2rem solid black;
             position: absolute;
@@ -429,7 +441,7 @@ $installer = new Installer($_POST['install-mode'] ?? $_SESSION['install-mode'] ?
                     <div class="input-group">
                         <input type="text" name="database-host" placeholder="Généralement localhost" required>
                         <input type="number" name="database-port" placeholder="3306" required>
-                        <input type="text" name="database-name" placeholder="Vide pour automatique" requires>
+                        <input type="text" name="database-name" placeholder="Vide pour automatique" required>
                         <input type="text" name="database-username" required>
                         <input type="password" name="database-password" required>
                     </div>
@@ -460,7 +472,51 @@ $installer = new Installer($_POST['install-mode'] ?? $_SESSION['install-mode'] ?
     </main>
 
     <script>
+
         const envForm = document.querySelector('form[name="env-form"]');
+
+        envForm.querySelector('input[type="submit"]').addEventListener('click', function(e) {
+            e.preventDefault();
+
+            // Removing old potential error messages.
+            envForm.querySelectorAll('span.error').forEach(function r(e){e.parentElement.removeChild(e);});
+
+            const databaseHost = envForm.querySelector('input[name="database-host"]'); // string
+            const databasePort = envForm.querySelector('input[name="database-port"]'); // int
+            const databaseName = envForm.querySelector('input[name="database-name"]'); // string
+            const databaseUsername = envForm.querySelector('input[name="database-username"]'); // string
+            const databasePassword = envForm.querySelector('input[name="database-password"]'); // string
+            const adminEmail = envForm.querySelector('input[name="admin-email"]'); // email
+            const adminPassword = envForm.querySelector('input[name="admin-password"]'); // string - password
+            const adminPasswordRepeat = envForm.querySelector('input[name="admin-password-repeat"]'); // string - password - repeat.
+
+            // Basic form validation.
+            validateNotEmptyField([
+                databaseHost,
+                databasePort,
+                databaseName,
+                databaseUsername,
+                databasePassword,
+                adminEmail,
+                adminPassword,
+                adminPasswordRepeat
+            ]);
+        });
+
+        /**
+         * @param fields
+         */
+        const validateNotEmptyField = function(fields) {
+            fields.forEach(function(field) {
+                if(!field.value > 0) {
+                    field.setCustomValidity("Ce champs ne peut être vide !");
+                    const errorElement = document.createElement('span');
+                    errorElement.innerText = 'Ce champs ne peut être vide';
+                    errorElement.classList.add('error');
+                    field.parentElement.insertBefore(errorElement, field.nextSibling);
+                }
+            });
+        }
     </script>
 </body>
 </html>
