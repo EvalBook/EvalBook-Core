@@ -51,7 +51,7 @@ $installer = new Installer($_POST['install-mode'] ?? $_SESSION['install-mode'] ?
 
         main, header, section {
             display: flex;
-            max-width: 50rem;
+            max-width: 75rem;
             flex-direction: column;
             margin-left: auto;
             margin-right: auto;
@@ -551,6 +551,12 @@ $installer = new Installer($_POST['install-mode'] ?? $_SESSION['install-mode'] ?
                 {el: adminPassword, min: 8, max: 25, password: true},
                 {el: adminPasswordRepeat, min: 8, max: 25, password: true},
             ]);
+
+            // Checking admin password and admin password repeat are the same.
+            if(adminPassword.value !== adminPasswordRepeat.value) {
+                setError(adminPassword, "Les mot de passe ne correspondent pas");
+                setError(adminPasswordRepeat, "Les mots de passe ne correspondent pas");
+            }
 
             if(!emptyError && !stringError) {
                 // Clearing old triggered validity errors.
