@@ -25,6 +25,7 @@
     "dependencies": {
         "sass": "^1.38.0",
         "sass-loader": "^12.1.0",
+        "valid.js": "^1.2.5",
         "yarn": "^1.22.11"
     }
 }

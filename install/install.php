@@ -209,7 +209,7 @@ $installer = new Installer($_POST['install-mode'] ?? $_SESSION['install-mode'] ?
             animation: load 5s infinite;
         }
 
-        label, input[type="text"], input[type="password"], input[type="email"] {
+        label:not(input+label), input[type="text"], input[type="password"], input[type="email"], input[type="number"] {
             display: block;
             margin-top: 0.8rem;
             width: 100%;
@@ -218,6 +218,11 @@ $installer = new Installer($_POST['install-mode'] ?? $_SESSION['install-mode'] ?
 
         label {
             margin-right: 3rem;
+        }
+
+        label.required::after {
+            content: "*";
+            color: indianred;
         }
 
         fieldset {
@@ -396,23 +401,37 @@ $installer = new Installer($_POST['install-mode'] ?? $_SESSION['install-mode'] ?
         /**
          * Making migration and asking for database / admin details.
          */
-        else { ?>
-            <form action="index.php" method="POST">
+        else {
+            if(isset($_POST['migrate'])) {
+                $host = $_POST['database-host'] ?? 'localhost';
+                $port = $_POST['database-port'] ?? 3306;
+                $db = $_POST['database-name'] ?? 'evalbook';
+                $db_user = $_POST['database-username'];
+                $db_password = $_POST['database-password'];
+
+                $admin_email = $_POST['admin-email'] ?? null;
+                $admin_password = $_POST['admin-password'] ?? null;
+                $admin_password_repeat = $_POST['admin-password-repeat'] ?? '';
+                // TODO form check in js and php.
+            }?>
+            <form action="index.php" method="POST" name="env-form">
                 <!-- Database information -->
                 <fieldset class="input-group row">
                     <legend>Base de données</legend>
                     <div>
-                        <label for="database-host">Serveur</label>
-                        <label for="database-name">Nom de la base</label>
-                        <label for="database-username">Utilisateur de la base</label>
-                        <label for="database-password">Password de la base</label>
+                        <label class="required" for="database-host">Serveur</label>
+                        <label class="required" for="database-port">Port</label>
+                        <label class="required" for="database-name">Nom de la base</label>
+                        <label class="required" for="database-username">Utilisateur de la base</label>
+                        <label class="required" for="database-password">Password de la base</label>
                     </div>
 
                     <div class="input-group">
-                        <input type="text" name="database-host" placeholder="Généralement localhost">
-                        <input type="text" name="database-name">
-                        <input type="text" name="database-username">
-                        <input type="password" name="database-password">
+                        <input type="text" name="database-host" placeholder="Généralement localhost" required>
+                        <input type="number" name="database-port" placeholder="3306" required>
+                        <input type="text" name="database-name" placeholder="Vide pour automatique" requires>
+                        <input type="text" name="database-username" required>
+                        <input type="password" name="database-password" required>
                     </div>
                 </fieldset>
 
@@ -420,27 +439,29 @@ $installer = new Installer($_POST['install-mode'] ?? $_SESSION['install-mode'] ?
                 <fieldset class="input-group row">
                     <legend>Définir l'accès administrateur</legend>
                     <div>
-                        <label for="admin-pseudo">Pseudo</label>
-                        <label for="admin-password">Mot de passe</label>
-                        <label for="admin-password-repeat">Répétez mot de passe</label>
-                        <label for="admin-email">Adresse mail</label>
+                        <label class="required" for="admin-email">Adresse mail</label>
+                        <label class="required" for="admin-password">Mot de passe</label>
+                        <label class="required" for="admin-password-repeat">Répétez mot de passe</label>
                     </div>
 
                     <div class="input-group">
-                        <input type="text" name="admin-pseudo" placeholder="Évitez 'admin'">
-                        <input type="password" name="admin-password">
-                        <input type="password" name="admin-password-repeat">
-                        <input type="email" name="admin-email">
+                        <input type="email" name="admin-email" required>
+                        <input type="password" name="admin-password" required>
+                        <input type="password" name="admin-password-repeat" required>
                     </div>
                 </fieldset>
 
                 <div class="input-group">
-                    <input type="submit" class="btn" value="Finir l'installation&nbsp;&raquo;" name="next">
+                    <input type="submit" class="btn" value="Finir l'installation&nbsp;&raquo;" name="migrate">
                 </div>
             </form>
             <?php
         }?>
     </main>
+
+    <script>
+        const envForm = document.querySelector('form[name="env-form"]');
+    </script>
 </body>
 </html>
 
