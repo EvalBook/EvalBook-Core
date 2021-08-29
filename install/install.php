@@ -187,7 +187,11 @@ $installer = new Installer($_POST['install-mode'] ?? $_SESSION['install-mode'] ?
         }
 
         .error::before {
-            content: "*";
+            content: "* ";
+        }
+
+        span.error {
+            display: block;
         }
 
         .progress-container {
@@ -513,7 +517,10 @@ $installer = new Installer($_POST['install-mode'] ?? $_SESSION['install-mode'] ?
             e.preventDefault();
 
             // Removing old potential error messages.
-            envForm.querySelectorAll('span.error').forEach(function r(e){e.parentElement.removeChild(e);});
+            envForm.querySelectorAll('span.error').forEach(function r(e){
+                e.parentElement.querySelector('input').classList.remove('error');
+                e.parentElement.removeChild(e);
+            });
 
             const databaseHost = envForm.querySelector('input[name="database-host"]'); // string
             const databasePort = envForm.querySelector('input[name="database-port"]'); // int
@@ -525,7 +532,7 @@ $installer = new Installer($_POST['install-mode'] ?? $_SESSION['install-mode'] ?
             const adminPasswordRepeat = envForm.querySelector('input[name="admin-password-repeat"]'); // string - password - repeat.
 
             // Basic form validation.
-            validateNotEmptyField([
+            const emptyError = validateNotEmptyField([
                 databaseHost,
                 databasePort,
                 databaseName,
@@ -535,22 +542,83 @@ $installer = new Installer($_POST['install-mode'] ?? $_SESSION['install-mode'] ?
                 adminPassword,
                 adminPasswordRepeat
             ]);
+
+            const stringError = validateString([
+                {el: databaseHost},
+                {el: databaseName},
+                {el: databaseUsername},
+                {el: databasePassword},
+                {el: adminPassword, min: 8, max: 25, password: true},
+                {el: adminPasswordRepeat, min: 8, max: 25, password: true},
+            ]);
+
+            if(!emptyError && !stringError) {
+                // Clearing old triggered validity errors.
+                envForm.querySelectorAll('input:not([type="submit"])').forEach(function(el) {
+                    el.classList.remove('error');
+                    el.setCustomValidity("");
+                });
+            }
+
+            // validate port
+            // validateEmail
+            // check both password the same.
         });
 
         /**
          * @param fields
          */
         const validateNotEmptyField = function(fields) {
+            let err = false;
             fields.forEach(function(field) {
                 if(!field.value > 0) {
-                    field.setCustomValidity("Ce champs ne peut être vide !");
-                    const errorElement = document.createElement('span');
-                    errorElement.innerText = 'Ce champs ne peut être vide';
-                    errorElement.classList.add('error');
-                    field.parentElement.appendChild(errorElement);
+                    setError(field, 'Ce champs ne peut être vide !');
+                    err = true;
                 }
             });
+            return err;
         }
+
+        /**
+         * @param fields
+         */
+        const validateString = function(fields) {
+            let err = false;
+            fields.forEach(function(fieldEntry){
+
+                if(fieldEntry.hasOwnProperty('min') && fieldEntry.el.value.length < fieldEntry.min) {
+                    setError(fieldEntry.el, 'Minimum ' + fieldEntry.min + ' caractères');
+                    err = true;
+                }
+
+                if(fieldEntry.hasOwnProperty('max') && fieldEntry.el.value.length > fieldEntry.max) {
+                    setError(fieldEntry.el, 'Maximum ' + fieldEntry.max + ' caractères')
+                    err = true;
+                }
+
+                if(fieldEntry.hasOwnProperty('password') && fieldEntry.password) {
+                    if(!fieldEntry.el.value.match(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,25}$/)) {
+                        setError(fieldEntry.el, 'De 8 à 25 caractères avec majuscule(s), minuscule(s), chiffre(s)');
+                        err = true;
+                    }
+                }
+            });
+            return err;
+        }
+
+        /**
+         * @param el
+         * @param message
+         */
+        const setError = function(el, message) {
+            const errorElement = document.createElement('span');
+            errorElement.innerText = message;
+            errorElement.classList.add('error');
+            el.classList.add('error');
+            el.parentElement.appendChild(errorElement);
+            el.setCustomValidity("Ce champs ne peut être vide !");
+        }
+
     </script>
 </body>
 </html>
