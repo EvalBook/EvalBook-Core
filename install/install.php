@@ -430,7 +430,7 @@ $installer = new Installer($_POST['install-mode'] ?? $_SESSION['install-mode'] ?
                 $admin_email = $_POST['admin-email'] ?? null;
                 $admin_password = $_POST['admin-password'] ?? null;
                 $admin_password_repeat = $_POST['admin-password-repeat'] ?? '';
-                // TODO form check in js and php.
+                // TODO form check in php.
             }?>
             <form action="index.php" method="POST" name="env-form">
                 <!-- Database information -->
@@ -513,9 +513,10 @@ $installer = new Installer($_POST['install-mode'] ?? $_SESSION['install-mode'] ?
 
         const envForm = document.querySelector('form[name="env-form"]');
 
+        /**
+         * Complete form field validation (basic validation).
+         */
         envForm.querySelector('input[type="submit"]').addEventListener('click', function(e) {
-            e.preventDefault();
-
             // Removing old potential error messages.
             envForm.querySelectorAll('span.error').forEach(function r(e){
                 e.parentElement.querySelector('input').classList.remove('error');
@@ -558,17 +559,27 @@ $installer = new Installer($_POST['install-mode'] ?? $_SESSION['install-mode'] ?
                 setError(adminPasswordRepeat, "Les mots de passe ne correspondent pas");
             }
 
-            if(!emptyError && !stringError) {
+            // Checking provided database port.
+            let doublePasswordError = false;
+            if(!Number.isInteger(parseInt(databasePort.value)) || parseInt(databasePort.value) < 4) {
+                setError(databasePort, "Le port ne semble pas correct");
+                doublePasswordError = true;
+            }
+
+            // Validating provided email.
+            let mailError = false;
+            if(!adminEmail.value.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) {
+                setError(adminEmail, "L'adresse mail ne semble pas correcte");
+                mailError = true;
+            }
+
+            if(!emptyError && !stringError && !doublePasswordError && !mailError) {
                 // Clearing old triggered validity errors.
                 envForm.querySelectorAll('input:not([type="submit"])').forEach(function(el) {
                     el.classList.remove('error');
                     el.setCustomValidity("");
                 });
             }
-
-            // validate port
-            // validateEmail
-            // check both password the same.
         });
 
         /**
