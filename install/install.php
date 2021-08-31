@@ -445,9 +445,9 @@ $installer = new Installer($_POST['install-mode'] ?? $_SESSION['install-mode'] ?
                 $db_user = strip_tags($_POST['database-username']);
                 $db_password = strip_tags($_POST['database-password']);
 
-                $admin_email = $_POST['admin-email'] ?? null;
-                $admin_password = $_POST['admin-password'] ?? null;
-                $admin_password_repeat = $_POST['admin-password-repeat'] ?? '';
+                $admin_email = strip_tags($_POST['admin-email']) ?? null;
+                $admin_password = strip_tags($_POST['admin-password']) ?? null;
+                $admin_password_repeat = strip_tags($_POST['admin-password-repeat']) ?? '';
 
                 // Validating installation form.
                 $error = areFieldsEmpty($host, $port, $db, $db_user, $db_password, $admin_email, $admin_password, $admin_password_repeat);
@@ -456,13 +456,13 @@ $installer = new Installer($_POST['install-mode'] ?? $_SESSION['install-mode'] ?
                 }
 
                 // Validating password check.
-                if($admin_password !== $admin_password_repeat) { ?>
+                if(null === $admin_password || $admin_password !== $admin_password_repeat) { ?>
                     <div class="error alert">Les mots de passe ne correspondent pas !</div> <?php
                     $error = true;
                 }
 
                 // Validating password format.
-                if(!preg_match("/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,25}$/", $admin_password)) { ?>
+                if(null === $admin_email || !preg_match("/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,25}$/", $admin_password)) { ?>
                     <div class="error alert">Le mot de passe doit contenir de 8 à 25 caractères avec majuscule(s), minuscule(s), chiffre(s)</div> <?php
                     $error = true;
                 }
@@ -735,6 +735,7 @@ function areFieldsEmpty(...$fields): bool {
     foreach($fields as $field) {
         return is_null($field) || (!is_int($field) && !strlen($field) > 0);
     }
+    return false;
 }
 
 
@@ -744,9 +745,9 @@ function areFieldsEmpty(...$fields): bool {
  * @param int $port
  * @param string $db
  * @param string $db_user
- * @param $admin_password
- * @param $param
+ * @param string $admin_password
+ * @param string $envType
  */
-function writeEnvironnement(string $host, int $port, string $db, string $db_user, $admin_password, $param) {
-
+function writeEnvironnement(string $host, int $port, string $db, string $db_user, string $admin_password, string $envType) {
+    //$envFile =
 }
