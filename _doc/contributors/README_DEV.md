@@ -16,10 +16,10 @@ $ yarn --version
 
 ### Choix de la version de PHP.
 La version choisie est la version **>= 8.0**, bien que certains gros hébergeurs ne supportent pas encore (à tort) PHP8.0,
-nous avons fais le choix de la stabilité en choisissant un version supportée pour au moins les 4 prochaines années.
+nous avons fais le choix de la stabilité en choisissant une version supportée pour au moins les 4 prochaines années.
 Si vous souhaitez connaître un hébergeur performant et supportant PHP8.0, contactez nous, nous serions ravis de vous aider !
 
-
+![php current support](php-version.png "Php Support")
 
 ## Base de données et configuration
 Il est important de <span style="color:blue">**ne pas toucher au fichier .env**</span> se situant à la racine du projet, ce fichier est destiné à être utilisé en production.
