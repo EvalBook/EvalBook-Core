@@ -249,7 +249,12 @@ $installer = new Installer($_POST['install-mode'] ?? $_SESSION['install-mode'] ?
             animation: load 5s infinite;
         }
 
-        label:not(input+label), input[type="text"], input[type="password"], input[type="email"], input[type="number"] {
+        label:not(input+label),
+        input[type="text"],
+        input[type="password"],
+        input[type="email"],
+        input[type="number"],
+        select {
             display: block;
             margin-top: 0.8rem;
             width: 100%;
@@ -444,15 +449,22 @@ $installer = new Installer($_POST['install-mode'] ?? $_SESSION['install-mode'] ?
                 $db = strip_tags($_POST['database-name']) ?? 'evalbook';
                 $db_user = strip_tags($_POST['database-username']);
                 $db_password = strip_tags($_POST['database-password']);
+                $db_type = strip_tags($_POST['database-type']);
 
                 $admin_email = strip_tags($_POST['admin-email']) ?? null;
                 $admin_password = strip_tags($_POST['admin-password']) ?? null;
                 $admin_password_repeat = strip_tags($_POST['admin-password-repeat']) ?? '';
 
                 // Validating installation form.
-                $error = areFieldsEmpty($host, $port, $db, $db_user, $db_password, $admin_email, $admin_password, $admin_password_repeat);
+                $error = areFieldsEmpty($host, $port, $db, $db_user, $db_password, $db_type, $admin_email, $admin_password, $admin_password_repeat);
                 if($error) { ?>
                     <div class="error alert">Certains champs sont vide</div> <?php
+                }
+
+                // Validating database type.
+                if(!in_array($db_type, ['mysql', 'postgresql', 'mariadb', 'sqlite'])) { ?>
+                    <div class="error alert">Le système de base de données choisi n'est pas pris en charge !</div> <?php
+                    $error = true;
                 }
 
                 // Validating password check.
@@ -475,7 +487,7 @@ $installer = new Installer($_POST['install-mode'] ?? $_SESSION['install-mode'] ?
 
                 // If no form error, writing the .evn file for prod | .env.local for dev.
                 if(!$error) {
-                    writeEnvironnement($host, $port, $db, $db_user, $admin_password, $_SESSION['env'] ?? 'prod');
+                    writeEnvironnement($host, $port, $db, $db_user, $admin_password, $_SESSION['install-mode'] ?? 'prod');
                 }
 
             }?>
@@ -485,10 +497,20 @@ $installer = new Installer($_POST['install-mode'] ?? $_SESSION['install-mode'] ?
                     <legend>Base de données</legend>
 
                     <div class="input-group row">
-                        <label class="required" for="database-host">Serveur</label>
+                        <label class="required" for="database-host">Adresse serveur</label>
                         <div>
                             <input type="text" name="database-host" placeholder="Généralement localhost">
                         </div>
+                    </div>
+
+                    <div class="input-group row">
+                        <label for="database-type" class="required">Base de données</label>
+                        <select name="database-type" id="db-type">
+                            <option value="mysql">MySql</option>
+                            <option value="postgresql">PostgreSql</option>
+                            <option value="mariadb">MariaDB</option>
+                            <option value="sqlite">SQLite</option>
+                        </select>
                     </div>
 
                     <div class="input-group row">
@@ -576,6 +598,7 @@ $installer = new Installer($_POST['install-mode'] ?? $_SESSION['install-mode'] ?
             const databaseName = envForm.querySelector('input[name="database-name"]'); // string
             const databaseUsername = envForm.querySelector('input[name="database-username"]'); // string
             const databasePassword = envForm.querySelector('input[name="database-password"]'); // string
+            const databaseType = envForm.querySelector('select[name="database-type"]'); // string - select.
             const adminEmail = envForm.querySelector('input[name="admin-email"]'); // email
             const adminPassword = envForm.querySelector('input[name="admin-password"]'); // string - password
             const adminPasswordRepeat = envForm.querySelector('input[name="admin-password-repeat"]'); // string - password - repeat.
@@ -601,6 +624,12 @@ $installer = new Installer($_POST['install-mode'] ?? $_SESSION['install-mode'] ?
                 {el: adminPasswordRepeat, min: 8, max: 25, password: true},
             ]);
 
+            // Check if db type is in allowed db types definition.
+            const dbTypeError = !['mysql', 'postgresql', 'mariadb', 'sqlite'].includes(databaseType.value);
+            if(dbTypeError){
+                setError(databaseType, "Système de base de données non pris en charge");
+            }
+
             // Checking admin password and admin password repeat are the same.
             if(adminPassword.value !== adminPasswordRepeat.value) {
                 setError(adminPassword, "Les mot de passe ne correspondent pas");
@@ -621,7 +650,7 @@ $installer = new Installer($_POST['install-mode'] ?? $_SESSION['install-mode'] ?
                 mailError = true;
             }
 
-            if(!emptyError && !stringError && !doublePasswordError && !mailError) {
+            if(!emptyError && !stringError && !doublePasswordError && !mailError && !dbTypeError) {
                 // Clearing old triggered validity errors.
                 envForm.querySelectorAll('input:not([type="submit"])').forEach(function(el) {
                     el.classList.remove('error');
