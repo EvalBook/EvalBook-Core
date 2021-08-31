@@ -266,7 +266,7 @@ $installer = new Installer($_POST['install-mode'] ?? $_SESSION['install-mode'] ?
         }
 
         label.required::after {
-            content: "*";
+            content: " * ";
             color: indianred;
         }
 
@@ -281,6 +281,8 @@ $installer = new Installer($_POST['install-mode'] ?? $_SESSION['install-mode'] ?
             margin-right: 0.5rem;
             padding-left: 1rem;
             padding-right: 1rem;
+            font-size: 1.5rem;
+            color: #6C9BC3;
         }
 
         @keyframes load {
