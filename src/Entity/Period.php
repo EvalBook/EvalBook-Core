@@ -6,6 +6,7 @@ use App\Repository\PeriodRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use JetBrains\PhpStorm\Pure;
 
 /**
  * @ORM\Entity(repositoryClass=PeriodRepository::class)
@@ -52,7 +53,7 @@ class Period
 
 
 
-    public function __construct()
+    #[Pure] public function __construct()
     {
         $this->activities = new ArrayCollection();
     }

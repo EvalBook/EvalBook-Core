@@ -62,7 +62,7 @@ class Implantation
 
 
 
-    public function __construct()
+    #[Pure] public function __construct()
     {
         $this->periods = new ArrayCollection();
         $this->classrooms = new ArrayCollection();

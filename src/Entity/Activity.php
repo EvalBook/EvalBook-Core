@@ -6,6 +6,7 @@ use App\Repository\ActivityRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use JetBrains\PhpStorm\Pure;
 
 /**
  * @ORM\Entity(repositoryClass=ActivityRepository::class)
@@ -59,7 +60,7 @@ class Activity
 
 
 
-    public function __construct()
+    #[Pure] public function __construct()
     {
         $this->notes = new ArrayCollection();
     }

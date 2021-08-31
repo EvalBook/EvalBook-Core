@@ -6,6 +6,7 @@ use App\Repository\NoteTypeRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use JetBrains\PhpStorm\Pure;
 
 /**
  * @ORM\Entity(repositoryClass=NoteTypeRepository::class)
@@ -35,7 +36,7 @@ class NoteType
     private ArrayCollection $noteTypeValues;
 
 
-    public function __construct()
+    #[Pure] public function __construct()
     {
         $this->noteTypeValues = new ArrayCollection();
     }

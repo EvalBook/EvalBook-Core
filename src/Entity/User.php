@@ -64,7 +64,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private Role $role;
 
 
-    public function __construct()
+    #[Pure] public function __construct()
     {
         $this->classrooms = new ArrayCollection();
     }
