@@ -178,6 +178,24 @@ $installer = new Installer($_POST['install-mode'] ?? $_SESSION['install-mode'] ?
             margin-top: 3rem;
         }
 
+        .alert {
+            position: absolute;
+            width: 100%;
+            height: 5rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            top: 0;
+            left: 0;
+            font-size: 1.8rem !important;
+            font-weight: bold;
+        }
+
+        .alert.error{
+            background-color: indianred;
+            color: white;
+        }
+
         .error {
             color: indianred;
             outline-color: indianred;
@@ -186,7 +204,7 @@ $installer = new Installer($_POST['install-mode'] ?? $_SESSION['install-mode'] ?
             font-size: 1.2rem;
         }
 
-        .error::before {
+        .error::before:not(.alert.error) {
             content: "* ";
         }
 
@@ -421,16 +439,45 @@ $installer = new Installer($_POST['install-mode'] ?? $_SESSION['install-mode'] ?
          */
         else {
             if(isset($_POST['migrate'])) {
-                $host = $_POST['database-host'] ?? 'localhost';
-                $port = $_POST['database-port'] ?? 3306;
-                $db = $_POST['database-name'] ?? 'evalbook';
-                $db_user = $_POST['database-username'];
-                $db_password = $_POST['database-password'];
+                $host = strip_tags($_POST['database-host']) ?? 'localhost';
+                $port = (int)$_POST['database-port'] ?? 3306;
+                $db = strip_tags($_POST['database-name']) ?? 'evalbook';
+                $db_user = strip_tags($_POST['database-username']);
+                $db_password = strip_tags($_POST['database-password']);
 
                 $admin_email = $_POST['admin-email'] ?? null;
                 $admin_password = $_POST['admin-password'] ?? null;
                 $admin_password_repeat = $_POST['admin-password-repeat'] ?? '';
-                // TODO form check in php.
+
+                // Validating installation form.
+                $error = areFieldsEmpty($host, $port, $db, $db_user, $db_password, $admin_email, $admin_password, $admin_password_repeat);
+                if($error) { ?>
+                    <div class="error alert">Certains champs sont vide</div> <?php
+                }
+
+                // Validating password check.
+                if($admin_password !== $admin_password_repeat) { ?>
+                    <div class="error alert">Les mots de passe ne correspondent pas !</div> <?php
+                    $error = true;
+                }
+
+                // Validating password format.
+                if(!preg_match("/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,25}$/", $admin_password)) { ?>
+                    <div class="error alert">Le mot de passe doit contenir de 8 à 25 caractères avec majuscule(s), minuscule(s), chiffre(s)</div> <?php
+                    $error = true;
+                }
+
+                // Validating email
+                if(!preg_match("/^[^\s@]+@[^\s@]+\.[^\s@]+$/", $admin_email)) { ?>
+                    <div class="error alert">Le format de l'adresse mail n'est pas bon</div> <?php
+                    $error = true;
+                }
+
+                // If no form error, writing the .evn file for prod | .env.local for dev.
+                if(!$error) {
+                    writeEnvironnement($host, $port, $db, $db_user, $admin_password, $_SESSION['env'] ?? 'prod');
+                }
+
             }?>
             <form action="index.php" method="POST" name="env-form">
                 <!-- Database information -->
@@ -440,35 +487,35 @@ $installer = new Installer($_POST['install-mode'] ?? $_SESSION['install-mode'] ?
                     <div class="input-group row">
                         <label class="required" for="database-host">Serveur</label>
                         <div>
-                            <input type="text" name="database-host" placeholder="Généralement localhost" required>
+                            <input type="text" name="database-host" placeholder="Généralement localhost">
                         </div>
                     </div>
 
                     <div class="input-group row">
                         <label class="required" for="database-port">Port</label>
                         <div>
-                            <input type="number" name="database-port" placeholder="3306" required>
+                            <input type="number" name="database-port" placeholder="3306">
                         </div>
                     </div>
 
                     <div class="input-group row">
                         <label class="required" for="database-name">Nom de la base</label>
                         <div>
-                            <input type="text" name="database-name" placeholder="Vide pour automatique" required>
+                            <input type="text" name="database-name" placeholder="Vide pour automatique">
                         </div>
                     </div>
 
                     <div class="input-group row">
                         <label class="required" for="database-username">Utilisateur de la base</label>
                         <div>
-                            <input type="text" name="database-username" required>
+                            <input type="text" name="database-username">
                         </div>
                     </div>
 
                     <div class="input-group row">
                         <label class="required" for="database-password">Password de la base</label>
                         <div>
-                            <input type="password" name="database-password" required>
+                            <input type="password" name="database-password">
                         </div>
                     </div>
 
@@ -481,21 +528,21 @@ $installer = new Installer($_POST['install-mode'] ?? $_SESSION['install-mode'] ?
                     <div class="input-group row">
                         <label class="required" for="admin-email">Adresse mail</label>
                         <div>
-                            <input type="email" name="admin-email" required>
+                            <input type="email" name="admin-email">
                         </div>
                     </div>
 
                     <div class="input-group row">
                         <label class="required" for="admin-password">Mot de passe</label>
                         <div>
-                            <input type="password" name="admin-password" required>
+                            <input type="password" name="admin-password">
                         </div>
                     </div>
 
                     <div class="input-group row">
                         <label class="required" for="admin-password-repeat">Répétez mot de passe</label>
                         <div>
-                            <input type="password" name="admin-password-repeat" required>
+                            <input type="password" name="admin-password-repeat">
                         </div>
                     </div>
 
@@ -517,6 +564,7 @@ $installer = new Installer($_POST['install-mode'] ?? $_SESSION['install-mode'] ?
          * Complete form field validation (basic validation).
          */
         envForm.querySelector('input[type="submit"]').addEventListener('click', function(e) {
+            return;
             // Removing old potential error messages.
             envForm.querySelectorAll('span.error').forEach(function r(e){
                 e.parentElement.querySelector('input').classList.remove('error');
@@ -676,4 +724,29 @@ function installPackages(
         <a class="try-again" href="index.php">Essayer à nouveau</a><?php
         $_SESSION['step'] = --$_SESSION['step'];
     }
+}
+
+
+/**
+ * @param ...$fields
+ * @return bool
+ */
+function areFieldsEmpty(...$fields): bool {
+    foreach($fields as $field) {
+        return is_null($field) || (!is_int($field) && !strlen($field) > 0);
+    }
+}
+
+
+/**
+ * Write the .env || .env.local file based on provided information.
+ * @param string $host
+ * @param int $port
+ * @param string $db
+ * @param string $db_user
+ * @param $admin_password
+ * @param $param
+ */
+function writeEnvironnement(string $host, int $port, string $db, string $db_user, $admin_password, $param) {
+
 }
