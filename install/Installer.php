@@ -55,6 +55,17 @@ final class Installer
 
 
     /**
+     * @param string $cmd
+     * @return bool
+     */
+    public function execSymfonyCmd(string $cmd): bool {
+        exec($cmd, $output, $code);
+        return $code === 0;
+    }
+
+
+
+    /**
      * Install dependencies via shell.
      */
     private function shellInstall(string $cmd, string $dir=null): bool {
@@ -65,6 +76,5 @@ final class Installer
         }
         return true;
     }
-
 }
 

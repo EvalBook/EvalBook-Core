@@ -487,9 +487,10 @@ $installer = new Installer($_POST['install-mode'] ?? $_SESSION['install-mode'] ?
                     $error = true;
                 }
 
-                // If no form error, writing the .evn file for prod | .env.local for dev.
+                // If no form error, writing the .env file for prod | .env.local for dev.
                 if(!$error) {
-                    writeEnvironnement($host, $port, $db, $db_user, $admin_password, $_SESSION['install-mode'] ?? 'prod');
+                    $dsn = "://$db_user:$db_password@$host:$port/$db";
+                    $envFileResult = $installer->execSymfonyCmd("php bin/console regenerate-env {$_SESSION['install-mode']} $dsn");
                 }
 
             }?>
@@ -767,18 +768,4 @@ function areFieldsEmpty(...$fields): bool {
         return is_null($field) || (!is_int($field) && !strlen($field) > 0);
     }
     return false;
-}
-
-
-/**
- * Write the .env || .env.local file based on provided information.
- * @param string $host
- * @param int $port
- * @param string $db
- * @param string $db_user
- * @param string $admin_password
- * @param string $envType
- */
-function writeEnvironnement(string $host, int $port, string $db, string $db_user, string $admin_password, string $envType) {
-    //$envFile =
 }
