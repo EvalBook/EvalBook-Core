@@ -59,7 +59,8 @@ final class Installer
      * @return bool
      */
     public function execSymfonyCmd(string $cmd): bool {
-        exec($cmd, $output, $code);
+        $workingDir = $_SERVER['DOCUMENT_ROOT'] . '/../';
+        exec('cd "'. $workingDir . '" && ' . $cmd, $output, $code);
         return $code === 0;
     }
 

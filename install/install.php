@@ -13,8 +13,8 @@ elseif(isset($_POST['previous'])) {
 $_SESSION['step'] = $step;
 
 // Getting installation mode.
-if(isset($_POST['install-mode']) && in_array($_POST['install-mode'], ['prod', 'env'])) {
-    $_SESSION['install-mode'] = $_POST['install-mode'];
+if(isset($_POST['install-mode']) && in_array($_POST['install-mode'], ['prod', 'dev'])) {
+    $_SESSION['install-mode'] = trim($_POST['install-mode']);
 }
 
 const CHOOSE_MODE = 0;
@@ -489,8 +489,10 @@ $installer = new Installer($_POST['install-mode'] ?? $_SESSION['install-mode'] ?
 
                 // If no form error, writing the .env file for prod | .env.local for dev.
                 if(!$error) {
-                    $dsn = "://$db_user:$db_password@$host:$port/$db";
-                    $envFileResult = $installer->execSymfonyCmd("php bin/console regenerate-env {$_SESSION['install-mode']} $dsn");
+                    $dsn = "postgresql://$db_user:$db_password@$host:$port/$db";
+                    $cmd = "php bin/console regenerate-env {$_SESSION['install-mode']} $dsn";
+                    $envFileResult = $installer->execSymfonyCmd($cmd);
+                    // TODO if $envFileResult => then next SF installation steps.
                 }
 
             }?>
