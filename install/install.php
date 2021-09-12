@@ -464,7 +464,7 @@ $installer = new Installer($_POST['install-mode'] ?? $_SESSION['install-mode'] ?
                 }
 
                 // Validating database type.
-                if(!in_array($db_type, ['mysql', 'postgresql', 'mariadb', 'sqlite'])) { ?>
+                if(!in_array($db_type, ['mysql', 'mariadb', 'sqlite'])) { ?>
                     <div class="error alert">Le système de base de données choisi n'est pas pris en charge !</div> <?php
                     $error = true;
                 }
@@ -489,6 +489,14 @@ $installer = new Installer($_POST['install-mode'] ?? $_SESSION['install-mode'] ?
 
                 // If no form error, writing the .env file for prod | .env.local for dev.
                 if(!$error) {
+                    // TODO switch over db system and write correct sgbd version
+                    // Mysql:
+                    // Mariadb:
+                    // Sqlite:
+
+                    switch($db_type) {
+
+                    }
                     $dsn = "postgresql://$db_user:$db_password@$host:$port/$db";
                     $cmd = "php bin/console regenerate-env {$_SESSION['install-mode']} $dsn";
                     $envFileResult = $installer->execSymfonyCmd($cmd);
@@ -512,7 +520,6 @@ $installer = new Installer($_POST['install-mode'] ?? $_SESSION['install-mode'] ?
                         <label for="database-type" class="required">Base de données</label>
                         <select name="database-type" id="db-type">
                             <option value="mysql">MySql</option>
-                            <option value="postgresql">PostgreSql</option>
                             <option value="mariadb">MariaDB</option>
                             <option value="sqlite">SQLite</option>
                         </select>

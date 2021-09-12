@@ -12,7 +12,8 @@ final class FileUtils {
      * @param $name
      * @return string|bool
      */
-    public static function download($url, $destination, $name) {
+    public static function download($url, $destination, $name): bool|string
+    {
         // $output = dirname($_SERVER['PHP_SELF']) . $destination . "/" . $name;
         $output = $destination . "/" . $name;
 
@@ -30,7 +31,8 @@ final class FileUtils {
      * Well formatted print_r.
      * @param $data
      */
-    public static function print_r2($data) {
+    public static function print_r2($data)
+    {
         echo "<pre>";
         print_r($data);
         echo "</pre>";
@@ -41,7 +43,8 @@ final class FileUtils {
      * @param $dir
      * @return bool
      */
-    public static function unlinkRecursive($dir): bool {
+    public static function unlinkRecursive($dir): bool
+    {
         if(!$dh = @opendir($dir)) {
             return false;
         }
