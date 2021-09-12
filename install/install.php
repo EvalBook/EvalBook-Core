@@ -446,6 +446,8 @@ $installer = new Installer($_POST['install-mode'] ?? $_SESSION['install-mode'] ?
          */
         else {
             if(isset($_POST['migrate'])) {
+                $allowedDbTypes = ['mysql-5.7', 'mysql-5.8', 'mariadb-10.5', 'sqlite'];
+
                 $host = strip_tags($_POST['database-host']) ?? 'localhost';
                 $port = (int)$_POST['database-port'] ?? 3306;
                 $db = strip_tags($_POST['database-name']) ?? 'evalbook';
@@ -458,13 +460,18 @@ $installer = new Installer($_POST['install-mode'] ?? $_SESSION['install-mode'] ?
                 $admin_password_repeat = strip_tags($_POST['admin-password-repeat']) ?? '';
 
                 // Validating installation form.
-                $error = areFieldsEmpty($host, $port, $db, $db_user, $db_password, $db_type, $admin_email, $admin_password, $admin_password_repeat);
+                if($db_type !== 'sqlite') {
+                    $error = areFieldsEmpty($host, $port, $db, $db_user, $db_password, $db_type, $admin_email, $admin_password, $admin_password_repeat);
+                }
+                else {
+                    $error = areFieldsEmpty($db, $admin_email, $admin_password, $admin_password_repeat);
+                }
                 if($error) { ?>
                     <div class="error alert">Certains champs sont vide</div> <?php
                 }
 
                 // Validating database type.
-                if(!in_array($db_type, ['mysql-5.7', 'mysql-5.8', 'mariadb-10.5', 'sqlite'])) { ?>
+                if(!in_array($db_type, $allowedDbTypes)) { ?>
                     <div class="error alert">Le système de base de données choisi n'est pas pris en charge !</div> <?php
                     $error = true;
                 }
