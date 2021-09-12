@@ -500,8 +500,12 @@ $installer = new Installer($_POST['install-mode'] ?? $_SESSION['install-mode'] ?
                     $envFileResult = $installer->execSymfonyCmd($cmd);
                     // TODO if $envFileResult => then next SF installation steps.
                 }
+                else {
+                    echo "Some errors were found !";
+                }
 
             }?>
+
             <form action="index.php" method="POST" name="env-form">
                 <!-- Database information -->
                 <fieldset>
