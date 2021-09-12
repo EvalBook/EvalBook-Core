@@ -503,9 +503,25 @@ $installer = new Installer($_POST['install-mode'] ?? $_SESSION['install-mode'] ?
                         default => "sqlite:///%kernel.project_dir%/var/$db.db",
                     };
 
-                    $cmd = "php bin/console regenerate-env {$_SESSION['install-mode']} $dsn";
-                    $envFileResult = $installer->execSymfonyCmd($cmd);
-                    // TODO if $envFileResult => then next SF installation steps => Create the database.
+                    if($installer->execSymfonyCmd("php bin/console regenerate-env {$_SESSION['install-mode']} $dsn")) {
+                        if($installer->execSymfonyCmd("php bin/console doctrine:database:create")) {
+                            // Deleting migrations and generate them to make sur user has the last available migration.
+                            if(FileUtils::unlinkRecursive(dirname(__FILE__) . '/../migrations/')) {
+                                $installer->execSymfonyCmd("php bin/console make:migration");
+                            }
+                            else { ?>
+                                <div class="error alert">
+                                    Impossible de supprimer les anciennes migrations, assurez vous que le dossier <strong>migrations</strong> soit vide et recommancez !
+                                </div> <?php
+                            }
+                        }
+                        else { ?>
+                            <div class="error alert">La base de données n'a pas pu être créée, l'installation a échoué</div> <?php
+                        }
+                    }
+                    else { ?>
+                        <div class="error alert">Le fichier de configuration n'a pas pu être généré, l'installation a échoué !</div> <?php
+                    }
                 }
 
             }?>
