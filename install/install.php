@@ -464,7 +464,7 @@ $installer = new Installer($_POST['install-mode'] ?? $_SESSION['install-mode'] ?
                 }
 
                 // Validating database type.
-                if(!in_array($db_type, ['mysql', 'mariadb', 'sqlite'])) { ?>
+                if(!in_array($db_type, ['mysql-5.7', 'mysql-5.8', 'mariadb-10.5', 'sqlite'])) { ?>
                     <div class="error alert">Le système de base de données choisi n'est pas pris en charge !</div> <?php
                     $error = true;
                 }
@@ -489,15 +489,13 @@ $installer = new Installer($_POST['install-mode'] ?? $_SESSION['install-mode'] ?
 
                 // If no form error, writing the .env file for prod | .env.local for dev.
                 if(!$error) {
-                    // TODO switch over db system and write correct sgbd version
-                    // Mysql:
-                    // Mariadb:
-                    // Sqlite:
+                    $dsn = match($db_type) {
+                        'mysql-5.7' => "mysql://$db_user:$db_password@$host:$port/$db?serverVersion=5.7&charset=utf8",
+                        'mysql-8.0' => "mysql://$db_user:$db_password@$host:$port/$db?serverVersion=8.0&charset=utf8",
+                        'mariadb-10.5' => "mysql://$db_user:$db_password@$host:$port/$db?serverVersion=mariadb-10.5.10&charset=utf8",
+                        default => "sqlite:///%kernel.project_dir%/var/$db.db",
+                    };
 
-                    switch($db_type) {
-
-                    }
-                    $dsn = "postgresql://$db_user:$db_password@$host:$port/$db";
                     $cmd = "php bin/console regenerate-env {$_SESSION['install-mode']} $dsn";
                     $envFileResult = $installer->execSymfonyCmd($cmd);
                     // TODO if $envFileResult => then next SF installation steps.
@@ -519,8 +517,9 @@ $installer = new Installer($_POST['install-mode'] ?? $_SESSION['install-mode'] ?
                     <div class="input-group row">
                         <label for="database-type" class="required">Base de données</label>
                         <select name="database-type" id="db-type">
-                            <option value="mysql">MySql</option>
-                            <option value="mariadb">MariaDB</option>
+                            <option value="mysql-5.7">MySql 5.7</option>
+                            <option value="mysql-8.0">MySql 8.0</option>
+                            <option value="mariadb-10.5">MariaDB 10.5</option>
                             <option value="sqlite">SQLite</option>
                         </select>
                     </div>
