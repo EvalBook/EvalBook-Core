@@ -505,14 +505,11 @@ $installer = new Installer($_POST['install-mode'] ?? $_SESSION['install-mode'] ?
 
                     if($installer->execSymfonyCmd("php bin/console regenerate-env {$_SESSION['install-mode']} $dsn")) {
                         if($installer->execSymfonyCmd("php bin/console doctrine:database:create")) {
-                            // Deleting migrations and generate them to make sur user has the last available migration.
-                            if(FileUtils::unlinkRecursive(dirname(__FILE__) . '/../migrations/')) {
-                                $installer->execSymfonyCmd("php bin/console make:migration");
+                            if($installer->execSymfonyCmd("php bin/console doctrine:migrations:migrate")) {
+
                             }
                             else { ?>
-                                <div class="error alert">
-                                    Impossible de supprimer les anciennes migrations, assurez vous que le dossier <strong>migrations</strong> soit vide et recommancez !
-                                </div> <?php
+                                <div class="error alert">Impossible d'initialiser la base de données, vérifiez les informations de connexion fournies</div> <?php
                             }
                         }
                         else { ?>
