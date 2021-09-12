@@ -469,13 +469,13 @@ $installer = new Installer($_POST['install-mode'] ?? $_SESSION['install-mode'] ?
                     $error = true;
                 }
 
-                // Validating password check.
+                // Validating EvalBook admin password format.
                 if(null === $admin_password || $admin_password !== $admin_password_repeat) { ?>
                     <div class="error alert">Les mots de passe ne correspondent pas !</div> <?php
                     $error = true;
                 }
 
-                // Validating password format.
+                // Validating EvalBook admin password format.
                 if(null === $admin_email || !preg_match("/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,25}$/", $admin_password)) { ?>
                     <div class="error alert">Le mot de passe doit contenir de 8 à 25 caractères avec majuscule(s), minuscule(s), chiffre(s)</div> <?php
                     $error = true;
@@ -498,10 +498,7 @@ $installer = new Installer($_POST['install-mode'] ?? $_SESSION['install-mode'] ?
 
                     $cmd = "php bin/console regenerate-env {$_SESSION['install-mode']} $dsn";
                     $envFileResult = $installer->execSymfonyCmd($cmd);
-                    // TODO if $envFileResult => then next SF installation steps.
-                }
-                else {
-                    echo "Some errors were found !";
+                    // TODO if $envFileResult => then next SF installation steps => Create the database.
                 }
 
             }?>
@@ -520,7 +517,8 @@ $installer = new Installer($_POST['install-mode'] ?? $_SESSION['install-mode'] ?
 
                     <div class="input-group row">
                         <label for="database-type" class="required">Base de données</label>
-                        <select name="database-type" id="db-type">
+                        <select name="database-type" id="db-type" required>
+                            <option value="">-- Veuillez choisir --</option>
                             <option value="mysql-5.7">MySql 5.7</option>
                             <option value="mysql-8.0">MySql 8.0</option>
                             <option value="mariadb-10.5">MariaDB 10.5</option>
@@ -531,28 +529,28 @@ $installer = new Installer($_POST['install-mode'] ?? $_SESSION['install-mode'] ?
                     <div class="input-group row">
                         <label class="required" for="database-port">Port</label>
                         <div>
-                            <input type="number" name="database-port" placeholder="3306">
+                            <input type="number" name="database-port" placeholder="3306" required>
                         </div>
                     </div>
 
                     <div class="input-group row">
                         <label class="required" for="database-name">Nom de la base</label>
                         <div>
-                            <input type="text" name="database-name" placeholder="Vide pour automatique">
+                            <input type="text" name="database-name" placeholder="Vide pour automatique" required>
                         </div>
                     </div>
 
                     <div class="input-group row">
                         <label class="required" for="database-username">Utilisateur de la base</label>
                         <div>
-                            <input type="text" name="database-username">
+                            <input type="text" name="database-username" required>
                         </div>
                     </div>
 
                     <div class="input-group row">
                         <label class="required" for="database-password">Password de la base</label>
                         <div>
-                            <input type="password" name="database-password">
+                            <input type="password" name="database-password" required>
                         </div>
                     </div>
 
@@ -565,21 +563,21 @@ $installer = new Installer($_POST['install-mode'] ?? $_SESSION['install-mode'] ?
                     <div class="input-group row">
                         <label class="required" for="admin-email">Adresse mail</label>
                         <div>
-                            <input type="email" name="admin-email">
+                            <input type="email" name="admin-email" required>
                         </div>
                     </div>
 
                     <div class="input-group row">
                         <label class="required" for="admin-password">Mot de passe</label>
                         <div>
-                            <input type="password" name="admin-password">
+                            <input type="password" name="admin-password" required>
                         </div>
                     </div>
 
                     <div class="input-group row">
                         <label class="required" for="admin-password-repeat">Répétez mot de passe</label>
                         <div>
-                            <input type="password" name="admin-password-repeat">
+                            <input type="password" name="admin-password-repeat" required>
                         </div>
                     </div>
 
@@ -594,26 +592,43 @@ $installer = new Installer($_POST['install-mode'] ?? $_SESSION['install-mode'] ?
     </main>
 
     <script>
-
         const envForm = document.querySelector('form[name="env-form"]');
+        const databaseType = envForm.querySelector('select[name="database-type"]'); // string - select.
+        const databaseUsername = envForm.querySelector('input[name="database-username"]'); // string
+        const databasePassword = envForm.querySelector('input[name="database-password"]'); // string
+        const databasePort = envForm.querySelector('input[name="database-port"]'); // int
+        const databaseHost = envForm.querySelector('input[name="database-host"]'); // string
+
+        /**
+         * Removing required on database-username and database-password if SQLite was selected.
+         */
+        databaseType.addEventListener('change', function(e) {
+           if(databaseType.options[databaseType.selectedIndex].value === 'sqlite') {
+               [databaseUsername, databasePort, databasePassword, databaseHost].forEach((el) => {
+                   el.removeAttribute('required');
+                   el.parentElement.parentElement.style.display = 'none';
+               });
+           }
+           else {
+               [databaseUsername, databasePort, databasePassword, databaseHost].forEach((el) => {
+                   el.setAttribute('required', 'true');
+                   el.parentElement.parentElement.style.display = 'flex';
+               });
+           }
+        });
+
 
         /**
          * Complete form field validation (basic validation).
          */
         envForm.querySelector('input[type="submit"]').addEventListener('click', function(e) {
-            return;
             // Removing old potential error messages.
             envForm.querySelectorAll('span.error').forEach(function r(e){
                 e.parentElement.querySelector('input').classList.remove('error');
                 e.parentElement.removeChild(e);
             });
 
-            const databaseHost = envForm.querySelector('input[name="database-host"]'); // string
-            const databasePort = envForm.querySelector('input[name="database-port"]'); // int
             const databaseName = envForm.querySelector('input[name="database-name"]'); // string
-            const databaseUsername = envForm.querySelector('input[name="database-username"]'); // string
-            const databasePassword = envForm.querySelector('input[name="database-password"]'); // string
-            const databaseType = envForm.querySelector('select[name="database-type"]'); // string - select.
             const adminEmail = envForm.querySelector('input[name="admin-email"]'); // email
             const adminPassword = envForm.querySelector('input[name="admin-password"]'); // string - password
             const adminPasswordRepeat = envForm.querySelector('input[name="admin-password-repeat"]'); // string - password - repeat.
@@ -639,12 +654,6 @@ $installer = new Installer($_POST['install-mode'] ?? $_SESSION['install-mode'] ?
                 {el: adminPasswordRepeat, min: 8, max: 25, password: true},
             ]);
 
-            // Check if db type is in allowed db types definition.
-            const dbTypeError = !['mysql', 'postgresql', 'mariadb', 'sqlite'].includes(databaseType.value);
-            if(dbTypeError){
-                setError(databaseType, "Système de base de données non pris en charge");
-            }
-
             // Checking admin password and admin password repeat are the same.
             if(adminPassword.value !== adminPasswordRepeat.value) {
                 setError(adminPassword, "Les mot de passe ne correspondent pas");
@@ -652,10 +661,10 @@ $installer = new Installer($_POST['install-mode'] ?? $_SESSION['install-mode'] ?
             }
 
             // Checking provided database port.
-            let doublePasswordError = false;
-            if(!Number.isInteger(parseInt(databasePort.value)) || parseInt(databasePort.value) < 4) {
+            let portError = false;
+            if(databasePort.hasOwnProperty('required') && !Number.isInteger(parseInt(databasePort.value)) || parseInt(databasePort.value) < 4) {
                 setError(databasePort, "Le port ne semble pas correct");
-                doublePasswordError = true;
+                portError = true;
             }
 
             // Validating provided email.
@@ -665,7 +674,8 @@ $installer = new Installer($_POST['install-mode'] ?? $_SESSION['install-mode'] ?
                 mailError = true;
             }
 
-            if(!emptyError && !stringError && !doublePasswordError && !mailError && !dbTypeError) {
+            console.log(emptyError, stringError, portError, mailError);
+            if(!emptyError && !stringError && !portError && !mailError) {
                 // Clearing old triggered validity errors.
                 envForm.querySelectorAll('input:not([type="submit"])').forEach(function(el) {
                     el.classList.remove('error');
@@ -680,7 +690,7 @@ $installer = new Installer($_POST['install-mode'] ?? $_SESSION['install-mode'] ?
         const validateNotEmptyField = function(fields) {
             let err = false;
             fields.forEach(function(field) {
-                if(!field.value > 0) {
+                if(field.value.length === 0 && field.hasOwnProperty('required')) {
                     setError(field, 'Ce champs ne peut être vide !');
                     err = true;
                 }
@@ -688,27 +698,29 @@ $installer = new Installer($_POST['install-mode'] ?? $_SESSION['install-mode'] ?
             return err;
         }
 
+
         /**
          * @param fields
          */
         const validateString = function(fields) {
             let err = false;
             fields.forEach(function(fieldEntry){
-
-                if(fieldEntry.hasOwnProperty('min') && fieldEntry.el.value.length < fieldEntry.min) {
-                    setError(fieldEntry.el, 'Minimum ' + fieldEntry.min + ' caractères');
-                    err = true;
-                }
-
-                if(fieldEntry.hasOwnProperty('max') && fieldEntry.el.value.length > fieldEntry.max) {
-                    setError(fieldEntry.el, 'Maximum ' + fieldEntry.max + ' caractères')
-                    err = true;
-                }
-
-                if(fieldEntry.hasOwnProperty('password') && fieldEntry.password) {
-                    if(!fieldEntry.el.value.match(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,25}$/)) {
-                        setError(fieldEntry.el, 'De 8 à 25 caractères avec majuscule(s), minuscule(s), chiffre(s)');
+                if(!fieldEntry.hasOwnProperty('required')) {
+                    if (fieldEntry.hasOwnProperty('min') && fieldEntry.el.value.length < fieldEntry.min) {
+                        setError(fieldEntry.el, 'Minimum ' + fieldEntry.min + ' caractères');
                         err = true;
+                    }
+
+                    if (fieldEntry.hasOwnProperty('max') && fieldEntry.el.value.length > fieldEntry.max) {
+                        setError(fieldEntry.el, 'Maximum ' + fieldEntry.max + ' caractères')
+                        err = true;
+                    }
+
+                    if (fieldEntry.hasOwnProperty('password') && fieldEntry.password) {
+                        if (!fieldEntry.el.value.match(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,25}$/)) {
+                            setError(fieldEntry.el, 'De 8 à 25 caractères avec majuscule(s), minuscule(s), chiffre(s)');
+                            err = true;
+                        }
                     }
                 }
             });
