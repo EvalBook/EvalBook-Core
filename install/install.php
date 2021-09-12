@@ -397,7 +397,7 @@ $installer = new Installer($_POST['install-mode'] ?? $_SESSION['install-mode'] ?
                          */
                         if($step === INSTALL_DEPENDENCIES) {
                             $php_version = phpversion();
-                            $version_span = version_compare($php_version, '7.4.0', '>=') ?
+                            $version_span = version_compare($php_version, '8.0.0', '>=') ?
                                 "<span class='green bold'>Ok</span>" : "<span class='red bold'>Nok</span>";
                             ?>
                             <p><?= $version_span ?> - Version de php >= à 7.4 (<?= $php_version ?>)</p>
