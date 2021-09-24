@@ -45,7 +45,7 @@ class RegenerateEnvCommand extends Command
         }
 
         // Checking dsn.
-        if(!preg_match("#[a-zA-Z]*:\/\/\S*:\S*@\S*:\d*\/\S*#", $dbDsn)) {
+        if(!preg_match("#[a-zA-Z]*:\/\/\S*:\S*@\S*:\d*\/\S*#", $dbDsn) && strpos($dbDsn, 'kernel') === -1) {
             $io->error("The provided database DSN does not match the dsn pattern");
         }
 
@@ -77,9 +77,6 @@ class RegenerateEnvCommand extends Command
         // Generating databse dsn.
         $io->note("Storing Database dsn");
         file_put_contents($file, 'DATABASE_URL=' . "\"$dbDsn\"", FILE_APPEND);
-
-        // Generating app secret.
-        $io->success('You have a new command! Now make it your own! Pass --help to see your options.');
 
         return Command::SUCCESS;
     }
