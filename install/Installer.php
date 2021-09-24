@@ -55,18 +55,6 @@ final class Installer
 
 
     /**
-     * @param string $cmd
-     * @return bool
-     */
-    public function execSymfonyCmd(string $cmd): bool {
-        $workingDir = $_SERVER['DOCUMENT_ROOT'] . '/../';
-        exec('cd "'. $workingDir . '" && ' . $cmd, $output, $code);
-        return $code === 0;
-    }
-
-
-
-    /**
      * Install dependencies via shell.
      */
     private function shellInstall(string $cmd, string $dir=null): bool {

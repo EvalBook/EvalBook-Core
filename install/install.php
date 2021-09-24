@@ -1,4 +1,7 @@
 <?php
+
+use App\Command\CommandUtil;
+
 session_start();
 
 $step = $_SESSION['step'] ?? 0;
@@ -503,9 +506,9 @@ $installer = new Installer($_POST['install-mode'] ?? $_SESSION['install-mode'] ?
                         default => "sqlite:///%kernel.project_dir%/var/$db.db",
                     };
 
-                    if($installer->execSymfonyCmd("php bin/console regenerate-env {$_SESSION['install-mode']} $dsn")) {
-                        if($installer->execSymfonyCmd("php bin/console doctrine:database:create")) {
-                            if($installer->execSymfonyCmd("php bin/console doctrine:migrations:migrate --no-interaction")) {
+                    if(CommandUtil::execSymfonyCmd("php bin/console regenerate-env {$_SESSION['install-mode']} $dsn")) {
+                        if(CommandUtil::execSymfonyCmd("php bin/console doctrine:database:create")) {
+                            if(CommandUtil::execSymfonyCmd("php bin/console doctrine:migrations:migrate --no-interaction")) {
 
                             }
                             else { ?>
