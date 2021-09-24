@@ -505,7 +505,7 @@ $installer = new Installer($_POST['install-mode'] ?? $_SESSION['install-mode'] ?
 
                     if($installer->execSymfonyCmd("php bin/console regenerate-env {$_SESSION['install-mode']} $dsn")) {
                         if($installer->execSymfonyCmd("php bin/console doctrine:database:create")) {
-                            if($installer->execSymfonyCmd("php bin/console doctrine:migrations:migrate")) {
+                            if($installer->execSymfonyCmd("php bin/console doctrine:migrations:migrate --no-interaction")) {
 
                             }
                             else { ?>
