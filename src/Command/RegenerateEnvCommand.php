@@ -59,7 +59,7 @@ class RegenerateEnvCommand extends Command
 
         if(!$proceed) {
             $io->error("Unable to delete old \"$file\" file, please delete it manually and try again");
-            exit(1);
+            exit(Command::FAILURE);
         }
 
         $io->note("New env file created");

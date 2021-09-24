@@ -1,6 +1,5 @@
 <?php
 
-use App\Command\CommandUtil;
 
 session_start();
 
@@ -26,6 +25,9 @@ const INSTALL_DEPENDENCIES_COMPOSER = 2;
 const INSTALL_DEPENDENCIES_NPM_YARN = 3;
 
 require dirname(__FILE__) . '/Installer.php';
+require dirname(__FILE__) . '/../src/Command/CommandUtil.php';
+
+use App\Command\CommandUtil;
 $installer = new Installer($_POST['install-mode'] ?? $_SESSION['install-mode'] ?? 'prod');
 
 ?>
@@ -507,16 +509,11 @@ $installer = new Installer($_POST['install-mode'] ?? $_SESSION['install-mode'] ?
                     };
 
                     if(CommandUtil::execSymfonyCmd("php bin/console regenerate-env {$_SESSION['install-mode']} $dsn")) {
-                        if(CommandUtil::execSymfonyCmd("php bin/console doctrine:database:create")) {
-                            if(CommandUtil::execSymfonyCmd("php bin/console doctrine:migrations:migrate --no-interaction")) {
+                        if(CommandUtil::execSymfonyCmd("php bin/console install-db")) {
 
-                            }
-                            else { ?>
-                                <div class="error alert">Impossible d'initialiser la base de données, vérifiez les informations de connexion fournies</div> <?php
-                            }
                         }
                         else { ?>
-                            <div class="error alert">La base de données n'a pas pu être créée, l'installation a échoué</div> <?php
+                            <div class="error alert">La base de données n'a pas pu être créée / peuplée, l'installation a échoué</div> <?php
                         }
                     }
                     else { ?>
