@@ -12,7 +12,6 @@ class SecurityController extends AbstractController
 {
     /**
      * @Route("/login", name="app_login")
-     * @Route("/", name="home")
      */
     public function login(AuthenticationUtils $authenticationUtils): Response
     {
@@ -31,20 +30,8 @@ class SecurityController extends AbstractController
     /**
      * @Route("/logout", name="app_logout")
      */
-    public function logout()
+    public function logout(): void
     {
         throw new \LogicException('This method can be blank - it will be intercepted by the logout key on your firewall.');
-    }
-
-
-    /**
-     * Checking Evalbook installation status in order to proceed to basic installation steps.
-     * @return bool
-     */
-    private function isEvalbookInstalled(): bool {
-        $repository = $this->getDoctrine()->getRepository(SystemConfiguration::class);
-        return null !== $repository->findOneBy([
-            'name' => 'installation_date',
-        ]);
     }
 }
