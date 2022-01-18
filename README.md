@@ -10,16 +10,21 @@ du module **EvalBook Report** qui est installé d'office.
 
 ## Installation
 
+### Serveurs
+EvalBook peut s'installer sur un serveur de type Linux, peu importe la distribution/
+
 ### Choix de la version de PHP.
-La version de PHP compatible avec EvalBook est la **>= 8.0**, bien que certains gros hébergeurs ne supportent pas encore (à tort) PHP8.0,
+La version de PHP compatible avec EvalBook est la **>= 8.0**, bien que certains gros hébergeurs ne supportent pas encore PHP8.0,
 nous avons fait le choix de la stabilité en choisissant une version supportée sur le long terme.
+
 Si vous souhaitez connaître un hébergeur performant et supportant PHP8.0, contactez nous, nous serions ravis de vous aider !
+
 
 ![php current support](_doc/contributors/php-version.png "Php Support")
 
 Plus d'informations sur les [version supportées de PHP](https://www.php.net/supported-versions.php)
 
-### Image Docker
+
 
 ### Installation classique
 
