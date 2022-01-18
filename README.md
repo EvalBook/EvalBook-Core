@@ -10,8 +10,21 @@ du module **EvalBook Report** qui est installé d'office.
 
 ## Installation
 
+
 ### Serveurs
-EvalBook peut s'installer sur un serveur de type Linux, peu importe la distribution/
+EvalBook peut s'installer sur un serveur de type Linux, peu importe la distribution
+
+
+### Pré-requis
+Pour installer EvalBook Core sur votre serveur, les extentions suivantes doivent etre installées:
+ 
+ * ext-iconv
+ * ext-ctype
+ * PHP >= 8.0
+ * pdo_mysql  (si mysql ou mariadb choisi en tant que système de gestion de base de données)
+ * pdo_sqlite (si sqlite choisi en tant que système de gestion de base de données)
+ * intl
+
 
 ### Choix de la version de PHP.
 La version de PHP compatible avec EvalBook est la **>= 8.0**, bien que certains gros hébergeurs ne supportent pas encore PHP8.0,
