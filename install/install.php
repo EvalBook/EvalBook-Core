@@ -405,7 +405,7 @@ $installer = new Installer($_POST['install-mode'] ?? $_SESSION['install-mode'] ?
                             $version_span = version_compare($php_version, '8.0.0', '>=') ?
                                 "<span class='green bold'>Ok</span>" : "<span class='red bold'>Nok</span>";
                             ?>
-                            <p><?= $version_span ?> - Version de php >= à 7.4 (<?= $php_version ?>)</p>
+                            <p><?= $version_span ?> - Version de php >= à 8.0 (<?= $php_version ?>)</p>
                             <hr>
                             <p class="info">
                                 La prochaine étape est l'installation de Composer, cette opération prend plus de temps.
