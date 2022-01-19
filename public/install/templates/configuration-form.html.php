@@ -55,8 +55,11 @@ if(isset($_POST['migrate'])) {
     // If no form error, writing the .env file for prod | .env.local for dev.
     if(!$error) {
         // Make sure .env file exists, it avoid Symfony to trigger an env file load error.
-        if(!file_exists(__DIR__ . '../.env')) {
+        if(!file_exists(__DIR__ . '/../../../.env')) {
             CommandUtil::execSymfonyCmd("echo \"DATABASE_URL=''\" >> .env");
+        }
+        if(!file_exists(__DIR__ . '/../../../.env.local')) {
+            CommandUtil::execSymfonyCmd("echo \"DATABASE_URL=''\" >> .env.local");
         }
 
         $dsn = match($db_type) {

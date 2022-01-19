@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Repository;
+namespace EvalBookCore\Repository;
 
-use App\Entity\ActivityType;
+use EvalBookCore\Entity\ActivityType;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 

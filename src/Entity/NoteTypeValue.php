@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Entity;
+namespace EvalBookCore\Entity;
 
-use App\Repository\NoteTypeValueRepository;
+use EvalBookCore\Repository\NoteTypeValueRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 /**

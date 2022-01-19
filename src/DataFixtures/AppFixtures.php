@@ -1,8 +1,8 @@
 <?php
 
-namespace App\DataFixtures;
+namespace EvalBookCore\DataFixtures;
 
-use App\Entity\User;
+use EvalBookCore\Entity\User;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 

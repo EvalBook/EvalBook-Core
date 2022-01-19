@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Command;
+namespace EvalBookCore\Command;
 
-use App\Command\CommandUtil;
+use EvalBookCore\Command\CommandUtil;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;

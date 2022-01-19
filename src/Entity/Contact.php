@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Entity;
+namespace EvalBookCore\Entity;
 
-use App\Repository\ContactRepository;
+use EvalBookCore\Repository\ContactRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 /**

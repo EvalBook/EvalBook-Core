@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Repository;
+namespace EvalBookCore\Repository;
 
-use App\Entity\Period;
+use EvalBookCore\Entity\Period;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 

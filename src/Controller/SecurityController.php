@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Controller;
+namespace EvalBookCore\Controller;
 
-use App\Entity\SystemConfiguration;
+use EvalBookCore\Entity\SystemConfiguration;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;

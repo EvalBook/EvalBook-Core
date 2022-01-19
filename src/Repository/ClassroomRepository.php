@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Repository;
+namespace EvalBookCore\Repository;
 
-use App\Entity\Classroom;
+use EvalBookCore\Entity\Classroom;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 

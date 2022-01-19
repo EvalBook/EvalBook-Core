@@ -11,3 +11,4 @@ yarn-error.log
 /.env.local
 /_doc/personnal.md
 /composer.phar
+/.env
