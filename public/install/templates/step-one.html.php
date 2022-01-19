@@ -5,14 +5,14 @@
         <div class="input-group">
             <!-- Standard installation mode, use in production -->
             <div>
-                <input type="radio" id="prod" name="install-mode" value="prod" checked>
-                <label for="prod">Mode production, pour utiliser dans votre école.</label>
+                <input type="radio" name="install-mode" value="prod" checked>
+                <label for="prod" id="prod">Mode production, pour utiliser dans votre école.</label>
             </div>
 
             <!-- Dev installation mode, used to contribute to EvalBook -->
             <div>
-                <input type="radio" id="dev" name="install-mode" value="dev">
-                <label for="prod">Mode développeur, pour contribuer à EvalBook</label>
+                <input type="radio" name="install-mode" value="dev">
+                <label for="prod" id="dev">Mode développeur, pour contribuer à EvalBook</label>
             </div>
         </div>
         <div class="input-group">
