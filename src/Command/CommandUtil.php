@@ -9,7 +9,7 @@ class CommandUtil {
      * @return bool
      */
     public static function execSymfonyCmd(string $cmd): bool {
-        $workingDir = $_SERVER['DOCUMENT_ROOT'] . '/../';
+        $workingDir = __DIR__ . '/../../';
         exec('cd "'. $workingDir . '" && ' . $cmd, $output, $code);
         return $code === 0;
     }
