@@ -6,11 +6,11 @@ class CommandUtil {
 
     /**
      * @param string $cmd
+     * @param bool $debug
      * @return bool
      */
     public static function execSymfonyCmd(string $cmd, bool $debug=false): bool
     {
-        $debug = true;
         $workingDir = __DIR__ . '/../../';
         exec('cd "'. $workingDir . '" && ' . $cmd, $output, $code);
 

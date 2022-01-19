@@ -1,6 +1,6 @@
 <?php
 
-use App\Command\CommandUtil;
+use EvalBookCore\Command\CommandUtil;
 use EvalBookCore\Installer\Form;
 
 if(isset($_POST['migrate'])) {
@@ -70,8 +70,10 @@ if(isset($_POST['migrate'])) {
         };
 
         if(CommandUtil::execSymfonyCmd("php bin/console regenerate-env {$_SESSION['install-mode']} $dsn")) {
+            // Installing database.
             if(CommandUtil::execSymfonyCmd("php bin/console install-db")) {
-
+                // Loading production / dev fixtures
+                // TODO
             }
             else { ?>
                 <div class="error alert">La base de données n'a pas pu être créée / peuplée, l'installation a échoué</div> <?php
