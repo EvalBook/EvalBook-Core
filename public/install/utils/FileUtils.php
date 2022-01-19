@@ -1,9 +1,11 @@
 <?php
 
+namespace utils;
 /**
  * Provide simple file utilities.
  */
-final class FileUtils {
+final class FileUtils
+{
 
     /**
      * Download a source from internet.
@@ -18,7 +20,7 @@ final class FileUtils {
         $output = $destination . "/" . $name;
 
         // Removes file if already exists.
-        if(file_exists($output)) {
+        if (file_exists($output)) {
             unlink($output);
         }
         $source = file_get_contents($url);
@@ -45,13 +47,13 @@ final class FileUtils {
      */
     public static function unlinkRecursive($dir): bool
     {
-        if(!$dh = @opendir($dir)) {
+        if (!$dh = @opendir($dir)) {
             return false;
         }
 
-        while (false !== ($obj = readdir($dh))){
+        while (false !== ($obj = readdir($dh))) {
             // Pass if directory is a . or ..
-            if($obj == '.' || $obj == '..') continue;
+            if ($obj == '.' || $obj == '..') continue;
 
             if (!@unlink($dir . '/' . $obj)) {
                 self::unlinkRecursive($dir . '/' . $obj);
