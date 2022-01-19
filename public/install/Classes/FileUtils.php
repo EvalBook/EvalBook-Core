@@ -1,6 +1,7 @@
 <?php
 
-namespace utils;
+namespace EvalBookCore\Installer;
+
 /**
  * Provide simple file utilities.
  */

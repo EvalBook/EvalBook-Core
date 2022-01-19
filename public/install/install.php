@@ -1,8 +1,21 @@
 <?php
 
-
 session_start();
 
+const CHOOSE_MODE = 0;
+const INSTALL_DEPENDENCIES = 1;
+const INSTALL_DEPENDENCIES_COMPOSER = 2;
+const INSTALL_DEPENDENCIES_NPM_YARN = 3;
+
+require __DIR__ . '/Classes/Installer.php';
+require __DIR__ . '/../../src/Command/CommandUtil.php';
+
+use App\Command\CommandUtil;
+use EvalBookCore\Installer\Installer;
+
+/**
+ * Defining current installation steps.
+ */
 $step = $_SESSION['step'] ?? 0;
 // Checking current installation step.
 if(isset($_POST['next'])){
@@ -14,20 +27,13 @@ elseif(isset($_POST['previous'])) {
 
 $_SESSION['step'] = $step;
 
-// Getting installation mode.
+/**
+ * Defining installation mode
+ */
 if(isset($_POST['install-mode']) && in_array($_POST['install-mode'], ['prod', 'dev'])) {
     $_SESSION['install-mode'] = trim($_POST['install-mode']);
 }
 
-const CHOOSE_MODE = 0;
-const INSTALL_DEPENDENCIES = 1;
-const INSTALL_DEPENDENCIES_COMPOSER = 2;
-const INSTALL_DEPENDENCIES_NPM_YARN = 3;
-
-require dirname(__FILE__) . '/Installer.php';
-require dirname(__FILE__) . '/../src/Command/CommandUtil.php';
-
-use App\Command\CommandUtil;
 
 $installer = new Installer($_POST['install-mode'] ?? $_SESSION['install-mode'] ?? 'prod');
 
@@ -40,7 +46,7 @@ $installer = new Installer($_POST['install-mode'] ?? $_SESSION['install-mode'] ?
     <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
-    <link rel="stylesheet" href="<? __dir__ ?>">
+    <link rel="stylesheet" href="/install/assets/css/style.css">
 
     <script>
         window.addEventListener('load', function() {
