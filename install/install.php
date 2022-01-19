@@ -501,6 +501,11 @@ $installer = new Installer($_POST['install-mode'] ?? $_SESSION['install-mode'] ?
 
                 // If no form error, writing the .env file for prod | .env.local for dev.
                 if(!$error) {
+                    // Make sure .env file exists, it avoid Symfony to trigger an env file load error.
+                    if(!file_exists(__DIR__ . '../.env')) {
+                        CommandUtil::execSymfonyCmd("echo \"DATABASE_URL=''\" >> .env");
+                    }
+
                     $dsn = match($db_type) {
                         'mysql-5.7' => "mysql://$db_user:$db_password@$host:$port/$db?serverVersion=5.7&charset=utf8",
                         'mysql-8.0' => "mysql://$db_user:$db_password@$host:$port/$db?serverVersion=8.0&charset=utf8",
