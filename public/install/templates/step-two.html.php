@@ -5,10 +5,10 @@ use EvalBookCore\Installer\Installer;
 
 /**
  * @param string $function
- * @param string $messageOk
- * @param string $messageNok
- * @param string $nextStepLabel
- * @param string $infoParagraph
+ * @param string $msgOk
+ * @param string $msgNok
+ * @param string $nextLabel
+ * @param string $infoP
  * @return void
  */
 function installPackages(string $function, string $msgOk, string $msgNok, string $nextLabel = '', string $infoP = ''): void
@@ -28,7 +28,7 @@ function installPackages(string $function, string $msgOk, string $msgNok, string
     else { ?>
         <p><span class='red bold'>Nok</span> - <?= $msgNok ?></p>
         <hr>
-        <a class="try-again" href="index.php">Essayer à nouveau</a><?php
+        <a class="try-again" href="/index.php">Essayer à nouveau</a><?php
         $_SESSION['step'] = --$_SESSION['step'];
     }
 }
@@ -37,7 +37,7 @@ function installPackages(string $function, string $msgOk, string $msgNok, string
 
 <section>
     <h2>Étape 2/3: <span>Installation des dépendences</span></h2>
-    <form action="index.php" method="POST">
+    <form action="/index.php" method="POST">
         <div class="input-group"> <?php
             /**
              * Display the composer install notice before proceeding (long install, no async possible as vendors are not set yet).

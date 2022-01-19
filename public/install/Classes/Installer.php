@@ -2,8 +2,6 @@
 
 namespace EvalBookCore\Installer;
 
-ini_set('max_execution_time', 0);
-require_once __DIR__ . '/File.php';
 
 final class Installer
 {
