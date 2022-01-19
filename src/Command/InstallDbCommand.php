@@ -48,6 +48,15 @@ class InstallDbCommand extends Command
         }
 
         if ($cmdr) {
+            $cmdr = $this->exec($io, 'php bin/console make:migration --no-interaction', [
+                'intro' => 'Creating migration',
+                'success' => 'Migration created',
+                'error' => 'An error occurred while creating migration',
+            ]);
+        }
+
+
+        if ($cmdr) {
             $cmdr = $this->exec($io, 'php bin/console doctrine:migrations:migrate --no-interaction', [
                 'intro' => 'Pushing migration',
                 'success' => 'Database was populated',
