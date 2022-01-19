@@ -1,5 +1,5 @@
 <?php
-
+// TODO -> Test the whole install process, mysql still fails.
 session_start();
 ini_set('max_execution_time', 0);
 
@@ -56,10 +56,8 @@ if(isset($_POST['install-mode']) && in_array($_POST['install-mode'], ['prod', 'd
     <main>
 
         <header>
-            <h1>Installation de votre instance</h1>
-            <div id="loader" class="progress-container">
-                <div class="loading"></div>
-            </div>
+            <h1>Installation de votre instance</h1> <?php
+            require __DIR__ . '/templates/loader.html.php'; ?>
             <img src="/assets/logo_text.png" alt="Logo texte EvalBook">
         </header> <?php
 

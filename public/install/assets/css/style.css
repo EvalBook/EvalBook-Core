@@ -175,18 +175,28 @@ span.error {
     display: block;
 }
 
-.progress-container {
-    border: .2rem solid black;
+.loader-container {
     position: absolute;
     top: 0;
-    left: 30%;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    z-index: 1;
+    background: rgba(222, 220, 220, 0.4);
+    justify-content: center;
+    align-items: flex-start;
+    display: none;
+}
+
+.progress-container {
+    border: .2rem solid black;
     width: 40%;
-    margin: 18rem auto;
     padding: 1.5rem 2rem;
     border-radius: .4rem;
     box-sizing: border-box;
+    margin-top: 28rem;
     background: #fff;
-    box-shadow: 0 1rem 2rem rgba(0, 0, 0, .5);
+    box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.24);
     animation: pulse 5s infinite;
 }
 
