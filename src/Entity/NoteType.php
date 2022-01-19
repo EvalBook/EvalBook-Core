@@ -36,7 +36,8 @@ class NoteType
     private ArrayCollection $noteTypeValues;
 
 
-    #[Pure] public function __construct()
+    #[Pure]
+    public function __construct()
     {
         $this->noteTypeValues = new ArrayCollection();
     }

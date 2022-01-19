@@ -64,7 +64,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private Role $role;
 
 
-    #[Pure] public function __construct()
+    #[Pure]
+    public function __construct()
     {
         $this->classrooms = new ArrayCollection();
     }
@@ -175,10 +176,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @see UserInterface
      */
-    public function eraseCredentials()
+    public function eraseCredentials(): self
     {
         // If you store any temporary, sensitive data on the user, clear it here
         // $this->plainPassword = null;
+        return $this;
     }
 
     /**

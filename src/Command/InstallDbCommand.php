@@ -65,7 +65,8 @@ class InstallDbCommand extends Command
      * @param array $msgs
      * @return bool
      */
-    private function exec(SymfonyStyle $io, string $cmd, array $msgs): bool {
+    private function exec(SymfonyStyle $io, string $cmd, array $msgs): bool
+    {
         $io->info($msgs['intro'] ?? "Executing new command");
         $cmdr = CommandUtil::execSymfonyCmd($cmd);
 

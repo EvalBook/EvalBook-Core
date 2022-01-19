@@ -53,7 +53,8 @@ class School
 
 
 
-    #[Pure] public function __construct()
+    #[Pure]
+    public function __construct()
     {
         $this->implantations = new ArrayCollection();
     }

@@ -31,7 +31,8 @@ class Role
     private ArrayCollection $users;
 
 
-    #[Pure] public function __construct()
+    #[Pure]
+    public function __construct()
     {
         $this->users = new ArrayCollection();
     }
@@ -104,7 +105,9 @@ class Role
     /**
      * @return string|null
      */
-    public function __toString() {
+    #[Pure]
+    public function __toString()
+    {
         return $this->getName();
     }
 }

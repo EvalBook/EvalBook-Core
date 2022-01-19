@@ -53,7 +53,8 @@ class Period
 
 
 
-    #[Pure] public function __construct()
+    #[Pure]
+    public function __construct()
     {
         $this->activities = new ArrayCollection();
     }
