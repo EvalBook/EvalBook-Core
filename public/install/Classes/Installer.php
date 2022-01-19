@@ -3,7 +3,7 @@
 namespace EvalBookCore\Installer;
 
 ini_set('max_execution_time', 0);
-require_once __DIR__ . '/FileUtils.php';
+require_once __DIR__ . '/File.php';
 
 final class Installer
 {
@@ -30,7 +30,7 @@ final class Installer
     public function installComposer(): bool
     {
         $release = 'https://github.com/composer/composer/releases/download/' . self::COMPOSER_VERSION . '/composer.phar';
-        if (!FileUtils::download($release, $this->root, 'composer.phar')) {
+        if (!File::download($release, $this->root, 'composer.phar')) {
             return false;
         }
 

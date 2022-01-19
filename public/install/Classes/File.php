@@ -5,7 +5,7 @@ namespace EvalBookCore\Installer;
 /**
  * Provide simple file utilities.
  */
-final class FileUtils
+final class File
 {
 
     /**
@@ -28,17 +28,6 @@ final class FileUtils
         $result = file_put_contents($output, $source, FILE_USE_INCLUDE_PATH | LOCK_EX);
         chmod($output, 0775);
         return $result ? $output : false;
-    }
-
-    /**
-     * Well formatted print_r.
-     * @param $data
-     */
-    public static function print_r2($data)
-    {
-        echo "<pre>";
-        print_r($data);
-        echo "</pre>";
     }
 
     /**

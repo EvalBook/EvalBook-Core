@@ -11,6 +11,7 @@ require __DIR__ . '/Classes/Installer.php';
 require __DIR__ . '/../../src/Command/CommandUtil.php';
 
 use App\Command\CommandUtil;
+use EvalBookCore\Installer\Form;
 use EvalBookCore\Installer\Installer;
 
 /**
@@ -48,8 +49,8 @@ $installer = new Installer($_POST['install-mode'] ?? $_SESSION['install-mode'] ?
     <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
     <link rel="stylesheet" href="/install/assets/css/style.css">
 
-    <script src="/installer/assets/js/app.js"></script>
-    <script src="/installer/assets/js/validator.js" defer></script>
+    <script src="/install/assets/js/app.js"></script>
+    <script src="/install/assets/js/validator.js" defer></script>
 
     <title>Installation - EvalBook</title>
 </head>
@@ -169,10 +170,10 @@ $installer = new Installer($_POST['install-mode'] ?? $_SESSION['install-mode'] ?
 
                 // Validating installation form.
                 if($db_type !== 'sqlite') {
-                    $error = areFieldsEmpty($host, $port, $db, $db_user, $db_password, $db_type, $admin_email, $admin_password, $admin_password_repeat);
+                    $error = Form::areFieldsEmpty($host, $port, $db, $db_user, $db_password, $db_type, $admin_email, $admin_password, $admin_password_repeat);
                 }
                 else {
-                    $error = areFieldsEmpty($db, $admin_email, $admin_password, $admin_password_repeat);
+                    $error = Form::areFieldsEmpty($db, $admin_email, $admin_password, $admin_password_repeat);
                 }
                 if($error) { ?>
                     <div class="error alert">Certains champs sont vide</div> <?php
@@ -364,14 +365,3 @@ function installPackages(
     }
 }
 
-
-/**
- * @param ...$fields
- * @return bool
- */
-function areFieldsEmpty(...$fields): bool {
-    foreach($fields as $field) {
-        return is_null($field) || (!is_int($field) && !strlen($field) > 0);
-    }
-    return false;
-}
