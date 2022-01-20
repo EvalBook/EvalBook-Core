@@ -175,7 +175,7 @@ span.error {
     display: block;
 }
 
-.loader-container {
+.loader-container, .modal-dialog-container {
     position: absolute;
     top: 0;
     left: 0;
@@ -188,7 +188,11 @@ span.error {
     display: none;
 }
 
-.progress-container {
+.modal-dialog-container {
+    display: flex;
+}
+
+.progress-container, .modal-dialog-content {
     border: .2rem solid black;
     width: 40%;
     padding: 1.5rem 2rem;
@@ -198,6 +202,12 @@ span.error {
     background: #fff;
     box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.24);
     animation: pulse 5s infinite;
+}
+
+.modal-dialog-content {
+    margin-top: 29rem;
+    padding: 2.5rem;
+    text-align: justify;
 }
 
 .loading {

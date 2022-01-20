@@ -1,9 +1,10 @@
 <?php
 // TODO
 //  -> Add an option to create OR use existing database.
-//  -> display error modal if os !== linux.
 //  -> Delete install folder if mode is env for security reasons
 //  -> make use of native npm and composer in dev mode (no need of composer.phar and mouf/nodejs-installer)
+
+use EvalBookCore\Installer\Installer;
 
 session_start();
 ini_set('max_execution_time', 0);
@@ -65,6 +66,12 @@ if(isset($_POST['install-mode']) && in_array($_POST['install-mode'], ['prod', 'd
             require __DIR__ . '/templates/loader.html.php'; ?>
             <img src="/assets/logo_text.png" alt="Logo texte EvalBook">
         </header> <?php
+
+        // Checking if system is linux before install.
+        if(!Installer::isLinux()) {
+            require __DIR__ . '/templates/modal.html.php';
+            exit();
+        }
 
         /**
          * Step one, selection between production or development EvalBook installation.
