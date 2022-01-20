@@ -25,6 +25,8 @@ Pour installer EvalBook Core sur votre serveur, les extentions suivantes doivent
  * pdo_sqlite (si sqlite choisi en tant que système de gestion de base de données)
  * intl
 
+Vous ne devriez pas avoir de soucis avec ces dépendances sur un serveur mutualisé, si vous avez un serveur dédié ou un VPS, pensez à installer ces extensions avant de procéder à l'installation
+
 
 ### Choix de la version de PHP.
 La version de PHP compatible avec EvalBook est la **>= 8.0**, bien que certains gros hébergeurs ne supportent pas encore PHP8.0,
@@ -44,7 +46,7 @@ Plus d'informations sur les [version supportées de PHP](https://www.php.net/sup
 ## Contribuer
 
 ### Traduire
-Nous ne parlons pas néerlandais, si vous ête néérlandophone, professeur de néerlandais ou polyglote :-) , sentez vous libre de nous aider dans les traductions, nous mettrons à votre disposition une interface simple vous permettant de nous aider sans vous encombrer :-)
+Nous ne parlons pas néerlandais, si vous êtes néérlandophone, professeur de néerlandais ou polyglote :-) , sentez vous libre de nous aider dans les traductions, nous mettrons à votre disposition une interface simple vous permettant de nous aider sans vous encombrer :-)
  Vous ne devrez faire **aucune installation** !
 
 ### Tester
@@ -54,9 +56,12 @@ Si vous le souhaitez et si vous travaillez dans l'enseignement, peu importe votr
 Vous avez trouvé, et corrigé un bug ? Envoyez nous une PR ! Vous avez trouvé une faute d'orthographe ? Nous ne sommes pas des machines, et apprécierions que vous nous le fassiez savoir :-)
 
 ### Coder
-Toute aide est l abienvenue, sentez vous libre de cloner le projet et de proposer des Pull Requests, nous serions ravis de les examiner et de les intégrer dans le projet si ils correspondent à la philosophie de EvalBook.
+Toute aide est la bienvenue, sentez-vous libre de cloner le projet et de proposer des **Pull Requests**, nous serions ravis de les examiner et de les intégrer dans le projet si ils correspondent à la philosophie de EvalBook.
+
 
 ### Financer
+Nous sommes en recherche de sponsors et de contributeurs afin de pouvoir consacrer plus de temps sur ce projet, mais aussi dans le but de pouvoir financer les différents serveurs dont nous avons besoin pour cet outil.
+Vous souhaitez nous sponsoriser ou contribuer financièrement au développement ? Nous en serions ravis, contactez nous !
 
 ## Support
 
