@@ -39,10 +39,8 @@ class CommandUtil {
 
         array_map(function($f){if(file_exists($f)) unlink($f);}, $files);
 
-        if(strtolower($env) === 'prod'){
-            CommandUtil::execSymfonyCmd("echo \"DATABASE_URL=''\" >> .env");
-        }
-        elseif(strtolower($env) === 'dev'){
+        CommandUtil::execSymfonyCmd("echo \"DATABASE_URL=''\" >> .env");
+        if(strtolower($env) === 'dev'){
             CommandUtil::execSymfonyCmd("echo \"DATABASE_URL=''\" >> .env.local");
         }
     }
