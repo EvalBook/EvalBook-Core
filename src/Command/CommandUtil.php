@@ -17,13 +17,8 @@ class CommandUtil {
         exec('cd "'. self::WORKING_DIR . '" && ' . $cmd, $output, $code);
 
         if($debug) {
-            echo "<pre>";
-            var_dump($output);
-            echo "</pre>";
-
-            echo "<pre>";
-            var_dump('cd "' . self::WORKING_DIR . '" && ' . $cmd);
-            echo "</pre>";
+            self::dump($output);
+            self::dump('cd "' . self::WORKING_DIR . '" && ' . $cmd);
         }
         return $code === 0;
     }
@@ -53,4 +48,14 @@ class CommandUtil {
         }
     }
 
+
+    /**
+     * @param mixed $data
+     * @return void
+     */
+    private static function dump(mixed $data): void {
+        echo "<pre>";
+        var_dump($data);
+        echo "</pre>";
+    }
 }
