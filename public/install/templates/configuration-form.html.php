@@ -8,6 +8,12 @@ if(isset($_POST['migrate'])) {
 
     $host = strip_tags($_POST['database-host']) ?? 'localhost';
     $port = (int)$_POST['database-port'] ?? 3306;
+    $port = abs($port);
+    // Make sure port is 3306 on incoherent provided port, registered ports are in the range 1024 to 49151
+    // Ports above 1024 are private ports.
+    if($port < 1024 || $port > 49151) {
+        $port = 3306;
+    }
     $db = strip_tags($_POST['database-name']) ?? 'evalbook';
     $db_user = strip_tags($_POST['database-username']);
     $db_password = strip_tags($_POST['database-password']);
@@ -107,28 +113,28 @@ if(isset($_POST['migrate'])) {
         </div>
 
         <div class="input-group row">
-            <label class="required" for="database-port">Port</label>
+            <label for="database-port">Port de connexion</label>
             <div>
-                <input type="number" name="database-port" placeholder="3306" required>
+                <input type="number" name="database-port" placeholder="Défault: 3306">
             </div>
         </div>
 
         <div class="input-group row">
-            <label class="required" for="database-name">Nom de la base</label>
+            <label class="required" for="database-name">Nom de la base de données</label>
             <div>
                 <input type="text" name="database-name" required>
             </div>
         </div>
 
         <div class="input-group row">
-            <label class="required" for="database-username">Utilisateur de la base</label>
+            <label class="required" for="database-username">Utilisateur de la base de données</label>
             <div>
                 <input type="text" name="database-username" required>
             </div>
         </div>
 
         <div class="input-group row">
-            <label class="required" for="database-password">Password de la base</label>
+            <label class="required" for="database-password">Password de la base de données</label>
             <div>
                 <input type="password" name="database-password" required>
             </div>
@@ -141,14 +147,14 @@ if(isset($_POST['migrate'])) {
         <legend>Définir l'accès administrateur</legend>
 
         <div class="input-group row">
-            <label class="required" for="admin-email">Adresse mail</label>
+            <label class="required" for="admin-email">Adresse mail admin</label>
             <div>
                 <input type="email" name="admin-email" required>
             </div>
         </div>
 
         <div class="input-group row">
-            <label class="required" for="admin-password">Mot de passe</label>
+            <label class="required" for="admin-password">Mot de passe admin</label>
             <div>
                 <input type="password" name="admin-password" required>
             </div>
