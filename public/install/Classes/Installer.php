@@ -9,7 +9,6 @@ final class Installer
 
     private string $root;
     private string $env;
-    private bool $isLinux;
 
     /**
      * @param string $env
@@ -18,7 +17,16 @@ final class Installer
     {
         $this->root = $_SERVER['DOCUMENT_ROOT'] . '/..';
         $this->env = $env;
-        $this->isLinux = strtolower(PHP_OS) === 'linux';
+    }
+
+
+    /**
+     * Return true if environnement is linux.
+     * @return bool
+     */
+    public static function isLinux(): bool
+    {
+        return strtolower(PHP_OS) === 'linux';
     }
 
     /**
@@ -45,11 +53,11 @@ final class Installer
     public function installNpmAndYarn(): bool
     {
         // Installing yarn
-        $npm = $this->isLinux ? 'sh ' . $this->root . '/vendor/mouf/nodejs-installer/bin/local/npm' : $this->root . '/vendor/bin/npm.bat';
+        $npm = 'sh ' . $this->root . '/vendor/mouf/nodejs-installer/bin/local/npm';
 
         if ($this->shellInstall("$npm install yarn", $this->root . '/node_modules/yarn')) {
             // Installing yarn dependencies.
-            $node = $this->isLinux ? 'sh ' . $this->root . '/vendor/mouf/nodejs-installer/bin/local/node' : $this->root . '/vendor/bin/node.bat';
+            $node = 'sh ' . $this->root . '/vendor/mouf/nodejs-installer/bin/local/node';
             $yarn = $this->root . '/node_modules/yarn/bin/yarn.js';
             return $this->shellInstall("$node $yarn install --cwd " . $this->root, null, false);
         }
