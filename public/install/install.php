@@ -1,4 +1,10 @@
 <?php
+// TODO
+//  -> do not display loader if configuration form was not validated.
+//  -> Add an option to create OR use existing database.
+//  -> make port optional
+//  -> display error modal if os !== linux.
+
 session_start();
 ini_set('max_execution_time', 0);
 

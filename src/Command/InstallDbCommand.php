@@ -22,8 +22,12 @@ class InstallDbCommand extends Command
      */
     protected function configure(): void
     {
-        $this
-            ->addArgument('database_create', InputArgument::OPTIONAL, 'Create the database either not create it', 'y');
+        $this->addArgument(
+            'database_create',
+            InputArgument::OPTIONAL,
+            'Create the database',
+            'y'
+        );
     }
 
 

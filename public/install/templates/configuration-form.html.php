@@ -78,10 +78,7 @@ if(isset($_POST['migrate'])) {
             <div class="error alert">Le fichier de configuration n'a pas pu être généré, l'installation a échoué !</div> <?php
         }
 
-        echo "<pre>";
-        var_dump($_SESSION['install-mode'], $dsn, "php bin/console regenerate-env {$_SESSION['install-mode']} $dsn");
-        echo "</pre>";
-
+        var_dump($_SESSION['install-mode']);
     }
 }
 ?>
