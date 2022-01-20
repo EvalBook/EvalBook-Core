@@ -11,6 +11,7 @@ class CommandUtil {
      */
     public static function execSymfonyCmd(string $cmd, bool $debug=false): bool
     {
+        $debug = true;
         $workingDir = __DIR__ . '/../../';
         exec('cd "'. $workingDir . '" && ' . $cmd, $output, $code);
 

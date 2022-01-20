@@ -1,5 +1,4 @@
 <?php
-// TODO -> Test the whole install process, mysql still fails.
 session_start();
 ini_set('max_execution_time', 0);
 

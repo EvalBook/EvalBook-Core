@@ -40,28 +40,46 @@ class InstallDbCommand extends Command
 
         // Creating the database if needed.
         if (strtolower($input->getArgument('database_create')) === 'y') {
-            $cmdr = $this->exec($io, 'php bin/console doctrine:database:create', [
-                'intro' => 'Installing database',
-                'success' => 'Database was created',
-                'error' => 'An error occurred while creating the database',
-            ]);
+            $messages = [
+                'Installing database',
+                'Database was created',
+                'An error occurred while creating the database',
+            ];
+
+            $cmdr = $this->exec($io, 'php bin/console doctrine:database:create', $messages);
         }
 
         if ($cmdr) {
-            $cmdr = $this->exec($io, 'php bin/console make:migration --no-interaction', [
-                'intro' => 'Creating migration',
-                'success' => 'Migration created',
-                'error' => 'An error occurred while creating migration',
-            ]);
+            $messages = [
+                'Creating migration',
+                'Migration created',
+                'An error occurred while creating migration',
+            ];
+
+            // Deleting migrations if any.
+            $io->info('Checking for existing migrations');
+            $files = glob(__DIR__ . '/../../migrations/*.php');
+            foreach($files as $file) {
+                if(is_file($file)) {
+                    $io->info("Deleting migration: $file");
+                    unlink($file);
+                    $io->info("...Deleted");
+                }
+            }
+
+            // Starting building new migration
+            $cmdr = $this->exec($io, 'php bin/console make:migration --no-interaction', $messages);
         }
 
 
         if ($cmdr) {
-            $cmdr = $this->exec($io, 'php bin/console doctrine:migrations:migrate --no-interaction', [
-                'intro' => 'Pushing migration',
-                'success' => 'Database was populated',
-                'error' => 'An error occurred while populating the database',
-            ]);
+            $messages = [
+                'Pushing migration',
+                'Database was populated',
+                'An error occurred while populating the database',
+            ];
+
+            $cmdr = $this->exec($io, 'php bin/console doctrine:migrations:migrate --no-interaction', $messages);
         }
 
         return $cmdr ? Command::SUCCESS : Command::FAILURE;
@@ -76,16 +94,10 @@ class InstallDbCommand extends Command
      */
     private function exec(SymfonyStyle $io, string $cmd, array $msgs): bool
     {
-        $io->info($msgs['intro'] ?? "Executing new command");
+        $io->info($msgs[0]);
         $cmdr = CommandUtil::execSymfonyCmd($cmd);
-
-        if($cmdr) {
-            $io->success($msgs['success'] ?? "The provided command was executed");
-        }
-        else {
-            $io->error($msgs['error'] ?? "An error occurred while executing the last command");
-        }
-
+        list($f, $p) = $cmd ? ['success', $msgs[1]] : ['error', $msgs[2]];
+        $io->$f($p);
         return $cmdr;
     }
 }

@@ -124,7 +124,7 @@ if(isset($_POST['migrate'])) {
         <div class="input-group row">
             <label class="required" for="database-name">Nom de la base</label>
             <div>
-                <input type="text" name="database-name" placeholder="Vide pour automatique" required>
+                <input type="text" name="database-name" required>
             </div>
         </div>
 
