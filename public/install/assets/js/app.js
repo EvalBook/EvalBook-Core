@@ -11,7 +11,17 @@ window.addEventListener('load', function() {
      */
     const inputButtons = document.querySelectorAll('input[type="submit"]');
     if(inputButtons) {
-        inputButtons.forEach(button => button.addEventListener('click', () => loaderContainer.style.display = 'flex'));
+        inputButtons.forEach(button => button.addEventListener('click', () => {
+            if(button.id !== 'database-configuration') {
+                loaderContainer.style.display = 'flex'
+            }
+            else {
+                const form = document.querySelector('form');
+                if(form.checkValidity()) {
+                    loaderContainer.style.display = 'flex';
+                }
+            }
+        }));
     }
 
     /**

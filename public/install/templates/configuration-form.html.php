@@ -164,6 +164,6 @@ if(isset($_POST['migrate'])) {
     </fieldset>
 
     <div class="input-group">
-        <input type="submit" class="btn" value="Finir l'installation&nbsp;&raquo;" name="migrate">
+        <input type="submit" class="btn" value="Finir l'installation&nbsp;&raquo;" name="migrate" id="database-configuration">
     </div>
 </form>
