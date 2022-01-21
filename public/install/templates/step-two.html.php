@@ -18,7 +18,7 @@ function installPackages(string $function, string $msgOk, string $msgNok, string
     if($installer->$function()) { ?>
         <p><span class='green bold'>Ok</span> - <?= $msgOk ?></p>
         <hr>
-        <p class="info">
+        <p class="info-step">
             <?= $infoP ?>
         </p>
         <div class="input-group">
@@ -49,7 +49,7 @@ function installPackages(string $function, string $msgOk, string $msgNok, string
                 ?>
                 <p><?= $version_span ?> - Version de php >= à 8.0 (<?= $php_version ?>)</p>
                 <hr>
-                <p class="info">
+                <p class="info-step">
                     La prochaine étape est l'installation de Composer, cette opération prend plus de temps.
                     Les étapes suivantes seront disponibles dès l'apparition des boutons de contrôle.
                 </p>
