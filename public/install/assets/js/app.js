@@ -28,36 +28,53 @@ window.addEventListener('load', function() {
     }
 
     /**
-     * Handle radio buttons labels click.
+     * Handle radio buttons labels clicks and tooltips hovering labels on step 1.
      */
     const prodLabel = document.querySelector('#prod');
     const devLabel = document.querySelector('#dev');
-    const radios = document.querySelectorAll('input[type="radio"]');
 
-    const prodTooltip = new Tooltip(`
-        Hello World from PROD
-    `);
+    if(prodLabel && devLabel) {
+        const radios = document.querySelectorAll('input[type="radio"]');
+        const prodTooltip = new Tooltip(`
+            <p class="info"><strong>Mode production: </strong></p>
+            <p class="info">
+                &#9432; Utilisez ce mode si vous souhaitez utiliser EvalBook dans votre établissement
+            </p>
+            <ul class="info">
+                <li>Installe toutes les dépendances automatiquement</li>
+                <li>Supprime le dossier d'installation pour des raisons de sécurité</li>
+                <li>Crée votre base de données</li>
+            </ul>
+        `);
 
-    const devTooltip = new Tooltip(`
-        <p class="info">
-            Utilise votre installation de composer et npm, ne supprime pas le dossier /install, et peuple la base de données avec des données de test
-        </p>
-    `);
+        const devTooltip = new Tooltip(`
+            <p class="info"><strong>Mode développement: </strong></p>
+            <p class="info">
+                &#9432; Utilisez ce mode si vous souhaitez contribuer à EvalBook
+            </p>
+            <ul class="info">
+                <li>Utilise vos installations de Composer et de NPM/Yarn</li>
+                <li>Ne supprime pas le dossier d'installation</li>
+                <li>Peuple la base de données avec des données de tests</li>
+                <li>Crée votre fichier <em>.env.local</em></li>
+            </ul>
+        `);
 
-    if(prodLabel && devLabel && radios) {
-        [prodLabel, devLabel].forEach(radioLabel => radioLabel.addEventListener('click', function() {
-            (this.id === 'prod' ? radios[0] : radios[1]).checked = true;
-        }));
+        if(radios) {
+            [prodLabel, devLabel].forEach(radioLabel => radioLabel.addEventListener('click', function () {
+                (this.id === 'prod' ? radios[0] : radios[1]).checked = true;
+            }));
+        }
+
+        /**
+         * Initialize tooltips.
+         */
+        prodLabel.addEventListener('mouseenter', (e) => prodTooltip.show(e));
+        prodLabel.addEventListener('mouseleave', () => prodTooltip.hide());
+
+        devLabel.addEventListener('mouseenter', (e) => devTooltip.show(e));
+        devLabel.addEventListener('mouseleave', () => devTooltip.hide());
     }
-
-    /**
-     * Initialize tooltips.
-     */
-    prodLabel.addEventListener('mouseenter', (e) => prodTooltip.show(e));
-    prodLabel.addEventListener('mouseleave', () => prodTooltip.hide());
-
-    devLabel.addEventListener('mouseenter', (e) => devTooltip.show(e));
-    devLabel.addEventListener('mouseleave', () => devTooltip.hide());
 
 });
 

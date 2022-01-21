@@ -253,10 +253,29 @@ label.required::after {
     color: indianred;
 }
 
-p.info {
+p.info, ul.info {
     font-weight: normal;
     font-size: 1.2rem;
     margin: 0;
+}
+
+p.info:first-child {
+    margin-bottom: 1.3rem;
+}
+
+p.info:last-child {
+    margin-bottom: 1rem;
+}
+
+p.info strong {
+    color: #EAAF19;
+}
+
+ul.info{
+    margin-top: .5rem;
+    margin-left: 2rem;
+    line-height: 2rem;
+    list-style-type: circle;
 }
 
 fieldset {
@@ -279,13 +298,15 @@ fieldset > legend {
     padding: 1rem 2rem;
     display: block;
     min-width: 20%;
-    max-width: 35%;
+    max-width: 40%;
     border-radius: .6rem;
     color: #6C9BC3;
     box-shadow: -6px 10px 15px -3px rgba(0,0,0,0.1);
     position: absolute;
     left: 0;
     top: 0;
+    border-bottom: solid #EAAF19 .2rem;
+    opacity: 0;
 }
 
 .tooltip::before {
