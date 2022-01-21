@@ -2,7 +2,6 @@
 // TODO
 //  -> Add an option to create OR use existing database.
 //  -> Delete install folder if mode is env for security reasons
-//  -> make use of native npm and composer in dev mode (no need of composer.phar and mouf/nodejs-installer)
 
 use EvalBookCore\Installer\Installer;
 

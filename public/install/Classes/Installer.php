@@ -35,13 +35,18 @@ final class Installer
      */
     public function installComposer(): bool
     {
-        $release = 'https://github.com/composer/composer/releases/download/' . self::COMPOSER_VERSION . '/composer.phar';
-        if (!File::download($release, $this->root, 'composer.phar')) {
-            return false;
-        }
+        if($this->env === 'prod') {
+            $release = 'https://github.com/composer/composer/releases/download/' . self::COMPOSER_VERSION . '/composer.phar';
+            if (!File::download($release, $this->root, 'composer.phar')) {
+                return false;
+            }
 
-        // Installing composer dependencies.
-        $composer = 'php ' . $this->root . '/composer.phar install --working-dir=' . $this->root;
+            // Installing composer dependencies.
+            $composer = 'php ' . $this->root . '/composer.phar install --working-dir=' . $this->root;
+        }
+        else {
+            $composer = 'composer install --working-dir=' . $this->root . " --no-scripts";
+        }
         return $this->shellInstall($composer, $this->root . '/vendor');
     }
 
@@ -53,13 +58,24 @@ final class Installer
     public function installNpmAndYarn(): bool
     {
         // Installing yarn
-        $npm = 'sh ' . $this->root . '/vendor/mouf/nodejs-installer/bin/local/npm';
+        if($this->env === 'prod') {
+            $npm = 'sh ' . $this->root . '/vendor/mouf/nodejs-installer/bin/local/npm';
 
-        if ($this->shellInstall("$npm install yarn", $this->root . '/node_modules/yarn')) {
-            // Installing yarn dependencies.
-            $node = 'sh ' . $this->root . '/vendor/mouf/nodejs-installer/bin/local/node';
-            $yarn = $this->root . '/node_modules/yarn/bin/yarn.js';
-            return $this->shellInstall("$node $yarn install --cwd " . $this->root, null, false);
+
+            if ($this->shellInstall("$npm install yarn", $this->root . '/node_modules/yarn')) {
+                // Installing yarn dependencies.
+                $node = 'sh ' . $this->root . '/vendor/mouf/nodejs-installer/bin/local/node';
+                $yarn = $this->root . '/node_modules/yarn/bin/yarn.js';
+                return $this->shellInstall("$node $yarn install --cwd " . $this->root);
+            }
+        }
+        else {
+            // Install yarn locally, in dev mode.
+            $ex = $this->shellInstall("npm install yarn", $this->root . '/node_modules/yarn');
+            if($ex){
+                $ex = $this->shellInstall("yarn install --cwd " . $this->root);
+            }
+            return $ex;
         }
         return false;
     }
