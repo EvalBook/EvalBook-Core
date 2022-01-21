@@ -253,6 +253,12 @@ label.required::after {
     color: indianred;
 }
 
+p.info {
+    font-weight: normal;
+    font-size: 1.2rem;
+    margin: 0;
+}
+
 fieldset {
     padding: 2rem;
     border-radius: 0.6rem;
@@ -266,6 +272,32 @@ fieldset > legend {
     padding-right: 1rem;
     font-size: 1.5rem;
     color: #6C9BC3;
+}
+
+.tooltip {
+    background: #f6f6f6;
+    padding: 1rem 2rem;
+    display: block;
+    min-width: 20%;
+    max-width: 35%;
+    border-radius: .6rem;
+    color: #6C9BC3;
+    box-shadow: -6px 10px 15px -3px rgba(0,0,0,0.1);
+    position: absolute;
+    left: 0;
+    top: 0;
+}
+
+.tooltip::before {
+    content: " ";
+    width: 2.5rem;
+    height: 2.5rem;
+    background: #f6f6f6;
+    position: absolute;
+    top: -7px;
+    left: 5px;
+    transform: rotate(25deg);
+    z-index: -10;
 }
 
 @keyframes load {

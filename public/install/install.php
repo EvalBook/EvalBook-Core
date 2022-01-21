@@ -53,7 +53,8 @@ if(isset($_POST['install-mode']) && in_array($_POST['install-mode'], ['prod', 'd
     <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
     <link rel="stylesheet" href="/install/assets/css/style.css">
 
-    <script src="/install/assets/js/app.js"></script>
+    <script src="/install/assets/js/components/Tooltip.js" type="module" defer></script>
+    <script src="/install/assets/js/app.js" type="module"></script>
     <script src="/install/assets/js/validator.js" defer></script>
 
     <title>Installation - EvalBook</title>
