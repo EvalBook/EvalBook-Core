@@ -1,6 +1,5 @@
 <?php
 // TODO
-//  -> Add an option to create OR use existing database.
 //  -> Delete install folder if mode is env for security reasons
 
 use EvalBookCore\Installer\Installer;

@@ -244,6 +244,14 @@ select {
     padding: 0.4rem;
 }
 
+input[type="checkbox"] {
+    margin-top: 0.8rem;
+}
+
+label[for="database-name"] {
+    align-self: baseline;
+}
+
 label {
     margin-right: 3rem;
 }

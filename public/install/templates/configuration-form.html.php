@@ -22,6 +22,7 @@ if(isset($_POST['migrate'])) {
     $admin_email = strip_tags($_POST['admin-email']) ?? null;
     $admin_password = strip_tags($_POST['admin-password']) ?? null;
     $admin_password_repeat = strip_tags($_POST['admin-password-repeat']) ?? '';
+    $createDatabase = intval(isset($_POST['create-database']) && $_POST['create-database'] === 'on');
 
     // Validating installation form.
     if($db_type !== 'sqlite') {
@@ -72,7 +73,7 @@ if(isset($_POST['migrate'])) {
 
         if(CommandUtil::execSymfonyCmd("php bin/console regenerate-env {$_SESSION['install-mode']} $dsn")) {
             // Installing database.
-            if(CommandUtil::execSymfonyCmd("php bin/console install-db")) {
+            if(CommandUtil::execSymfonyCmd("php bin/console install-db $createDatabase")) {
                 // Loading production / dev fixtures
                 // TODO
             }
@@ -95,13 +96,6 @@ if(isset($_POST['migrate'])) {
         <legend>Base de données</legend>
 
         <div class="input-group row">
-            <label class="required" for="database-host">Adresse serveur</label>
-            <div>
-                <input type="text" name="database-host" placeholder="Généralement localhost">
-            </div>
-        </div>
-
-        <div class="input-group row">
             <label for="database-type" class="required">Base de données</label>
             <select name="database-type" id="db-type" required>
                 <option value="">-- Veuillez choisir --</option>
@@ -110,6 +104,13 @@ if(isset($_POST['migrate'])) {
                 <option value="mariadb-10.5">MariaDB 10.5</option>
                 <option value="sqlite">SQLite</option>
             </select>
+        </div>
+
+        <div class="input-group row">
+            <label class="required" for="database-host">Adresse serveur</label>
+            <div>
+                <input type="text" name="database-host" placeholder="Généralement localhost">
+            </div>
         </div>
 
         <div class="input-group row">
@@ -123,6 +124,7 @@ if(isset($_POST['migrate'])) {
             <label class="required" for="database-name">Nom de la base de données</label>
             <div>
                 <input type="text" name="database-name" required>
+                <input type="checkbox" name="create-database" checked> Créer la base de données
             </div>
         </div>
 

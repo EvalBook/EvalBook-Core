@@ -2,7 +2,6 @@ const envForm = document.querySelector('form[name="env-form"]');
 const databaseType = envForm.querySelector('select[name="database-type"]'); // string - select.
 const databaseUsername = envForm.querySelector('input[name="database-username"]'); // string
 const databasePassword = envForm.querySelector('input[name="database-password"]'); // string
-const databasePort = envForm.querySelector('input[name="database-port"]'); // int
 const databaseHost = envForm.querySelector('input[name="database-host"]'); // string
 
 /**
@@ -10,13 +9,13 @@ const databaseHost = envForm.querySelector('input[name="database-host"]'); // st
  */
 databaseType.addEventListener('change', function(e) {
     if(databaseType.options[databaseType.selectedIndex].value === 'sqlite') {
-        [databaseUsername, databasePort, databasePassword, databaseHost].forEach((el) => {
+        [databaseUsername, databasePassword, databaseHost].forEach((el) => {
             el.removeAttribute('required');
             el.parentElement.parentElement.style.display = 'none';
         });
     }
     else {
-        [databaseUsername, databasePort, databasePassword, databaseHost].forEach((el) => {
+        [databaseUsername, databasePassword, databaseHost].forEach((el) => {
             el.setAttribute('required', 'true');
             el.parentElement.parentElement.style.display = 'flex';
         });
@@ -42,7 +41,6 @@ envForm.querySelector('input[type="submit"]').addEventListener('click', function
     // Basic form validation.
     const emptyError = validateNotEmptyField([
         databaseHost,
-        databasePort,
         databaseName,
         databaseUsername,
         databasePassword,
@@ -64,13 +62,6 @@ envForm.querySelector('input[type="submit"]').addEventListener('click', function
     if(adminPassword.value !== adminPasswordRepeat.value) {
         setError(adminPassword, "Les mot de passe ne correspondent pas");
         setError(adminPasswordRepeat, "Les mots de passe ne correspondent pas");
-    }
-
-    // Checking provided database port.
-    let portError = false;
-    if(databasePort.hasOwnProperty('required') && !Number.isInteger(parseInt(databasePort.value)) || parseInt(databasePort.value) < 4) {
-        setError(databasePort, "Le port ne semble pas correct");
-        portError = true;
     }
 
     // Validating provided email.

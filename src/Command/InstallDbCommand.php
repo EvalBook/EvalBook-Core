@@ -22,12 +22,7 @@ class InstallDbCommand extends Command
      */
     protected function configure(): void
     {
-        $this->addArgument(
-            'database_create',
-            InputArgument::OPTIONAL,
-            'Create the database',
-            'y'
-        );
+        $this->addArgument('create_database', InputArgument::REQUIRED, 'Create database');
     }
 
 
@@ -41,9 +36,10 @@ class InstallDbCommand extends Command
     {
         $io = new SymfonyStyle($input, $output);
         $cmdr = true;
+        $createDatabase = (bool)$input->getArgument('create_database');
 
         // Creating the database if needed.
-        if (strtolower($input->getArgument('database_create')) === 'y') {
+        if ($createDatabase) {
             $messages = [
                 'Installing database',
                 'Database was created',
