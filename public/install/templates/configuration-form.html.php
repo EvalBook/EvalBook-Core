@@ -56,6 +56,7 @@ if(isset($_POST['migrate'])) {
                 $res = CommandUtil::execSymfonyCmd("php bin/console doctrine:fixtures:load --group={$_SESSION['install-mode']} --no-interaction");
                 if($res && $_SESSION['install-mode'] === 'prod') {
                     CommandUtil::execSymfonyCmd("rm -rf ./public/install");
+                    header("Location: /");
                 }
             }
             else { ?>
