@@ -53,7 +53,10 @@ if(isset($_POST['migrate'])) {
             // Installing database.
             if(CommandUtil::execSymfonyCmd("php bin/console install-db $createDatabase {$_SESSION['install-mode']}")) {
                 // Loading production / dev fixtures
-                CommandUtil::execSymfonyCmd("php bin/console doctrine:fixtures:load --group={$_SESSION['install-mode']} --no-interaction");
+                $res = CommandUtil::execSymfonyCmd("php bin/console doctrine:fixtures:load --group={$_SESSION['install-mode']} --no-interaction");
+                if($res && $_SESSION['install-mode'] === 'prod') {
+                    CommandUtil::execSymfonyCmd("rm -rf ./public/install");
+                }
             }
             else { ?>
                 <div class="error alert">La base de données n'a pas pu être créée / peuplée, l'installation a échoué</div> <?php

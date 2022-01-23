@@ -12,3 +12,4 @@ yarn-error.log
 /_doc/personnal.md
 /composer.phar
 /.env
+/migrations/*
