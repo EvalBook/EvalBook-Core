@@ -3,19 +3,20 @@ const databaseType = envForm.querySelector('select[name="database-type"]'); // s
 const databaseUsername = envForm.querySelector('input[name="database-username"]'); // string
 const databasePassword = envForm.querySelector('input[name="database-password"]'); // string
 const databaseHost = envForm.querySelector('input[name="database-host"]'); // string
+const databasePort = envForm.querySelector('input[name="database-port"]'); // int
 
 /**
  * Removing required on database-username and database-password if SQLite was selected.
  */
 databaseType.addEventListener('change', function(e) {
     if(databaseType.options[databaseType.selectedIndex].value === 'sqlite') {
-        [databaseUsername, databasePassword, databaseHost].forEach((el) => {
+        [databaseUsername, databasePassword, databaseHost, databasePort].forEach((el) => {
             el.removeAttribute('required');
             el.parentElement.parentElement.style.display = 'none';
         });
     }
     else {
-        [databaseUsername, databasePassword, databaseHost].forEach((el) => {
+        [databaseUsername, databasePassword, databaseHost, databasePort].forEach((el) => {
             el.setAttribute('required', 'true');
             el.parentElement.parentElement.style.display = 'flex';
         });
@@ -34,45 +35,17 @@ envForm.querySelector('input[type="submit"]').addEventListener('click', function
     });
 
     const databaseName = envForm.querySelector('input[name="database-name"]'); // string
-    const adminEmail = envForm.querySelector('input[name="admin-email"]'); // email
-    const adminPassword = envForm.querySelector('input[name="admin-password"]'); // string - password
-    const adminPasswordRepeat = envForm.querySelector('input[name="admin-password-repeat"]'); // string - password - repeat.
 
     // Basic form validation.
-    const emptyError = validateNotEmptyField([
-        databaseHost,
-        databaseName,
-        databaseUsername,
-        databasePassword,
-        adminEmail,
-        adminPassword,
-        adminPasswordRepeat
-    ]);
-
+    const emptyError = validateNotEmptyField([databaseHost, databaseName, databaseUsername, databasePassword]);
     const stringError = validateString([
         {el: databaseHost},
         {el: databaseName},
         {el: databaseUsername},
         {el: databasePassword},
-        {el: adminPassword, min: 8, max: 25, password: true},
-        {el: adminPasswordRepeat, min: 8, max: 25, password: true},
     ]);
 
-    // Checking admin password and admin password repeat are the same.
-    if(adminPassword.value !== adminPasswordRepeat.value) {
-        setError(adminPassword, "Les mot de passe ne correspondent pas");
-        setError(adminPasswordRepeat, "Les mots de passe ne correspondent pas");
-    }
-
-    // Validating provided email.
-    let mailError = false;
-    if(!adminEmail.value.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) {
-        setError(adminEmail, "L'adresse mail ne semble pas correcte");
-        mailError = true;
-    }
-
-    console.log(emptyError, stringError, portError, mailError);
-    if(!emptyError && !stringError && !portError && !mailError) {
+    if(!emptyError && !stringError) {
         // Clearing old triggered validity errors.
         envForm.querySelectorAll('input:not([type="submit"])').forEach(function(el) {
             el.classList.remove('error');

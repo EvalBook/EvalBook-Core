@@ -55,20 +55,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @ORM\ManyToMany(targetEntity=Classroom::class, mappedBy="users")
      */
-    private ArrayCollection $classrooms;
+    private Collection $classrooms;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Role::class, inversedBy="users")
+     * @ORM\ManyToOne(targetEntity=Role::class, inversedBy="users", cascade={"persist", "remove"})
      * @ORM\JoinColumn(nullable=false)
      */
     private Role $role;
-
-
-    #[Pure]
-    public function __construct()
-    {
-        $this->classrooms = new ArrayCollection();
-    }
 
 
     /**
@@ -117,6 +110,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @see UserInterface
      */
+    #[Pure]
     public function getRoles(): array
     {
         return [

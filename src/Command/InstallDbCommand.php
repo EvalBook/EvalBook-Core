@@ -23,6 +23,7 @@ class InstallDbCommand extends Command
     protected function configure(): void
     {
         $this->addArgument('create_database', InputArgument::REQUIRED, 'Create database');
+        $this->addArgument('env', InputArgument::REQUIRED, 'env');
     }
 
 
@@ -37,8 +38,11 @@ class InstallDbCommand extends Command
         $io = new SymfonyStyle($input, $output);
         $cmdr = true;
         $createDatabase = (bool)$input->getArgument('create_database');
+        $env = $input->getArgument('env');
 
-        // Creating the database if needed.
+        /**
+         * Create database if needed.
+         */
         if ($createDatabase) {
             $messages = [
                 'Installing database',
@@ -49,6 +53,9 @@ class InstallDbCommand extends Command
             $cmdr = $this->exec($io, 'php bin/console doctrine:database:create', $messages);
         }
 
+        /**
+         * Making a new migration to match database model.
+         */
         if ($cmdr) {
             $messages = [
                 'Creating migration',
@@ -72,6 +79,9 @@ class InstallDbCommand extends Command
         }
 
 
+        /**
+         * Pushing migration into the database.
+         */
         if ($cmdr) {
             $messages = [
                 'Pushing migration',
@@ -80,6 +90,21 @@ class InstallDbCommand extends Command
             ];
 
             $cmdr = $this->exec($io, 'php bin/console doctrine:migrations:migrate --no-interaction', $messages);
+        }
+
+        /**
+         * Loading prod or dev default data set.
+         */
+        if($cmdr) {
+            $messages = [
+                'Loading data',
+                'Data loaded',
+                'An error occurred loading default data',
+            ];
+
+            // Loading prod default data.
+            $group = $env === 'prod' ? 'prod' : 'dev';
+            $cmdr = $this->exec($io, "php bin/console doctrine:fixtures:load --group=$group --append", $messages);
         }
 
         return $cmdr ? Command::SUCCESS : Command::FAILURE;

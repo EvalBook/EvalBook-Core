@@ -28,14 +28,8 @@ class Role
     /**
      * @ORM\OneToMany(targetEntity=User::class, mappedBy="role", orphanRemoval=true)
      */
-    private ArrayCollection $users;
+    private Collection $users;
 
-
-    #[Pure]
-    public function __construct()
-    {
-        $this->users = new ArrayCollection();
-    }
 
     /**
      * @return int|null
@@ -105,7 +99,6 @@ class Role
     /**
      * @return string|null
      */
-    #[Pure]
     public function __toString()
     {
         return $this->getName();

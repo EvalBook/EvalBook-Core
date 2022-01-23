@@ -18,10 +18,6 @@ if(isset($_POST['migrate'])) {
     $db_user = strip_tags($_POST['database-username']);
     $db_password = strip_tags($_POST['database-password']);
     $db_type = strip_tags($_POST['database-type']);
-
-    $admin_email = strip_tags($_POST['admin-email']) ?? null;
-    $admin_password = strip_tags($_POST['admin-password']) ?? null;
-    $admin_password_repeat = strip_tags($_POST['admin-password-repeat']) ?? '';
     $createDatabase = intval(isset($_POST['create-database']) && $_POST['create-database'] === 'on');
 
     // Validating installation form.
@@ -41,24 +37,6 @@ if(isset($_POST['migrate'])) {
         $error = true;
     }
 
-    // Validating EvalBook admin password format.
-    if(null === $admin_password || $admin_password !== $admin_password_repeat) { ?>
-        <div class="error alert">Les mots de passe ne correspondent pas !</div> <?php
-        $error = true;
-    }
-
-    // Validating EvalBook admin password format.
-    if(null === $admin_email || !preg_match("/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,25}$/", $admin_password)) { ?>
-        <div class="error alert">Le mot de passe doit contenir de 8 à 25 caractères avec majuscule(s), minuscule(s), chiffre(s)</div> <?php
-        $error = true;
-    }
-
-    // Validating email
-    if(!preg_match("/^[^\s@]+@[^\s@]+\.[^\s@]+$/", $admin_email)) { ?>
-        <div class="error alert">Le format de l'adresse mail n'est pas bon</div> <?php
-        $error = true;
-    }
-
     // If no form error, writing the .env file for prod | .env.local for dev.
     if(!$error) {
         // Reset env files before write them again.
@@ -73,9 +51,9 @@ if(isset($_POST['migrate'])) {
 
         if(CommandUtil::execSymfonyCmd("php bin/console regenerate-env {$_SESSION['install-mode']} $dsn")) {
             // Installing database.
-            if(CommandUtil::execSymfonyCmd("php bin/console install-db $createDatabase")) {
+            if(CommandUtil::execSymfonyCmd("php bin/console install-db $createDatabase {$_SESSION['install-mode']}")) {
                 // Loading production / dev fixtures
-                // TODO
+                CommandUtil::execSymfonyCmd("php bin/console doctrine:fixtures:load --group={$_SESSION['install-mode']} --no-interaction");
             }
             else { ?>
                 <div class="error alert">La base de données n'a pas pu être créée / peuplée, l'installation a échoué</div> <?php
@@ -146,26 +124,19 @@ if(isset($_POST['migrate'])) {
 
     <!-- Admin user information -->
     <fieldset>
-        <legend>Définir l'accès administrateur</legend>
-
+        <legend>Accès administrateur par défaut</legend>
+        Une fois connecté à l'interface, la première chose à faire sera de modifier ces accès par défaut.
         <div class="input-group row">
-            <label class="required" for="admin-email">Adresse mail admin</label>
+            <span>Adresse mail admin</span>
             <div>
-                <input type="email" name="admin-email" required>
+                <span>admin@evalbook.be</span>
             </div>
         </div>
 
         <div class="input-group row">
-            <label class="required" for="admin-password">Mot de passe admin</label>
+            <span>Mot de passe admin</span>
             <div>
-                <input type="password" name="admin-password" required>
-            </div>
-        </div>
-
-        <div class="input-group row">
-            <label class="required" for="admin-password-repeat">Répétez mot de passe</label>
-            <div>
-                <input type="password" name="admin-password-repeat" required>
+                <span>adminADMIN0</span>
             </div>
         </div>
 
