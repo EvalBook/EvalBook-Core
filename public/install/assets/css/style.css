@@ -329,6 +329,11 @@ fieldset > legend {
     z-index: -10;
 }
 
+p.important {
+    font-size: 1.5rem;
+    color: indianred;
+}
+
 @keyframes load {
     0% {
         width: 0;

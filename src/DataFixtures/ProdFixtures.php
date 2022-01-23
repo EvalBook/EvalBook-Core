@@ -50,6 +50,6 @@ class ProdFixtures extends Fixture implements FixtureGroupInterface
      */
     public static function getGroups(): array
     {
-        return ['prod'];
+        return ['prod', 'dev'];
     }
 }

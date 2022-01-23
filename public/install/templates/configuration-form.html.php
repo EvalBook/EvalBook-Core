@@ -125,18 +125,22 @@ if(isset($_POST['migrate'])) {
     <!-- Admin user information -->
     <fieldset>
         <legend>Accès administrateur par défaut</legend>
-        Une fois connecté à l'interface, la première chose à faire sera de modifier ces accès par défaut.
+        <p class="important">
+            Une fois connecté à l'interface, la première chose à faire sera de modifier ces accès par défaut.
+            En effet, ce sont les mêmes pour chaque installation de EvalBook. Vous ne pouvez pas modifier ces accès depuis cet installateur
+        </p>
+
         <div class="input-group row">
-            <span>Adresse mail admin</span>
+            <label>Login admin par défaut</label>
             <div>
-                <span>admin@evalbook.be</span>
+                <input type="email" value="admin@evalbook.be" disabled>
             </div>
         </div>
 
         <div class="input-group row">
-            <span>Mot de passe admin</span>
+            <label>Mot de passe admin par défaut</label>
             <div>
-                <span>adminADMIN0</span>
+                <input type="text" value="adminAdmin0" disabled>
             </div>
         </div>
 
