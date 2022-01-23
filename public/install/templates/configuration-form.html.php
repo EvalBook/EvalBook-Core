@@ -22,10 +22,10 @@ if(isset($_POST['migrate'])) {
 
     // Validating installation form.
     if($db_type !== 'sqlite') {
-        $error = Form::areFieldsEmpty($host, $port, $db, $db_user, $db_password, $db_type, $admin_email, $admin_password, $admin_password_repeat);
+        $error = Form::areFieldsEmpty($host, $port, $db, $db_user, $db_password, $db_type);
     }
     else {
-        $error = Form::areFieldsEmpty($db, $admin_email, $admin_password, $admin_password_repeat);
+        $error = Form::areFieldsEmpty($db);
     }
     if($error) { ?>
         <div class="error alert">Certains champs sont vide</div> <?php
