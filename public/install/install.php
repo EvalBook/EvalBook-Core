@@ -1,6 +1,4 @@
 <?php
-// TODO
-//  -> Delete install folder if mode is env for security reasons
 
 use EvalBookCore\Installer\Installer;
 
